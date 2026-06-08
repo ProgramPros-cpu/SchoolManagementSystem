@@ -15,7 +15,6 @@
            CSS VARIABLES & RESET (Apple Design Language + Dark Mode)
            ========================================================================== */
         :root {
-            /* Light Theme Defaults */
             --bg-color: #f5f5f7;
             --text-main: #1d1d1f;
             --text-muted: #86868b;
@@ -27,7 +26,6 @@
             --table-hover: rgba(0, 0, 0, 0.02);
             --modal-bg: #f5f5f7;
             
-            /* Brand Colors */
             --primary: #0071e3;
             --primary-hover: #0077ed;
             --success: #34c759;
@@ -69,14 +67,12 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(134, 134, 139, 0.3); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(134, 134, 139, 0.5); }
 
         h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.02em; }
-        
         .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--input-border); flex-wrap: wrap; gap: 10px;}
 
         .glass-card {
@@ -86,29 +82,15 @@
             box-shadow: var(--card-shadow); padding: 24px;
             transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
         }
-        .glass-card:hover { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08); }
-
-        /* Search Bars & Dropdown */
-        .search-bar { position: relative; width: 100%; max-width: 400px; }
-        .search-bar i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; z-index: 2; }
-        .search-bar input { padding-left: 40px !important; border-radius: 30px !important; background: var(--input-bg) !important; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        
-        .search-results { position: absolute; top: 110%; left: 0; width: 100%; background: var(--modal-bg); border: 1px solid var(--input-border); border-radius: var(--radius-md); box-shadow: var(--card-shadow); max-height: 300px; overflow-y: auto; z-index: 1000; display: none; padding: 8px;}
-        .search-results.active { display: block; }
-        .search-item { padding: 12px 16px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; color: var(--text-main); }
-        .search-item:hover { background: var(--table-hover); }
-        .search-item-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(0, 113, 227, 0.1); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 16px; }
 
         /* Inputs & Buttons */
         .input-group { margin-bottom: 16px; display: flex; flex-direction: column; width: 100%; }
         .input-group label { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; }
-        input[type="text"], input[type="password"], input[type="tel"], input[type="number"], input[type="email"], input[type="date"], input[type="search"], select, textarea {
+        input[type="text"], input[type="password"], input[type="tel"], input[type="number"], input[type="email"], input[type="date"], input[type="search"], select, textarea, input[type="file"] {
             width: 100%; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--input-border); background: var(--input-bg); font-size: 15px; color: var(--text-main); transition: all 0.2s; outline: none;
         }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15); }
-        .checkbox-group { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding: 10px; background: var(--input-bg); border-radius: var(--radius-sm); border: 1px solid var(--input-border); transition: 0.2s; }
-        .checkbox-group:hover { border-color: var(--primary); }
-
+        
         .btn { padding: 14px 24px; border-radius: var(--radius-md); border: none; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; text-align: center; gap: 8px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-hover); transform: scale(0.98); }
@@ -119,40 +101,20 @@
         .btn-warning { background: var(--warning); color: #000; }
         .btn-block { width: 100%; }
 
-        /* Data Center Grid */
-        .data-center-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-        .data-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px 16px; border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-main); }
-        .data-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: var(--primary); }
-        .data-btn i { font-size: 32px; }
-        .data-btn span { font-weight: 600; font-size: 14px; }
-
-        /* Government Form Elements */
-        fieldset { border: 1px solid var(--input-border); border-radius: var(--radius-sm); padding: 20px 16px 8px 16px; margin-bottom: 24px; background: transparent; position: relative; }
-        legend { font-size: 13px; font-weight: 700; color: var(--text-main); padding: 0 10px; text-transform: uppercase; letter-spacing: 0.5px; background: var(--modal-bg); border-radius: 4px; }
-        .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
-
-        /* Tables */
+        /* Tables & Grids */
         .table-container { width: 100%; overflow-x: auto; border-radius: var(--radius-md); background: var(--input-bg); border: 1px solid var(--input-border); }
         table { width: 100%; border-collapse: collapse; font-size: 14px; }
         th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--input-border); }
         th { font-weight: 600; color: var(--text-muted); background: var(--input-bg); white-space: nowrap; position: sticky; top: 0; z-index: 10; }
         tr:hover td { background: var(--table-hover); }
 
-        /* Calendar Grid */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 16px; background: rgba(0,0,0,0.02); padding: 8px; border-radius: var(--radius-md); }
-        [data-theme="dark"] .calendar-grid { background: rgba(255,255,255,0.02); }
-        .calendar-header-day { font-weight: 600; text-align: center; padding: 8px; font-size: 12px; color: var(--text-muted); text-transform: uppercase;}
-        .calendar-day { background: var(--input-bg); padding: 8px; border-radius: var(--radius-sm); min-height: 80px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); font-size: 13px; border: 1px solid transparent; cursor: pointer; transition: 0.2s; color: var(--text-main);}
-        .calendar-day:hover { border-color: var(--primary); transform: scale(1.02); }
-        .calendar-day.empty { background: transparent; box-shadow: none; cursor: default; }
-        .calendar-day.empty:hover { border-color: transparent; transform: none; }
-        .calendar-day.has-event { border: 1px solid rgba(0, 113, 227, 0.3); background: rgba(0, 113, 227, 0.05); }
-        .event-badge { display: block; font-size: 10px; padding: 4px 6px; border-radius: 4px; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
-        .event-holiday { background: var(--danger); color: white; }
-        .event-exam { background: var(--purple); color: white; }
-        .event-general { background: var(--primary); color: white; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 24px; }
+        .data-center-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .data-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px 16px; border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-main); }
+        .data-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: var(--primary); }
+        .data-btn i { font-size: 32px; }
 
-        /* Toggle Switch */
+        /* Switch */
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--text-muted); transition: .4s; border-radius: 24px; }
@@ -169,16 +131,24 @@
         .close-btn { background: var(--input-bg); border: 1px solid var(--input-border); width: 36px; height: 36px; border-radius: 50%; font-size: 20px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .close-btn:hover { background: var(--danger); color: white; border-color: var(--danger); transform: rotate(90deg); }
 
-        /* Progress Bars */
-        .progress-bar-bg { background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; height: 12px; width: 100%; overflow: hidden; margin-top: 8px; }
-        .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 1s ease-in-out; }
-
-        /* Toast Notifications */
+        /* Toasts */
         .toast-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; }
         .toast { background: var(--modal-bg); backdrop-filter: blur(24px); border: 1px solid var(--input-border); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.2); padding: 16px 20px; min-width: 250px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); color: var(--text-main); }
         .toast.show { transform: translateX(0); opacity: 1; }
         .toast-icon { font-size: 20px; }
-        .toast-content { flex: 1; font-size: 14px; font-weight: 500; }
+
+        /* Progress Stepper for Application Tracking */
+        .stepper { display: flex; justify-content: space-between; position: relative; margin: 40px 0; max-width: 800px; margin-left: auto; margin-right: auto;}
+        .stepper::before { content: ''; position: absolute; top: 18px; left: 0; right: 0; height: 4px; background: var(--input-border); z-index: 1; border-radius: 4px; }
+        .stepper-progress { position: absolute; top: 18px; left: 0; height: 4px; background: var(--primary); z-index: 1; border-radius: 4px; transition: width 0.4s ease; }
+        .step { position: relative; z-index: 2; background: var(--modal-bg); border: 4px solid var(--input-border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--text-muted); transition: 0.3s; }
+        .step.completed { border-color: var(--success); background: var(--success); color: white; }
+        .step.active { border-color: var(--primary); background: var(--modal-bg); color: var(--primary); box-shadow: 0 0 0 4px rgba(0,113,227,0.2);}
+        .step.rejected { border-color: var(--danger); background: var(--danger); color: white;}
+        .step-label { position: absolute; top: 50px; font-size: 12px; white-space: nowrap; left: 50%; transform: translateX(-50%); color: var(--text-muted); font-weight: 600;}
+        .step.completed .step-label { color: var(--success); }
+        .step.active .step-label { color: var(--primary); }
+        .step.rejected .step-label { color: var(--danger); }
 
         /* Header & Main Views */
         header { padding: 16px 5%; background: var(--card-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--input-border); display: none; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 16px; transition: background 0.3s;}
@@ -188,50 +158,35 @@
         .user-name { font-weight: 600; font-size: 14px; color: var(--text-main); }
         .user-role { font-size: 12px; color: var(--text-muted); text-transform: capitalize; }
         .theme-toggle { background: transparent; border: none; font-size: 24px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: 0.2s;}
-        .theme-toggle:hover { background: var(--table-hover); }
 
         main { padding: 32px 5%; flex: 1; display: flex; flex-direction: column; }
         .view { display: none; animation: fadeIn 0.4s ease; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Grids & Dashboard Elements */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 24px; }
-        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 24px; }
-        .metric-card { text-align: center; }
-        .metric-value { font-size: 36px; font-weight: 700; margin: 12px 0 4px; color: var(--primary); }
-        .metric-label { font-size: 14px; color: var(--text-muted); }
-
-        /* Chart Wrapper */
-        .chart-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; }
-
         /* Login Screen */
         #view-login { flex: 1; display: none; align-items: center; justify-content: center; }
         #view-login.active { display: flex; }
         .login-card { width: 100%; max-width: 450px; text-align: center; margin: auto;}
-        .login-logo { font-size: 32px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 12px;}
-        .login-sub { color: var(--text-muted); margin-bottom: 32px; font-size: 15px; }
-
-        /* Chat UI */
-        .chat-box { border: 1px solid var(--input-border); border-radius: var(--radius-md); height: 250px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: var(--input-bg); margin-bottom: 16px;}
-        .msg { padding: 10px 14px; border-radius: 18px; max-width: 80%; font-size: 14px; }
-        .msg-received { background: var(--table-hover); color: var(--text-main); border: 1px solid var(--input-border); align-self: flex-start; border-bottom-left-radius: 4px;}
-        .msg-sent { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        
-        .pintu-btn { background: #5856D6; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; padding: 12px; border-radius: var(--radius-md); border: none; cursor: pointer; width: 100%; transition: 0.2s;}
-        .pintu-btn:hover { background: #4a48b5; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(88, 86, 214, 0.3);}
 
         .d-none { display: none !important; }
         .mt-4 { margin-top: 16px; }
         .mb-4 { margin-bottom: 16px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-draft { background: rgba(134,134,139,0.2); color: var(--text-muted); }
+        .status-review { background: rgba(255,204,0,0.2); color: var(--warning); }
+        .status-action { background: rgba(255,59,48,0.2); color: var(--danger); }
+        .status-paid { background: rgba(0,113,227,0.2); color: var(--primary); }
+        .status-enrolled { background: rgba(52,199,89,0.2); color: var(--success); }
 
         @media (max-width: 768px) {
-            .dashboard-grid, .chart-grid { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
             main { padding: 16px 5%; }
-            .grid-2-col { grid-template-columns: 1fr; gap: 12px; }
-            .header-actions .search-bar { width: 100%; order: 3; max-width: 100%; }
-            .user-info { border-left: none; padding-left: 0; }
+            .stepper-progress, .stepper::before { top: 15px; }
+            .step { width: 30px; height: 30px; border-width: 2px; font-size: 12px;}
+            .step-label { font-size: 10px; top: 35px; white-space: normal; text-align: center; width: 60px;}
         }
     </style>
 </head>
@@ -239,28 +194,9 @@
 
     <!-- App Header -->
     <header id="app-header">
-        <div class="header-brand"><i class="ph-fill ph-graduation-cap" style="color: var(--primary); font-size: 28px;"></i> EduCore</div>
-        
+        <div class="header-brand"><i class="ph-fill ph-graduation-cap" style="color: var(--primary); font-size: 28px;"></i> EduCore System</div>
         <div class="header-actions">
-            <!-- Global Calendar -->
-            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="app.openCalendar()">
-                <i class="ph ph-calendar-blank"></i> Calendar
-            </button>
-
-            <!-- Global Search -->
-            <div class="search-bar" id="global-search-container" style="display: none; width: 250px;">
-                <i class="ph ph-magnifying-glass"></i>
-                <input type="search" id="global-search-input" placeholder="Search ID, Name..." autocomplete="off">
-                <div class="search-results" id="global-search-results">
-                    <!-- Populated dynamically -->
-                </div>
-            </div>
-            
-            <!-- Theme Toggle -->
-            <button class="theme-toggle" onclick="app.toggleTheme()" id="theme-toggle-btn" title="Toggle Dark/Light Mode">
-                <i class="ph ph-moon"></i>
-            </button>
-
+            <button class="theme-toggle" onclick="app.toggleTheme()" id="theme-toggle-btn" title="Toggle Dark/Light Mode"><i class="ph ph-moon"></i></button>
             <div class="user-info">
                 <div class="user-name" id="display-user-name">John Doe</div>
                 <div class="user-role" id="display-user-role">Role</div>
@@ -277,25 +213,25 @@
              ========================================== -->
         <section id="view-login" class="view active">
             <div class="glass-card login-card">
-                <div class="login-logo"><i class="ph-fill ph-graduation-cap" style="color: var(--primary);"></i> EduCore System</div>
-                <div class="login-sub">Secure Identity Gateway</div>
+                <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 12px;"><i class="ph-fill ph-graduation-cap" style="color: var(--primary);"></i> EduCore</div>
+                <div style="color: var(--text-muted); margin-bottom: 32px; font-size: 15px;">Identity & Admission Gateway</div>
                 
                 <form id="login-form" onsubmit="app.handleAuth(event)">
                     <div class="input-group" style="text-align: left;">
-                        <label for="auth-id">System ID / User ID</label>
-                        <input type="text" id="auth-id" placeholder="Enter your ID or Phone" required autocomplete="username">
+                        <label for="auth-id">Email / System ID / Phone</label>
+                        <input type="text" id="auth-id" placeholder="Enter your Email or ID" required autocomplete="username">
                     </div>
                     
                     <div id="login-fields">
                         <div class="input-group" style="text-align: left;">
-                            <label for="auth-pass">Password / OTP</label>
+                            <label for="auth-pass">Password</label>
                             <input type="password" id="auth-pass" placeholder="Enter Password" autocomplete="current-password" required>
                         </div>
                     </div>
 
                     <!-- Sign Up Flow Fields (Hidden initially) -->
                     <div id="signup-fields" class="d-none">
-                        <p style="font-size: 13px; color: var(--danger); margin-bottom: 16px; text-align:left;">New ID detected. Let's set up your account.</p>
+                        <p style="font-size: 13px; color: var(--danger); margin-bottom: 16px; text-align:left;">New Identity detected. Let's set up your profile.</p>
                         <div class="input-group" style="text-align: left;">
                             <label for="auth-name">Full Name</label>
                             <input type="text" id="auth-name" placeholder="John Doe">
@@ -303,7 +239,8 @@
                         <div class="input-group" style="text-align: left;">
                             <label for="auth-role">I am a...</label>
                             <select id="auth-role">
-                                <option value="student">Student</option>
+                                <option value="applicant">New Applicant (Admission/Recruitment)</option>
+                                <option value="student">Existing Student</option>
                                 <option value="parent">Parent</option>
                                 <option value="staff">Facility/Staff</option>
                             </select>
@@ -314,20 +251,9 @@
                     
                     <div style="margin-top: 24px; font-size: 12px; color: var(--text-muted); background: var(--input-bg); padding: 16px; border-radius: 8px; border: 1px solid var(--input-border); text-align: left; line-height: 1.6;">
                         <b style="color: var(--text-main);"><i class="ph ph-info"></i> Demo Credentials (Pass: 123)</b><br>
-                        • Super Admin: <code>admin</code><br>
-                        • Headmaster: <code>hm</code><br>
-                        • Teacher: <code>teacher</code><br>
-                        • Student: <code>student</code> (Links to STU-10001)<br>
-                        • Parent: <code>parent</code><br>
-                        • Staff/Maint: <code>staff</code>
-                    </div>
-                    
-                    <hr style="border:0; border-top: 1px solid var(--input-border); margin: 24px 0;">
-                    
-                    <!-- Admissions Gateway -->
-                    <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
-                        <div style="font-size: 11px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; background: var(--input-bg); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--input-border);">Public Gateways</div>
-                        <button type="button" class="btn btn-outline btn-block" onclick="app.openModal('modal-admission')"><i class="ph ph-student" style="margin-right: 8px; font-size: 18px;"></i> Apply for Student Admission</button>
+                        • Super Admin: <code>joykumbhakar001@gmail.com</code><br>
+                        • Headmaster: <code>joykumbhakar77@gmail.com</code><br>
+                        • Standard Student: <code>STU-10001</code>
                     </div>
                 </form>
             </div>
@@ -339,77 +265,51 @@
         <section id="view-superadmin" class="view">
             <div class="section-title">
                 <h2>Super Admin Control Center</h2>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn btn-primary" onclick="app.openModal('modal-adduser')"><i class="ph ph-user-plus"></i> Add New User</button>
-                </div>
             </div>
 
-            <!-- KPI Cards -->
             <div class="dashboard-grid">
-                <div class="glass-card metric-card">
-                    <div class="metric-label">Total System Users</div>
-                    <div class="metric-value" id="sa-total-users">0</div>
-                    <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Active tracking</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-label">Total Revenue (YTD)</div>
-                    <div class="metric-value" style="color: var(--success);">$2.4M</div>
-                    <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Target Exceeded</div>
-                </div>
-                <div class="glass-card metric-card">
-                    <div class="metric-label">System Health</div>
-                    <div class="metric-value" style="color: var(--primary);">99.9%</div>
-                    <div style="font-size: 12px; color: var(--text-muted);"><i class="ph ph-cloud-check"></i> Cloud Sync Active</div>
-                </div>
-            </div>
+                <!-- System Settings for Portals -->
+                <div class="glass-card">
+                    <h3>Public Portal Controls</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Open or close public admission and recruitment gateways.</p>
+                    
+                    <div class="flex-between mb-4" style="background: var(--input-bg); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--input-border);">
+                        <div>
+                            <div style="font-weight: 600;">Student Admissions</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">Allow new students to apply.</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-admission" onchange="app.togglePortalSetting('admissionOpen', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
 
-            <!-- Advanced Analytics (Charts) -->
-            <div class="flex-between mb-4">
-                <h3>Advanced System Analytics</h3>
-                <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('sa-user-table-element', 'System_Analytics.csv')"><i class="ph ph-download-simple"></i> Export Data CSV</button>
-            </div>
-            
-            <div class="chart-grid">
-                <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Revenue vs Expenses</h4>
-                    <div class="chart-wrapper"><canvas id="saRevenueChart"></canvas></div>
+                    <div class="flex-between" style="background: var(--input-bg); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--input-border);">
+                        <div>
+                            <div style="font-weight: 600;">Teacher Recruitment</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">Allow new educators to apply.</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-recruitment" onchange="app.togglePortalSetting('recruitmentOpen', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-                <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Student Enrollment Trend (5 Yrs)</h4>
-                    <div class="chart-wrapper"><canvas id="saEnrollmentChart"></canvas></div>
-                </div>
-                <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">User Demographics</h4>
-                    <div class="chart-wrapper"><canvas id="saDemographicsChart"></canvas></div>
-                </div>
-                <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Feedback & Incident Categories</h4>
-                    <div class="chart-wrapper"><canvas id="saFeedbackChart"></canvas></div>
-                </div>
-            </div>
 
-            <!-- Information Center / Data Center -->
-            <div class="section-title mt-4">
-                <h2>Information & Data Center</h2>
-            </div>
-            <p style="color: var(--text-muted); margin-bottom: 24px;">Access full database tables and specific module records across the system.</p>
-            
-            <div class="data-center-grid">
-                <div class="data-btn" style="color: var(--primary);" onclick="app.openModal('modal-all-users')">
-                    <i class="ph-fill ph-users-three"></i>
-                    <span>User Management</span>
-                </div>
-                <div class="data-btn" style="color: var(--purple);" onclick="app.openModal('modal-all-students')">
-                    <i class="ph-fill ph-student"></i>
-                    <span>Global Student Registry</span>
-                </div>
-                <div class="data-btn" style="color: var(--success);" onclick="app.openModal('modal-financial-ledger')">
-                    <i class="ph-fill ph-bank"></i>
-                    <span>Financial Ledger</span>
-                </div>
-                <div class="data-btn" style="color: var(--orange);" onclick="app.openModal('modal-offline-fee')">
-                    <i class="ph-fill ph-wallet"></i>
-                    <span>Update Offline Fees</span>
+                <!-- Admin Action Center -->
+                <div class="glass-card">
+                    <h3>Administration Center</h3>
+                    <div class="data-center-grid mt-4">
+                        <div class="data-btn" style="color: var(--primary);" onclick="app.openModal('modal-review-apps', 'admin')">
+                            <i class="ph-fill ph-check-square-offset"></i>
+                            <span>Verify Applications</span>
+                            <div style="font-size: 12px; background: var(--danger); color: white; padding: 2px 8px; border-radius: 10px; position:absolute; top: -10px; right: -10px;" id="admin-badge-count">0 Pending</div>
+                        </div>
+                        <div class="data-btn" style="color: var(--success);" onclick="app.openModal('modal-all-students')">
+                            <i class="ph-fill ph-student"></i>
+                            <span>Student Registry</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -422,578 +322,244 @@
                 <h2>Headmaster Dashboard</h2>
             </div>
 
-            <div class="dashboard-grid mb-4">
-                <div class="glass-card">
-                    <h3>School Analytics Quick View</h3>
-                    <div class="mt-4">
-                        <div class="flex-between"><span class="metric-label">Overall Attendance Target</span> <span style="font-weight:600">92%</span></div>
-                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 0%;" id="hm-bar-1"></div></div>
-                    </div>
-                    <div class="mt-4">
-                        <div class="flex-between"><span class="metric-label">Academic Performance</span> <span style="font-weight:600">B+ Avg</span></div>
-                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 0%; background: var(--success)" id="hm-bar-2"></div></div>
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <h3>Broadcast Notice & Event</h3>
-                    <form onsubmit="app.sendBroadcast(event)" class="mt-4">
-                        <div class="input-group"><input type="text" placeholder="Notice Title" required></div>
-                        <div class="input-group">
-                            <select required>
-                                <option value="all">Entire School</option>
-                                <option value="teachers">Teachers Only</option>
-                                <option value="parents">Parents Only</option>
-                            </select>
-                        </div>
-                        <div class="input-group"><textarea rows="2" placeholder="Write your message here..." required></textarea></div>
-                        <button type="submit" class="btn btn-primary btn-block"><i class="ph ph-broadcast"></i> Send Broadcast</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- HM Data Center Buttons -->
-            <h3 class="mt-4 mb-4">Administration & Moderation Center</h3>
-            <div class="data-center-grid mb-4">
-                <div class="data-btn" style="color: var(--orange);" onclick="app.openModal('modal-offline-fee')">
-                    <i class="ph-fill ph-money"></i>
-                    <span>Manage Offline Fees</span>
-                </div>
-                <div class="data-btn" style="color: var(--danger);" onclick="app.openModal('modal-student-reports')">
-                    <i class="ph-fill ph-warning-octagon"></i>
-                    <span>Review Student Feedback</span>
-                </div>
-                <div class="data-btn" style="color: var(--purple);" onclick="app.openModal('modal-maintenance-logs')">
-                    <i class="ph-fill ph-wrench"></i>
-                    <span>Facility/Maintenance Logs</span>
-                </div>
-                <div class="data-btn" style="color: var(--success);" onclick="app.openModal('modal-staff-directory')">
-                    <i class="ph-fill ph-chalkboard-teacher"></i>
-                    <span>Staff Directory</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             D. TEACHER DASHBOARD
-             ========================================== -->
-        <section id="view-teacher" class="view">
-            <div class="section-title">
-                <h2>Teacher Workspace</h2>
-                <div class="search-bar" style="max-width: 250px;">
-                    <i class="ph ph-magnifying-glass"></i>
-                    <input type="search" id="teacher-class-search" placeholder="Filter student..." onkeyup="app.filterTable('teacher-class-search', 'teacher-class-table')">
-                </div>
-            </div>
-            
-            <div class="dashboard-grid mt-4">
-                <div class="glass-card" style="grid-column: 1 / -1;">
-                    <div class="flex-between mb-4">
-                        <h3>My Classes</h3>
-                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap:wrap;">
-                            <select style="width: 200px;" onchange="app.renderTeacherTable()">
-                                <option>Grade 10 - Section A</option>
-                                <option>Grade 9 - Section B</option>
-                            </select>
-                            <button class="btn btn-outline" style="padding: 10px 16px; font-size: 13px;" onclick="app.exportDataToCSV('teacher-class-table', 'Class_Grades.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
-                            <button class="btn btn-primary" style="padding: 10px 16px; font-size: 13px;" onclick="app.saveGrades()"><i class="ph ph-floppy-disk"></i> Save Grades</button>
-                        </div>
-                    </div>
-                    <div class="table-container" style="max-height: 400px; overflow-y: auto;">
-                        <table id="teacher-class-table">
-                            <thead>
-                                <tr>
-                                    <th>Student ID</th>
-                                    <th>Name</th>
-                                    <th>Present Today?</th>
-                                    <th>Math Grade</th>
-                                    <th>Science Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody id="teacher-student-table">
-                                <!-- Populated via JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="glass-card">
-                    <h3>Direct Message Parent</h3>
-                    <form onsubmit="app.sendDirectMessage(event)" class="mt-4">
-                        <div class="input-group">
-                            <select id="teacher-msg-target" required>
-                                <!-- Populated via JS -->
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <textarea rows="4" placeholder="Type concern or update..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-outline btn-block"><i class="ph ph-paper-plane-right"></i> Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             E. STUDENT DASHBOARD
-             ========================================== -->
-        <section id="view-student" class="view">
-            <h2>Student Portal</h2>
-            <div class="dashboard-grid mt-4">
-                <div class="glass-card">
-                    <h3>My Profile</h3>
-                    <div class="mt-4" style="display: flex; align-items: center; gap: 16px;">
-                        <div style="width: 64px; height: 64px; background: rgba(0, 113, 227, 0.1); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;"><i class="ph-fill ph-student"></i></div>
-                        <div>
-                            <h4 id="student-profile-name">Student Name</h4>
-                            <div class="metric-label" id="student-profile-grade">ID: ... | Grade ...</div>
-                        </div>
-                    </div>
-                    <hr style="border:0; border-top: 1px solid var(--input-border); margin: 24px 0;">
-                    <div class="metric-label">Current Attendance: <span style="font-weight: 600; color: var(--success); float:right;" id="student-profile-attendance">0%</span></div>
-                    <div class="metric-label mt-4">Current GPA: <span style="font-weight: 600; color: var(--primary); float:right;" id="student-profile-gpa">0.0</span></div>
-                </div>
-
-                <!-- Student Feedback & Report System -->
-                <div class="glass-card">
-                    <h3>Report an Issue / Feedback</h3>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Your report will be reviewed confidentially by the Headmaster.</p>
-                    <form onsubmit="app.submitStudentReport(event)">
-                        <div class="input-group">
-                            <select id="student-report-type" required>
-                                <option value="">Select Category</option>
-                                <option value="academic">Academic / Teacher Exchange Issue</option>
-                                <option value="behavior">Behavioral / Rude Behavior Incident</option>
-                                <option value="infra">Infrastructure / Broken Facility (e.g. Bathroom, Null)</option>
-                                <option value="tech">Technical / Website Server Problem</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <textarea id="student-report-msg" rows="3" placeholder="Describe the specific problem or incident in detail..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-warning btn-block" style="color:black;"><i class="ph ph-warning"></i> Submit Report</button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="glass-card mt-4">
-                <h3>My Current Grades</h3>
-                <div class="table-container mt-4">
-                    <table>
-                        <thead><tr><th>Subject</th><th>Score</th><th>Status</th></tr></thead>
-                        <tbody id="student-grades-table">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             F. PARENT DASHBOARD
-             ========================================== -->
-        <section id="view-parent" class="view">
-            <h2>Parent Portal</h2>
-            <div class="dashboard-grid mt-4">
-                <div class="glass-card">
-                    <h3>Child Overview</h3>
-                    <div class="mt-4">
-                        <div class="metric-label mb-4">Linked Student: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-name">Alex Smith</span></div>
-                        <div class="metric-label mb-4">Attendance: <span style="font-weight: 600; color: var(--success); float:right;" id="parent-child-attendance">94%</span></div>
-                        <hr style="border:0; border-top: 1px solid var(--input-border); margin: 16px 0;">
-                        <div class="flex-between">
-                            <span class="metric-label">Lock Student Portal Access</span>
-                            <label class="switch">
-                                <input type="checkbox" onchange="app.togglePortalLock(event)">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Fee Management -->
-                <div class="glass-card">
-                    <h3>Fee Management</h3>
-                    <div class="mt-4">
-                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Select the pending months you wish to pay for.</p>
-                        <div id="parent-fee-list" style="max-height: 150px; overflow-y: auto; margin-bottom: 12px; padding-right:4px;">
-                            <!-- Populated by JS -->
-                        </div>
-                        <div class="flex-between mb-4" style="background: var(--input-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--input-border);">
-                            <span class="metric-label" style="font-weight:bold; color:var(--text-main);">Selected Total:</span>
-                            <span class="metric-value" style="font-size: 24px; margin:0;" id="parent-fee-total">$0.00</span>
-                        </div>
-                        <button class="btn btn-success btn-block" onclick="app.processSelectedFees()"><i class="ph ph-credit-card"></i> Pay Selected Amount</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-card mt-4">
-                <h3>Communication Hub</h3>
-                <div class="dashboard-grid mt-4" style="gap: 24px;">
-                    <div>
-                        <div class="chat-box" id="parent-chat">
-                            <div class="msg msg-received">Hello! This is Headmaster Davis. How can I help you today?</div>
-                        </div>
-                        <form style="display: flex; gap: 8px;" onsubmit="app.sendParentChat(event)">
-                            <input type="text" id="parent-chat-input" placeholder="Message Headmaster..." required style="flex:1; border-radius: 30px; padding-left: 20px;">
-                            <button type="submit" class="btn btn-primary" style="border-radius: 30px; padding: 10px 20px;"><i class="ph ph-paper-plane-right"></i></button>
-                        </form>
-                    </div>
-                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.02); padding: 24px; border-radius: var(--radius-md);">
-                        <div style="text-align: center; margin-bottom: 16px;">
-                            <i class="ph-fill ph-wrench" style="font-size: 40px; margin-bottom: 8px; color: var(--primary);"></i>
-                            <h4>Technical or Service Issue?</h4>
-                            <p style="font-size: 13px; color: var(--text-muted);">Directly contact our IT Support.</p>
-                        </div>
-                        <button class="pintu-btn" onclick="app.showToast('Connecting you to Pintu Bro (IT Lead)...', 'success')">
-                            <i class="ph-fill ph-phone-call" style="font-size: 18px;"></i> Contact Pintu Bro
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             G. STAFF / FACILITY DASHBOARD
-             ========================================== -->
-        <section id="view-staff" class="view">
-            <h2>Facility & Support Staff Portal</h2>
-            <p style="color: var(--text-muted); margin-bottom: 24px;">Update current situations for specific locations around the campus.</p>
-            
             <div class="dashboard-grid">
-                <!-- Submit a situation report -->
                 <div class="glass-card">
-                    <h3>Log Campus Situation</h3>
-                    <form onsubmit="app.submitStaffLog(event)" class="mt-4">
-                        <div class="input-group">
-                            <label>Location Area</label>
-                            <select id="staff-log-location" required>
-                                <option value="">Select Area</option>
-                                <option value="Lecture Hall A">Lecture Hall A</option>
-                                <option value="Lecture Hall B">Lecture Hall B</option>
-                                <option value="Bathroom (Boys/Main)">Bathroom (Boys/Main)</option>
-                                <option value="Bathroom (Girls/Main)">Bathroom (Girls/Main)</option>
-                                <option value="MDM Hall">MDM Hall (Dining)</option>
-                                <option value="Library">Library</option>
-                                <option value="Playground">Playground</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Action/Situation Needed</label>
-                            <textarea id="staff-log-msg" rows="3" placeholder='e.g., "Need Mr. Joy in Lecture hall", "Bathroom light Bulb expired or need to be fixed"' required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block"><i class="ph ph-paper-plane-tilt"></i> Broadcast to Admin</button>
-                    </form>
-                </div>
-
-                <!-- Book Tracking specific for Library Staff -->
-                <div class="glass-card">
-                    <h3>Library Book Tracking</h3>
-                    <form onsubmit="app.submitBookTrack(event)" class="mt-4">
-                        <div class="input-group">
-                            <label>Book Title / ID</label>
-                            <input type="text" id="staff-book-title" placeholder="e.g. Physics Vol 2 (B-104)" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Student Reg ID (if issued)</label>
-                            <input type="text" id="staff-book-student" placeholder="e.g. STU-10022">
-                        </div>
-                        <div class="input-group">
-                            <label>Status</label>
-                            <select id="staff-book-status" required>
-                                <option value="missing">Report Missing / Lost</option>
-                                <option value="issued">Track Issue to Student</option>
-                                <option value="returned">Mark as Returned</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-outline btn-block"><i class="ph ph-books"></i> Update Book Record</button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="glass-card mt-4">
-                <h3>Recent Library Alerts</h3>
-                <div class="table-container mt-4">
-                    <table>
-                        <thead><tr><th>Book Title</th><th>Student ID</th><th>Status</th><th>Date</th></tr></thead>
-                        <tbody id="staff-book-table-body">
-                            <!-- Populated via JS -->
-                        </tbody>
-                    </table>
+                    <h3>Application Initial Review</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Review newly submitted student and teacher applications.</p>
+                    <button class="btn btn-primary btn-block" onclick="app.openModal('modal-review-apps', 'hm')">
+                        <i class="ph ph-files"></i> Open Review Queue (<span id="hm-badge-count">0</span>)
+                    </button>
                 </div>
             </div>
         </section>
+
+        <!-- ==========================================
+             D. APPLICANT TRACKING DASHBOARD
+             ========================================== -->
+        <section id="view-applicant" class="view">
+            <div class="section-title">
+                <h2>My Application Portal</h2>
+                <span class="status-badge status-draft" id="app-current-status-badge">Draft</span>
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 24px;">
+                <h3 style="text-align: center; margin-bottom: 8px;">Application Progress Tracker</h3>
+                <div class="stepper" id="applicant-stepper">
+                    <div class="stepper-progress" id="applicant-progress-line" style="width: 0%;"></div>
+                    <div class="step" id="step-1">1<div class="step-label">Draft / Form</div></div>
+                    <div class="step" id="step-2">2<div class="step-label">HM Review</div></div>
+                    <div class="step" id="step-3">3<div class="step-label">Admin Verify</div></div>
+                    <div class="step" id="step-4">4<div class="step-label">Fee Payment</div></div>
+                    <div class="step" id="step-5"><i class="ph ph-check"></i><div class="step-label">Enrolled</div></div>
+                </div>
+                
+                <div id="applicant-notes-box" class="d-none mt-4" style="background: rgba(255,59,48,0.1); border: 1px solid var(--danger); padding: 16px; border-radius: var(--radius-md); color: var(--danger);">
+                    <strong><i class="ph ph-warning"></i> Action Required:</strong> <span id="applicant-notes-text"></span>
+                </div>
+            </div>
+
+            <!-- Stage 1: The Application Form -->
+            <div id="applicant-stage-form" class="glass-card d-none">
+                <div class="flex-between mb-4">
+                    <h3>Application Form</h3>
+                    <select id="applicant-type" class="btn-outline" style="width: auto; padding: 6px 12px; font-size: 13px; border-radius: var(--radius-sm);" onchange="app.toggleApplicationFields()">
+                        <option value="student">Student Admission</option>
+                        <option value="teacher">Teacher Recruitment</option>
+                    </select>
+                </div>
+
+                <div id="portal-closed-msg" class="d-none" style="text-align: center; padding: 40px; color: var(--danger); font-weight: 600;">
+                    <i class="ph ph-lock" style="font-size: 40px; margin-bottom: 16px; display: block;"></i>
+                    This portal is currently closed by the Administration.
+                </div>
+
+                <form id="admission-form" onsubmit="app.submitApplication(event)">
+                    <div class="dashboard-grid" style="gap: 16px; margin-bottom: 0;">
+                        <div class="input-group">
+                            <label>Full Name (As per records)</label>
+                            <input type="text" id="app-form-name" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Date of Birth (Used as Default Password)</label>
+                            <input type="date" id="app-form-dob" required>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-grid" style="gap: 16px; margin-bottom: 0;">
+                        <div class="input-group" style="position: relative;">
+                            <label>Phone Number</label>
+                            <div style="display:flex; gap: 8px;">
+                                <input type="tel" id="app-form-phone" placeholder="10-digit number" required>
+                                <button type="button" class="btn btn-outline" id="btn-verify-phone" onclick="app.verifyPhoneMock()">Verify</button>
+                            </div>
+                            <small id="phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
+                            <input type="hidden" id="app-form-phone-verified" value="false">
+                        </div>
+                        
+                        <!-- Dynamic Field: Grade OR Qualification -->
+                        <div class="input-group" id="field-grade-wrap">
+                            <label>Applying for Grade</label>
+                            <select id="app-form-grade">
+                                <option value="Grade 1">Grade 1</option>
+                                <option value="Grade 5">Grade 5</option>
+                                <option value="Grade 9">Grade 9</option>
+                                <option value="Grade 10">Grade 10</option>
+                            </select>
+                        </div>
+                        <div class="input-group d-none" id="field-qual-wrap">
+                            <label>Highest Qualification</label>
+                            <input type="text" id="app-form-qual" placeholder="e.g. B.Ed, M.Sc Mathematics">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Upload Aadhar / ID Proof (PDF/JPG)</label>
+                        <input type="file" id="app-form-doc1" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small style="color: var(--text-muted); margin-top: 4px;">For this demo, files are simulated and not uploaded to server.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-4" id="btn-submit-app"><i class="ph ph-paper-plane-tilt"></i> Submit for Review</button>
+                </form>
+            </div>
+
+            <!-- Stage 4: Payment Required -->
+            <div id="applicant-stage-payment" class="glass-card d-none" style="text-align: center;">
+                <i class="ph-fill ph-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 16px;"></i>
+                <h3 style="margin-bottom: 8px;">Application Verified!</h3>
+                <p style="color: var(--text-muted); margin-bottom: 24px;">Please pay the Registration / Admission Fee to generate your official ID.</p>
+                
+                <div style="background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px; border-radius: var(--radius-md); max-width: 400px; margin: 0 auto; text-align: left;">
+                    <div class="flex-between mb-4">
+                        <span style="font-weight: 600;">Fee Amount:</span>
+                        <span style="font-size: 24px; font-weight: 700; color: var(--primary);">$150.00</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Pay via Bank Transfer or UPI and enter the reference number below.</p>
+                    
+                    <form onsubmit="app.submitFeePayment(event)">
+                        <div class="input-group">
+                            <label>UPI / Bank Reference Number</label>
+                            <input type="text" id="app-payment-ref" placeholder="e.g. 301928371928" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block"><i class="ph ph-shield-check"></i> Submit Payment Info</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Stage 5: Enrolled -->
+            <div id="applicant-stage-enrolled" class="glass-card d-none" style="text-align: center;">
+                <div style="background: rgba(52, 199, 89, 0.1); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+                    <i class="ph-fill ph-confetti" style="font-size: 50px; color: var(--success);"></i>
+                </div>
+                <h2 style="margin-bottom: 8px;">Welcome to EduCore!</h2>
+                <p style="color: var(--text-muted); margin-bottom: 24px;">Your admission is complete. Please save your official credentials below.</p>
+                
+                <div style="background: var(--input-bg); border: 1px dashed var(--primary); padding: 24px; border-radius: var(--radius-md); max-width: 400px; margin: 0 auto; text-align: left;">
+                    <div class="mb-4">
+                        <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Official Registration ID</label>
+                        <div style="font-size: 24px; font-weight: 700; color: var(--text-main);" id="enrolled-final-id">STU-XXXXX</div>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Default Password</label>
+                        <div style="font-size: 18px; font-weight: 600; color: var(--text-main);" id="enrolled-final-pass">YYYYMMDD</div>
+                        <div style="font-size: 12px; color: var(--danger); margin-top: 4px;">* Derived from your Date of Birth. Login to change it.</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-4" onclick="app.logout()">Go to Login Portal</button>
+            </div>
+        </section>
+
+        <!-- Existing Empty Views for Structure Integrity -->
+        <section id="view-teacher" class="view"><div class="section-title"><h2>Teacher Portal</h2></div><p>Simulated empty view.</p></section>
+        <section id="view-student" class="view"><div class="section-title"><h2>Student Portal</h2></div><p>Simulated empty view.</p></section>
+        <section id="view-parent" class="view"><div class="section-title"><h2>Parent Portal</h2></div><p>Simulated empty view.</p></section>
+        <section id="view-staff" class="view"><div class="section-title"><h2>Staff Portal</h2></div><p>Simulated empty view.</p></section>
 
     </main>
 
     <div class="toast-container" id="toast-container"></div>
 
     <!-- ==========================================
-         MODALS (DATA TABLES, FORMS, CALENDAR)
+         MODALS 
          ========================================== -->
 
-    <!-- Modal: Global Calendar -->
-    <div class="modal-overlay" id="modal-calendar">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <h3 style="margin-bottom: 4px;">School Event Calendar</h3>
-                    <div style="font-size: 13px; color: var(--text-muted);" id="calendar-month-year">June 2026</div>
-                </div>
-                <div style="display:flex; gap:16px; align-items:center;">
-                    <div id="calendar-admin-controls" style="display: none;">
-                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="document.getElementById('calendar-add-form').classList.toggle('d-none')">+ Add Event</button>
-                    </div>
-                    <button class="close-btn" onclick="app.closeModal('modal-calendar')"><i class="ph ph-x"></i></button>
-                </div>
-            </div>
-            
-            <div id="calendar-add-form" class="d-none" style="background: var(--table-hover); padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--input-border);">
-                <form onsubmit="app.addCalendarEvent(event)" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap:wrap;">
-                    <div class="input-group" style="width: auto; flex:1; min-width: 150px;">
-                        <label>Date</label>
-                        <input type="date" id="cal-add-date" required>
-                    </div>
-                    <div class="input-group" style="width: auto; flex:2; min-width: 200px;">
-                        <label>Event Title</label>
-                        <input type="text" id="cal-add-title" placeholder="Holiday name or Event" required>
-                    </div>
-                    <div class="input-group" style="width: auto; flex:1; min-width: 150px;">
-                        <label>Type</label>
-                        <select id="cal-add-type">
-                            <option value="holiday">Holiday</option>
-                            <option value="exam">Exam</option>
-                            <option value="general">General Event</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="margin-bottom: 16px;">Save Event</button>
-                </form>
-            </div>
-
-            <div class="calendar-grid">
-                <div class="calendar-header-day">Sun</div><div class="calendar-header-day">Mon</div><div class="calendar-header-day">Tue</div>
-                <div class="calendar-header-day">Wed</div><div class="calendar-header-day">Thu</div><div class="calendar-header-day">Fri</div><div class="calendar-header-day">Sat</div>
-            </div>
-            <div id="calendar-days-container" class="calendar-grid" style="margin-top:0; padding-top:0;"></div>
-        </div>
-    </div>
-
-    <!-- Modal: Offline Fee Update (Admin/HM) -->
-    <div class="modal-overlay" id="modal-offline-fee">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3>Manage Offline Payments</h3>
-                <button class="close-btn" onclick="app.closeModal('modal-offline-fee')"><i class="ph ph-x"></i></button>
-            </div>
-            <div class="input-group">
-                <label>Search Student by ID</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="offline-fee-search" placeholder="e.g. STU-10001">
-                    <button class="btn btn-primary" onclick="app.searchOfflineFeeStudent()"><i class="ph ph-magnifying-glass"></i> Find</button>
-                </div>
-            </div>
-            
-            <div id="offline-fee-result" class="d-none mt-4">
-                <h4 id="of-student-name" style="margin-bottom: 12px; color: var(--primary);">Student Name</h4>
-                <div id="of-fee-list" style="background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-sm); padding: 12px;">
-                    <!-- Checkboxes mapped here -->
-                </div>
-                <button class="btn btn-success btn-block mt-4" onclick="app.markFeesPaidOffline()"><i class="ph ph-check-circle"></i> Mark Selected as Paid (Offline)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Student Reports Review (HM) -->
-    <div class="modal-overlay" id="modal-student-reports">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Student Reports & Feedback</h3>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('student-reports-table', 'Student_Reports.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
-                    <button class="close-btn" onclick="app.closeModal('modal-student-reports')"><i class="ph ph-x"></i></button>
-                </div>
-            </div>
-            <div class="table-container">
-                <table id="student-reports-table">
-                    <thead><tr><th>Date</th><th>Reporter ID</th><th>Category</th><th>Issue Detail</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="student-reports-tbody">
-                        <!-- Populated by JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Maintenance & Facility Logs (HM/Admin) -->
-    <div class="modal-overlay" id="modal-maintenance-logs">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Facility & Maintenance Logs</h3>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('maintenance-logs-table', 'Maintenance_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
-                    <button class="close-btn" onclick="app.closeModal('modal-maintenance-logs')"><i class="ph ph-x"></i></button>
-                </div>
-            </div>
-            <div class="table-container">
-                <table id="maintenance-logs-table">
-                    <thead><tr><th>Time</th><th>Location</th><th>Situation/Requirement</th><th>Logged By</th><th>Status</th></tr></thead>
-                    <tbody id="maintenance-logs-tbody">
-                        <!-- Populated by JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Global Student Registry (Super Admin) -->
+    <!-- Modal: Global Student Registry (Admin) -->
     <div class="modal-overlay" id="modal-all-students">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
                     <h3 style="margin-bottom: 4px;">Global Student Registry</h3>
-                    <div style="font-size: 13px; color: var(--text-muted);">Tracking all student records across the system.</div>
                 </div>
-                <div style="display:flex; gap:16px; align-items:center;">
-                    <div class="search-bar" style="width: 250px;">
-                        <i class="ph ph-magnifying-glass"></i>
-                        <input type="search" id="global-student-search" placeholder="Search ID, Name..." onkeyup="app.filterTable('global-student-search', 'global-student-table')">
-                    </div>
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('global-student-table', 'Global_Students.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
-                    <button class="close-btn" onclick="app.closeModal('modal-all-students')"><i class="ph ph-x"></i></button>
-                </div>
+                <button class="close-btn" onclick="app.closeModal('modal-all-students')"><i class="ph ph-x"></i></button>
             </div>
             <div class="table-container" style="max-height: 60vh;">
                 <table id="global-student-table">
-                    <thead>
-                        <tr>
-                            <th>Reg ID</th>
-                            <th>Full Name</th>
-                            <th>Grade/Sec</th>
-                            <th>Parent Contact</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="global-student-tbody">
-                        <!-- Populated by JS -->
-                    </tbody>
+                    <thead><tr><th>Reg ID</th><th>Full Name</th><th>Grade</th><th>Status</th></tr></thead>
+                    <tbody id="global-student-tbody"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Modal: User Management Table (Super Admin) -->
-    <div class="modal-overlay" id="modal-all-users">
-        <div class="modal-content">
+    <!-- Modal: Application Review (Admin/HM) -->
+    <div class="modal-overlay" id="modal-review-apps">
+        <div class="modal-content" style="max-width: 1000px;">
             <div class="modal-header">
-                <h3>User Management</h3>
-                <div style="display:flex; gap:16px; align-items:center;">
-                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="app.exportDataToCSV('sa-user-table-element', 'System_Users.csv')"><i class="ph ph-download-simple"></i> Export Users</button>
-                    <button class="close-btn" onclick="app.closeModal('modal-all-users')"><i class="ph ph-x"></i></button>
+                <h3 id="review-modal-title">Review Applications</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-review-apps')"><i class="ph ph-x"></i></button>
+            </div>
+            
+            <!-- Table List View -->
+            <div id="review-list-view">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Applicant Name</th><th>Type</th><th>Status</th><th>Submitted</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="review-apps-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="table-container">
-                <table id="sa-user-table-element">
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sa-user-table">
-                        <!-- Populated via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal: Financial Ledger (Super Admin) -->
-    <div class="modal-overlay" id="modal-financial-ledger">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Financial Ledger</h3>
-                <div style="display:flex; gap:16px; align-items:center;">
-                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="app.exportDataToCSV('finance-table-element', 'Financial_Ledger.csv')"><i class="ph ph-download-simple"></i> Export Finances</button>
-                    <button class="close-btn" onclick="app.closeModal('modal-financial-ledger')"><i class="ph ph-x"></i></button>
-                </div>
-            </div>
-            <div class="table-container">
-                <table id="finance-table-element">
-                    <thead>
-                        <tr>
-                            <th>Transaction ID</th>
-                            <th>Date</th>
-                            <th>Category</th>
-                            <th>Amount</th>
-                            <th>Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>TXN-9021</td><td>2026-06-01</td><td>Tuition Fees (Grade 10)</td><td style="color:var(--success)">+$45,000</td><td>Credit</td></tr>
-                        <tr><td>TXN-9022</td><td>2026-06-02</td><td>Staff Salary Distribution</td><td style="color:var(--danger)">-$120,000</td><td>Debit</td></tr>
-                        <tr><td>TXN-9023</td><td>2026-06-03</td><td>Lab Equipment Purchase</td><td style="color:var(--danger)">-$8,500</td><td>Debit</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Staff Directory (Headmaster) -->
-    <div class="modal-overlay" id="modal-staff-directory">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Staff & Teacher Directory</h3>
-                <div style="display:flex; gap:16px; align-items:center;">
-                    <div class="search-bar" style="width: 250px;">
-                        <i class="ph ph-magnifying-glass"></i>
-                        <input type="search" id="staff-search" placeholder="Search staff..." onkeyup="app.filterTable('staff-search', 'staff-table')">
+            <!-- Single Application Details View (Hidden initially) -->
+            <div id="review-detail-view" class="d-none">
+                <button class="btn btn-outline mb-4" style="padding: 6px 12px; font-size: 13px;" onclick="document.getElementById('review-list-view').classList.remove('d-none'); document.getElementById('review-detail-view').classList.add('d-none');"><i class="ph ph-arrow-left"></i> Back to List</button>
+                
+                <div class="glass-card" style="padding: 20px; background: var(--input-bg);">
+                    <div class="dashboard-grid">
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-muted); font-weight:600; text-transform:uppercase;">Applicant Details</div>
+                            <h2 id="rev-det-name" style="margin-bottom: 8px;">Name</h2>
+                            <div class="mb-4"><span class="status-badge" id="rev-det-type" style="background: var(--primary); color: white;">Type</span></div>
+                            
+                            <p><strong>Phone:</strong> <span id="rev-det-phone"></span> (Verified)</p>
+                            <p><strong>DOB:</strong> <span id="rev-det-dob"></span></p>
+                            <p><strong>Applying For:</strong> <span id="rev-det-target"></span></p>
+                            <p class="mt-4"><strong>Document Attached:</strong> <i class="ph ph-file-pdf"></i> <span id="rev-det-doc">doc.pdf</span></p>
+                        </div>
+                        <div id="payment-verify-box" class="d-none" style="background: rgba(52, 199, 89, 0.1); border: 1px solid var(--success); padding: 16px; border-radius: var(--radius-md);">
+                            <h4 style="color: var(--success); margin-bottom: 8px;"><i class="ph ph-shield-check"></i> Payment Claim Verification</h4>
+                            <p style="font-size: 14px;"><strong>Reported UPI/Ref:</strong> <span id="rev-det-payment-ref" style="font-family: monospace; font-size: 16px; font-weight: bold;">---</span></p>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Verify this against bank statement before approving.</p>
+                        </div>
                     </div>
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('staff-table', 'Staff_Directory.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
-                    <button class="close-btn" onclick="app.closeModal('modal-staff-directory')"><i class="ph ph-x"></i></button>
+                    
+                    <hr style="border: 0; border-top: 1px solid var(--input-border); margin: 24px 0;">
+                    
+                    <!-- Action Forms -->
+                    <div id="action-area">
+                        <div class="input-group">
+                            <label>Admin/HM Remarks (Required for Revision/Rejection)</label>
+                            <textarea id="rev-action-notes" rows="2" placeholder="e.g. Document blur, re-upload needed..."></textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;" id="rev-action-buttons">
+                            <!-- Buttons injected by JS based on role and status -->
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="table-container">
-                <table id="staff-table">
-                    <thead><tr><th>Emp ID</th><th>Name</th><th>Department</th><th>Position</th><th>Contact</th></tr></thead>
-                    <tbody id="staff-tbody">
-                        <tr><td>EMP-001</td><td>Mr. Anderson</td><td>Mathematics</td><td>Senior Teacher</td><td>555-0101</td></tr>
-                        <tr><td>EMP-002</td><td>Mrs. Roberts</td><td>Science</td><td>HOD Science</td><td>555-0102</td></tr>
-                        <tr><td>EMP-003</td><td>Dr. Jekyll</td><td>Chemistry</td><td>Lab Instructor</td><td>555-0103</td></tr>
-                        <tr><td>EMP-004</td><td>Mr. Filch</td><td>Facility</td><td>Head Janitor</td><td>555-0999</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Add User (SuperAdmin) -->
-    <div class="modal-overlay" id="modal-adduser">
-        <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-header">
-                <h3>Add New System User</h3>
-                <button class="close-btn" onclick="app.closeModal('modal-adduser')"><i class="ph ph-x"></i></button>
-            </div>
-            <form onsubmit="app.addUser(event)">
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="new-user-name" required>
-                </div>
-                <div class="input-group">
-                    <label>Role Assignment</label>
-                    <select id="new-user-role">
-                        <option value="superadmin">Super Admin</option>
-                        <option value="headmaster">Headmaster</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="student">Student</option>
-                        <option value="parent">Parent</option>
-                        <option value="staff">Facility / Support Staff</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block mt-4"><i class="ph ph-user-plus"></i> Create User Account</button>
-            </form>
         </div>
     </div>
 
@@ -1006,33 +572,29 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         window.app = (function() {
-            // --- CONSTANTS & STATE ---
+            // State
             let currentUser = null;
-            let loginFlowState = 'signin';
-            let chartInstances = {}; 
-            let currentAdminFeeStudent = null;
             let currentTheme = 'light';
             let db = null;
             let isDbLoaded = false;
+            let currentReviewAppId = null;
+            let activeReviewRole = null;
             
-            try {
-                currentTheme = localStorage.getItem('educore_theme') || 'light';
-            } catch (e) {}
-            
-            // --- FIREBASE INITIALIZATION ---
+            try { currentTheme = localStorage.getItem('educore_theme') || 'light'; } catch (e) {}
+
+            // Firebase Initialization 
+            // Using standard setup wrapper as per constraints
             let firebaseConfig;
             if (typeof __firebase_config !== 'undefined') {
                 firebaseConfig = JSON.parse(__firebase_config);
             } else {
-                // Using the specific config provided by user
                 firebaseConfig = {
-                    apiKey: "AIzaSyAcs--ynKwApvbbzeXpCNm3Qcz2JaikjyA",
+                    apiKey: "AIzaSyAcs--ynKwApvbbzeXpCNm3Qcz2JaikjyA", // Placeholder strictly for demo functionality
                     authDomain: "schoolmanagementsystem-1d10a.firebaseapp.com",
                     projectId: "schoolmanagementsystem-1d10a",
                     storageBucket: "schoolmanagementsystem-1d10a.firebasestorage.app",
                     messagingSenderId: "370442990785",
-                    appId: "1:370442990785:web:0a4904713d73ff117a9040",
-                    measurementId: "G-HTK1VSTN49"
+                    appId: "1:370442990785:web:0a4904713d73ff117a9040"
                 };
             }
 
@@ -1040,7 +602,6 @@
             const auth = getAuth(firebaseApp);
             const firestore = getFirestore(firebaseApp);
             
-            // Strict Cloud Storage Pathway Setup
             const fbAppId = typeof __app_id !== 'undefined' ? __app_id : 'schoolmanagementsystem-1d10a';
             const dbDocRef = doc(firestore, 'artifacts', fbAppId, 'public', 'data', 'school_db', 'main_doc');
 
@@ -1053,244 +614,57 @@
                         await signInAnonymously(auth);
                     }
                 } catch (err) {
-                    console.error("Firebase Auth initialization error:", err);
+                    console.error("Firebase Auth error:", err);
                 }
             };
             initAuth();
 
-            // Handle Cloud Data Real-Time Tracking
+            // Handle Cloud Data Tracking
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     onSnapshot(dbDocRef, (snap) => {
                         if (snap.exists()) {
                             db = snap.data();
                             isDbLoaded = true;
-                            if (currentUser) {
-                                navigate(`view-${currentUser.role}`);
-                            }
+                            if (currentUser) { updateUIAfterDbSync(); }
                         } else {
-                            // Seed Database if empty
                             db = generateSeedData();
                             setDoc(dbDocRef, db);
                             isDbLoaded = true;
                         }
-                    }, (error) => {
-                        console.error("Firestore sync error:", error);
-                    });
+                    }, (error) => { console.error("Firestore sync error:", error); });
                 }
             });
 
-            // Trigger saving the DB to Cloud
             function saveDB() {
-                if (auth.currentUser && db) {
-                    setDoc(dbDocRef, db).catch(console.error);
-                }
+                if (auth.currentUser && db) { setDoc(dbDocRef, db).catch(console.error); }
             }
 
-            // Fallback generation function for the database structure if clean installation
+            // Seed Generation including specific requested roles/Env Vars
             function generateSeedData() {
-                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                const today = new Date();
-                
-                let defaultDb = {
+                return {
+                    settings: { admissionOpen: true, recruitmentOpen: true },
                     users: [
-                        { id: 'admin', name: 'System Admin', role: 'superadmin', pass: '123' },
-                        { id: 'hm', name: 'Principal Davis', role: 'headmaster', pass: '123' },
-                        { id: 'teacher', name: 'Mr. Anderson', role: 'teacher', pass: '123' },
-                        { id: 'student', name: 'Alex Smith', role: 'student', pass: '123' }, 
-                        { id: 'parent', name: 'Mrs. Smith', role: 'parent', pass: '123' },
-                        { id: 'staff', name: 'Mr. Filch', role: 'staff', pass: '123' }
+                        { id: 'joykumbhakar001@gmail.com', name: 'Super Admin', role: 'superadmin', pass: '123' },
+                        { id: 'joykumbhakar77@gmail.com', name: 'Headmaster', role: 'headmaster', pass: '123' },
+                        { id: 'STU-10001', name: 'Standard Student', role: 'student', pass: '123' }
                     ],
-                    allStudents: [],
-                    events: [
-                        { date: '2026-06-15', title: 'Summer Break Starts', type: 'holiday' },
-                        { date: '2026-06-20', title: 'PTA Meeting', type: 'general' },
-                        { date: '2026-06-25', title: 'Mid-Term Exams Begin', type: 'exam' }
+                    allStudents: [
+                        { regId: 'STU-10001', name: 'Standard Student', grade: 'Grade 10', status: 'Active' }
                     ],
-                    studentReports: [
-                        { date: '2026-06-08', studentId: 'STU-10001', type: 'infra', msg: 'The tap in the boys 2nd floor bathroom is leaking heavily.', status: 'Pending' }
-                    ],
-                    maintenanceLogs: [
-                        { time: '09:30 AM', location: 'Lecture Hall A', msg: 'Need Mr. Joy in Lecture hall', logger: 'Mr. Filch', status: 'Actioned' },
-                        { time: '10:15 AM', location: 'Bathroom (Girls/Main)', msg: 'Bathroom light Bulb expired or need to be fixed', logger: 'Mrs. Norris', status: 'Pending' }
-                    ],
-                    libraryLogs: [
-                        { title: 'Physics Vol 2 (B-104)', student: 'STU-10022', status: 'missing', date: '2026-06-05' }
-                    ]
+                    applications: []
                 };
-
-                const firstNames = ['Jamie', 'Sam', 'Taylor', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Cameron', 'Avery'];
-                const lastNames = ['Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor'];
-                
-                for(let i=2; i<=50; i++) {
-                    const fname = firstNames[Math.floor(Math.random() * firstNames.length)];
-                    const lname = lastNames[Math.floor(Math.random() * lastNames.length)];
-                    let studentFees = [];
-                    for(let m=0; m<= today.getMonth(); m++) {
-                        studentFees.push({ month: months[m], amount: 150, paid: Math.random() > 0.3 }); 
-                    }
-                    defaultDb.allStudents.push({
-                        regId: `STU-10${i.toString().padStart(3, '0')}`,
-                        name: `${fname} ${lname}`,
-                        grade: `Grade ${Math.floor(Math.random() * 5) + 6}-${['A','B','C'][Math.floor(Math.random() * 3)]}`,
-                        attendance: Math.floor(Math.random() * 20) + 80,
-                        math: Math.floor(Math.random() * 40) + 60,
-                        science: Math.floor(Math.random() * 40) + 60,
-                        parentContact: `555-${Math.floor(Math.random() * 9000) + 1000}`,
-                        status: Math.random() > 0.95 ? 'Suspended' : 'Active',
-                        parentId: `par_${i}`, 
-                        fees: studentFees
-                    });
-                }
-                
-                defaultDb.allStudents.unshift({
-                    regId: "STU-10001",
-                    name: "Alex Smith",
-                    grade: "Grade 10-A",
-                    attendance: 94,
-                    math: 88,
-                    science: 92,
-                    parentContact: "555-1001",
-                    status: 'Active',
-                    parentId: "parent", 
-                    fees: [
-                        {month: 'April', amount: 150, paid: false},
-                        {month: 'May', amount: 150, paid: false},
-                        {month: 'June', amount: 150, paid: false}
-                    ]
-                });
-                return defaultDb;
             }
 
-            // --- THEME MANAGEMENT ---
+            // --- UI & THEME LOGIC ---
             function applyTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
-                try {
-                    localStorage.setItem('educore_theme', theme);
-                } catch(e) { } // Ignore storage constraints
-                
+                try { localStorage.setItem('educore_theme', theme); } catch(e) {}
                 const toggleBtn = document.getElementById('theme-toggle-btn');
-                if(toggleBtn) {
-                    toggleBtn.innerHTML = theme === 'dark' ? '<i class="ph-fill ph-sun"></i>' : '<i class="ph ph-moon"></i>';
-                }
-                
-                // Redraw charts with new colors safely if the CDN loaded
-                if (typeof Chart !== 'undefined') {
-                    Chart.defaults.color = theme === 'dark' ? '#a1a1a6' : '#86868b';
-                    if(currentUser && currentUser.role === 'superadmin') {
-                        renderSuperAdmin(); 
-                    } else if(currentUser && currentUser.role === 'headmaster') {
-                        renderHeadmaster();
-                    }
-                }
+                if(toggleBtn) { toggleBtn.innerHTML = theme === 'dark' ? '<i class="ph-fill ph-sun"></i>' : '<i class="ph ph-moon"></i>'; }
             }
+            function toggleTheme() { currentTheme = currentTheme === 'light' ? 'dark' : 'light'; applyTheme(currentTheme); }
 
-            function toggleTheme() {
-                currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-                applyTheme(currentTheme);
-            }
-
-            // --- ROUTING & NAVIGATION ---
-            function navigate(viewId) {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                document.getElementById(viewId).classList.add('active');
-
-                const header = document.getElementById('app-header');
-                const globalSearch = document.getElementById('global-search-container');
-
-                if (viewId === 'view-login') {
-                    header.style.display = 'none';
-                } else {
-                    header.style.display = 'flex';
-                    document.getElementById('display-user-name').innerText = currentUser.name;
-                    
-                    let roleDisplay = currentUser.role;
-                    if(roleDisplay === 'superadmin') roleDisplay = 'Super Admin';
-                    if(roleDisplay === 'staff') roleDisplay = 'Facility/Staff';
-                    document.getElementById('display-user-role').innerText = roleDisplay;
-                    
-                    // Show global search only for admin/hm/teacher
-                    if(['superadmin', 'headmaster', 'teacher'].includes(currentUser.role)) {
-                        globalSearch.style.display = 'block';
-                    } else {
-                        globalSearch.style.display = 'none';
-                    }
-
-                    // Trigger View Specific Renderers
-                    if(viewId === 'view-superadmin') renderSuperAdmin();
-                    if(viewId === 'view-headmaster') renderHeadmaster();
-                    if(viewId === 'view-teacher') renderTeacherTable();
-                    if(viewId === 'view-student') renderStudent();
-                    if(viewId === 'view-parent') renderParent();
-                    if(viewId === 'view-staff') renderStaff();
-                }
-                window.scrollTo(0, 0);
-            }
-
-            // --- AUTH LOGIC ---
-            function handleAuth(e) {
-                e.preventDefault();
-
-                if (!isDbLoaded) {
-                    showToast("Connecting to cloud database, please wait...", "warning");
-                    return;
-                }
-
-                const idInput = document.getElementById('auth-id').value.trim();
-                
-                if (loginFlowState === 'signin') {
-                    const passInput = document.getElementById('auth-pass').value;
-                    const user = db.users.find(u => u.id.toLowerCase() === idInput.toLowerCase());
-
-                    if (user && user.pass === passInput) {
-                        currentUser = user;
-                        navigate(`view-${user.role}`);
-                        e.target.reset();
-                        showToast(`Welcome back, ${user.name}`, "success");
-                    } else if (!user) {
-                        loginFlowState = 'signup';
-                        document.getElementById('login-fields').classList.add('d-none');
-                        document.getElementById('signup-fields').classList.remove('d-none');
-                        document.getElementById('auth-btn').innerText = 'Complete Sign Up';
-                        document.getElementById('auth-id').disabled = true;
-                    } else {
-                        showToast("Incorrect Password!", "error");
-                    }
-                } else {
-                    // Process Signup
-                    const nameInput = document.getElementById('auth-name').value;
-                    const roleInput = document.getElementById('auth-role').value;
-                    
-                    const newUser = { id: idInput, name: nameInput || 'New User', role: roleInput, pass: '123' };
-                    db.users.push(newUser);
-                    saveDB();
-                    currentUser = newUser;
-                    
-                    loginFlowState = 'signin';
-                    document.getElementById('login-fields').classList.remove('d-none');
-                    document.getElementById('signup-fields').classList.add('d-none');
-                    document.getElementById('auth-btn').innerText = 'Authenticate / Continue';
-                    document.getElementById('auth-id').disabled = false;
-                    e.target.reset();
-
-                    navigate(`view-${newUser.role}`);
-                    showToast("Account Created Successfully", "success");
-                }
-            }
-
-            function logout() {
-                currentUser = null;
-                navigate('view-login');
-            }
-
-            // --- UTILITIES ---
-            function openModal(id) { 
-                document.getElementById(id).classList.add('active'); 
-                if(id === 'modal-student-reports') renderStudentReports();
-                if(id === 'modal-maintenance-logs') renderMaintenanceLogs();
-            }
-            function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-            
             function showToast(message, type = 'info') {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
@@ -1301,609 +675,434 @@
                 if (type === 'warning') icon = '<i class="ph-fill ph-warning" style="color: var(--warning);"></i>';
                 toast.innerHTML = `<div class="toast-icon">${icon}</div><div class="toast-content">${message}</div>`;
                 container.appendChild(toast);
-                
-                // Trigger reflow
-                void toast.offsetWidth;
+                void toast.offsetWidth; // reflow
                 toast.classList.add('show');
-                
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
+                setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
             }
 
-            // --- CSV EXPORT LOGIC ---
-            function exportDataToCSV(tableId, filename) {
-                const table = document.getElementById(tableId);
-                if (!table) { showToast("No data to export", "error"); return; }
-                
-                let csv = [];
-                let rows = table.querySelectorAll("tr");
-                
-                for (let i = 0; i < rows.length; i++) {
-                    let row = [], cols = rows[i].querySelectorAll("td, th");
-                    for (let j = 0; j < cols.length; j++) {
-                        let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, ""); 
-                        row.push(text);
-                    }
-                    csv.push(row.join(","));
+            function openModal(id, roleCtx = null) { 
+                document.getElementById(id).classList.add('active'); 
+                if(id === 'modal-review-apps') {
+                    activeReviewRole = roleCtx;
+                    document.getElementById('review-list-view').classList.remove('d-none');
+                    document.getElementById('review-detail-view').classList.add('d-none');
+                    renderReviewTable();
                 }
-                
-                let csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
-                let downloadLink = document.createElement("a");
-                downloadLink.download = filename;
-                downloadLink.href = window.URL.createObjectURL(csvFile);
-                downloadLink.style.display = "none";
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                showToast(`Downloading ${filename}...`, "success");
+                if(id === 'modal-all-students') {
+                    renderAllStudents();
+                }
+            }
+            function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+            function navigate(viewId) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(viewId).classList.add('active');
+
+                const header = document.getElementById('app-header');
+                if (viewId === 'view-login') {
+                    header.style.display = 'none';
+                } else {
+                    header.style.display = 'flex';
+                    document.getElementById('display-user-name').innerText = currentUser.name;
+                    document.getElementById('display-user-role').innerText = currentUser.role;
+                    updateUIAfterDbSync();
+                }
+                window.scrollTo(0, 0);
             }
 
-            // --- SEARCH LOGIC ---
-            function filterTable(inputId, tableId) {
-                const filter = document.getElementById(inputId).value.toUpperCase();
-                const table = document.getElementById(tableId);
-                const trs = table.getElementsByTagName('tr');
-                for (let i = 1; i < trs.length; i++) {
-                    let display = 'none';
-                    const tds = trs[i].getElementsByTagName('td');
-                    for(let j=0; j<tds.length; j++) {
-                        if (tds[j].innerText.toUpperCase().indexOf(filter) > -1) {
-                            display = '';
-                            break;
-                        }
-                    }
-                    trs[i].style.display = display;
+            function updateUIAfterDbSync() {
+                if(!currentUser || !db) return;
+                
+                if(currentUser.role === 'superadmin') {
+                    document.getElementById('toggle-admission').checked = db.settings.admissionOpen;
+                    document.getElementById('toggle-recruitment').checked = db.settings.recruitmentOpen;
+                    const pendingAdminCount = db.applications.filter(a => a.status === 'hm_reviewed' || a.status === 'paid_pending_approval').length;
+                    document.getElementById('admin-badge-count').innerText = `${pendingAdminCount} Pending Action`;
+                }
+                if(currentUser.role === 'headmaster') {
+                    const pendingHmCount = db.applications.filter(a => a.status === 'submitted').length;
+                    document.getElementById('hm-badge-count').innerText = pendingHmCount;
+                }
+                if(currentUser.role === 'applicant') {
+                    renderApplicantDashboard();
                 }
             }
 
-            // Global Search Setup
-            function setupGlobalSearch() {
-                const input = document.getElementById('global-search-input');
-                const resultsBox = document.getElementById('global-search-results');
-                
-                input.addEventListener('input', function() {
-                    const query = this.value.toLowerCase().trim();
-                    resultsBox.innerHTML = '';
-                    
-                    if(query.length < 2) {
-                        resultsBox.classList.remove('active');
-                        return;
-                    }
-                    
-                    let matches = [];
-                    // Search users
-                    db.users.forEach(u => {
-                        if(u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query)) {
-                            matches.push({ type: 'User', icon: 'ph-user', text: `${u.name} (@${u.id}) - ${u.role}`});
-                        }
-                    });
-                    // Search students
-                    db.allStudents.forEach(s => {
-                        if(s.name.toLowerCase().includes(query) || s.regId.toLowerCase().includes(query)) {
-                            matches.push({ type: 'Student', icon: 'ph-student', text: `${s.name} (${s.regId}) - ${s.grade}`});
-                        }
-                    });
+            // --- AUTHENTICATION ---
+            function handleAuth(e) {
+                e.preventDefault();
+                if (!isDbLoaded) { showToast("Connecting to cloud database...", "warning"); return; }
 
-                    if(matches.length === 0) {
-                        resultsBox.innerHTML = `<div style="padding: 12px; color: var(--text-muted); text-align:center;">No results found</div>`;
+                const idInput = document.getElementById('auth-id').value.trim();
+                const loginFieldsVisible = !document.getElementById('login-fields').classList.contains('d-none');
+                
+                if (loginFieldsVisible) {
+                    const passInput = document.getElementById('auth-pass').value;
+                    const user = db.users.find(u => u.id.toLowerCase() === idInput.toLowerCase());
+
+                    if (user && user.pass === passInput) {
+                        currentUser = user;
+                        navigate(`view-${user.role}`);
+                        e.target.reset();
+                        showToast(`Welcome, ${user.name}`, "success");
+                    } else if (!user) {
+                        // Switch to Sign Up UI
+                        document.getElementById('login-fields').classList.add('d-none');
+                        document.getElementById('signup-fields').classList.remove('d-none');
+                        document.getElementById('auth-btn').innerText = 'Complete Identity Setup';
+                        document.getElementById('auth-id').disabled = true;
+                        showToast("ID not found. Create account.", "info");
                     } else {
-                        matches.slice(0, 8).forEach(m => {
-                            resultsBox.innerHTML += `
-                                <div class="search-item" onclick="app.showToast('Navigating to ${m.type} profile...', 'info')">
-                                    <div class="search-item-icon"><i class="ph ${m.icon}"></i></div>
-                                    <div style="font-size: 13px;">${m.text}</div>
-                                </div>
-                            `;
-                        });
+                        showToast("Incorrect Password!", "error");
                     }
-                    resultsBox.classList.add('active');
-                });
-
-                // Close dropdown on click outside
-                document.addEventListener('click', (e) => {
-                    if(!e.target.closest('#global-search-container')) {
-                        resultsBox.classList.remove('active');
-                    }
-                });
-            }
-
-            function initChart(chartId, type, data, options) {
-                if (typeof Chart === 'undefined') return;
-                const ctx = document.getElementById(chartId);
-                if(!ctx) return;
-                if(chartInstances[chartId]) chartInstances[chartId].destroy();
-                chartInstances[chartId] = new Chart(ctx, { type, data, options });
-            }
-
-            // --- GLOBAL CALENDAR SYSTEM ---
-            function openCalendar() {
-                const controls = document.getElementById('calendar-admin-controls');
-                if(['superadmin', 'headmaster'].includes(currentUser.role)) {
-                    controls.style.display = 'block';
                 } else {
-                    controls.style.display = 'none';
-                }
-                renderCalendar();
-                openModal('modal-calendar');
-            }
-
-            function renderCalendar() {
-                const container = document.getElementById('calendar-days-container');
-                container.innerHTML = '';
-                
-                const daysInMonth = 30; // June
-                const startDayIndex = 1; // June 1st 2026 is a Monday (0=Sun, 1=Mon)
-
-                for(let i=0; i<startDayIndex; i++) {
-                    container.innerHTML += `<div class="calendar-day empty"></div>`;
-                }
-
-                for(let i=1; i<=daysInMonth; i++) {
-                    let dateStr = `2026-06-${i.toString().padStart(2, '0')}`;
-                    let eventsForDay = db.events.filter(e => e.date === dateStr);
+                    // Process Signup
+                    const nameInput = document.getElementById('auth-name').value || 'New User';
+                    const roleInput = document.getElementById('auth-role').value;
                     
-                    let eventsHtml = '';
-                    eventsForDay.forEach(e => {
-                        let badgeClass = `event-${e.type}`;
-                        eventsHtml += `<span class="event-badge ${badgeClass}" title="${e.title}">${e.title}</span>`;
-                    });
+                    const newUser = { id: idInput, name: nameInput, role: roleInput, pass: '123' };
+                    db.users.push(newUser);
+                    saveDB();
+                    currentUser = newUser;
+                    
+                    // Reset UI
+                    document.getElementById('login-fields').classList.remove('d-none');
+                    document.getElementById('signup-fields').classList.add('d-none');
+                    document.getElementById('auth-btn').innerText = 'Authenticate / Continue';
+                    document.getElementById('auth-id').disabled = false;
+                    e.target.reset();
 
-                    let classes = `calendar-day ${eventsForDay.length > 0 ? 'has-event' : ''}`;
-                    container.innerHTML += `<div class="${classes}">
-                        <div style="font-weight:600; margin-bottom:4px;">${i}</div>
-                        ${eventsHtml}
-                    </div>`;
+                    navigate(`view-${newUser.role}`);
+                    showToast("Account Setup Successful!", "success");
                 }
             }
+            function logout() { currentUser = null; navigate('view-login'); }
 
-            function addCalendarEvent(e) {
-                e.preventDefault();
-                const date = document.getElementById('cal-add-date').value;
-                const title = document.getElementById('cal-add-title').value;
-                const type = document.getElementById('cal-add-type').value;
-
-                db.events.push({date, title, type});
+            // --- ADMIN / HM PORTAL LOGIC ---
+            function togglePortalSetting(key, val) {
+                if(!db) return;
+                db.settings[key] = val;
                 saveDB();
-                showToast("Event Added to Calendar", "success");
-                renderCalendar();
-                document.getElementById('calendar-add-form').classList.add('d-none');
-                e.target.reset();
+                showToast(`${key} is now ${val ? 'Open' : 'Closed'}`, "success");
             }
 
-            // --- VIEW RENDERERS & CHARTS ---
-            function renderSuperAdmin() {
-                document.getElementById('sa-total-users').innerText = db.users.length + db.allStudents.length; 
-                
-                const tbody = document.getElementById('sa-user-table');
+            function renderAllStudents() {
+                const tbody = document.getElementById('global-student-tbody');
                 tbody.innerHTML = '';
-                db.users.forEach(u => {
-                    tbody.innerHTML += `<tr>
-                        <td>${u.id}</td><td>${u.name}</td>
-                        <td style="text-transform: capitalize;">${u.role}</td>
-                        <td><span style="color: var(--success); font-weight: 600;">Active</span></td>
-                    </tr>`;
-                });
-
-                const stuBody = document.getElementById('global-student-tbody');
-                stuBody.innerHTML = '';
                 db.allStudents.forEach(s => {
-                    let statusColor = s.status === 'Active' ? 'var(--success)' : 'var(--danger)';
-                    stuBody.innerHTML += `<tr>
-                        <td>${s.regId}</td><td>${s.name}</td>
-                        <td>${s.grade}</td><td>${s.parentContact}</td>
-                        <td style="color:${statusColor}; font-weight:600;">${s.status}</td>
-                    </tr>`;
+                    tbody.innerHTML += `<tr><td>${s.regId}</td><td>${s.name}</td><td>${s.grade}</td><td style="color:var(--success); font-weight:bold;">${s.status}</td></tr>`;
                 });
+            }
 
-                // Charts
-                if (typeof Chart !== 'undefined') {
-                    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+            // --- APPLICATION REVIEW LOGIC (ADMIN/HM) ---
+            function getStatusBadge(status) {
+                switch(status) {
+                    case 'draft': return '<span class="status-badge status-draft">Draft</span>';
+                    case 'submitted': return '<span class="status-badge status-review">Waiting HM</span>';
+                    case 'hm_reviewed': return '<span class="status-badge status-review">Waiting Admin</span>';
+                    case 'needs_revision': return '<span class="status-badge status-action">Needs Revision</span>';
+                    case 'payment_pending': return '<span class="status-badge status-review">Awaiting Payment</span>';
+                    case 'paid_pending_approval': return '<span class="status-badge status-action">Verify Payment</span>';
+                    case 'approved': return '<span class="status-badge status-enrolled">Approved/Enrolled</span>';
+                    default: return `<span class="status-badge">${status}</span>`;
+                }
+            }
+
+            function renderReviewTable() {
+                const tbody = document.getElementById('review-apps-tbody');
+                tbody.innerHTML = '';
+                
+                let appsToShow = [];
+                if(activeReviewRole === 'hm') {
+                    // HM sees newly submitted
+                    appsToShow = db.applications.filter(a => a.status === 'submitted');
+                } else if (activeReviewRole === 'admin') {
+                    // Admin sees reviewed and payment verifications
+                    appsToShow = db.applications.filter(a => a.status === 'hm_reviewed' || a.status === 'paid_pending_approval');
+                }
+
+                if(appsToShow.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No applications pending your review.</td></tr>`;
+                    return;
+                }
+
+                appsToShow.forEach(app => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="font-weight:600;">${app.name}</td>
+                            <td style="text-transform: capitalize;">${app.type}</td>
+                            <td>${getStatusBadge(app.status)}</td>
+                            <td>${app.submittedAt || 'N/A'}</td>
+                            <td><button class="btn btn-outline" style="padding: 4px 10px; font-size:12px;" onclick="app.viewAppDetail('${app.id}')">View</button></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            function viewAppDetail(appId) {
+                const application = db.applications.find(a => a.id === appId);
+                if(!application) return;
+                currentReviewAppId = appId;
+
+                document.getElementById('review-list-view').classList.add('d-none');
+                document.getElementById('review-detail-view').classList.remove('d-none');
+
+                document.getElementById('rev-det-name').innerText = application.name;
+                document.getElementById('rev-det-type').innerText = application.type.toUpperCase();
+                document.getElementById('rev-det-phone').innerText = application.phone;
+                document.getElementById('rev-det-dob').innerText = application.dob;
+                document.getElementById('rev-det-target').innerText = application.targetGrade || application.targetQual;
+                document.getElementById('rev-det-doc').innerText = application.documentName || 'No Doc';
+                
+                document.getElementById('rev-action-notes').value = '';
+
+                const actionDiv = document.getElementById('rev-action-buttons');
+                actionDiv.innerHTML = '';
+                const payBox = document.getElementById('payment-verify-box');
+                payBox.classList.add('d-none');
+
+                // Dynamic buttons based on status & role
+                if(application.status === 'submitted' && activeReviewRole === 'hm') {
+                    actionDiv.innerHTML = `
+                        <button class="btn btn-success" onclick="app.processApp('hm_reviewed')"><i class="ph ph-check"></i> Approve & Pass to Admin</button>
+                        <button class="btn btn-danger" onclick="app.processApp('needs_revision')"><i class="ph ph-x"></i> Reject / Request Revision</button>
+                    `;
+                } else if(application.status === 'hm_reviewed' && activeReviewRole === 'admin') {
+                    actionDiv.innerHTML = `
+                        <button class="btn btn-primary" onclick="app.processApp('payment_pending')"><i class="ph ph-check"></i> Verify Details & Request Payment</button>
+                        <button class="btn btn-danger" onclick="app.processApp('needs_revision')"><i class="ph ph-x"></i> Reject / Request Revision</button>
+                    `;
+                } else if(application.status === 'paid_pending_approval' && activeReviewRole === 'admin') {
+                    payBox.classList.remove('d-none');
+                    document.getElementById('rev-det-payment-ref').innerText = application.paymentRef;
+                    actionDiv.innerHTML = `
+                        <button class="btn btn-success" onclick="app.processApp('approved')"><i class="ph ph-shield-check"></i> Payment Valid - Complete Enrollment</button>
+                        <button class="btn btn-danger" onclick="app.processApp('payment_pending')"><i class="ph ph-x"></i> Invalid Payment - Request Again</button>
+                    `;
+                }
+            }
+
+            function processApp(newStatus) {
+                const notes = document.getElementById('rev-action-notes').value.trim();
+                if((newStatus === 'needs_revision' || newStatus === 'payment_pending') && !notes && activeReviewRole === 'admin' && newStatus !== 'payment_pending') {
+                    showToast("Please provide remarks for rejection/revision.", "warning");
+                    return;
+                }
+
+                const application = db.applications.find(a => a.id === currentReviewAppId);
+                application.status = newStatus;
+                if(notes) application.adminNotes = notes;
+
+                // Auto-Enrollment logic if fully approved
+                if(newStatus === 'approved') {
+                    const newIdNum = 10000 + db.allStudents.length + 1;
+                    const regId = `STU-${newIdNum}`;
                     
-                    const gridColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-
-                    initChart('saRevenueChart', 'bar', {
-                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                        datasets: [
-                            { label: 'Revenue', data: [650, 590, 800, 810], backgroundColor: '#0071e3', borderRadius: 6 },
-                            { label: 'Expenses', data: [400, 420, 390, 450], backgroundColor: '#ff3b30', borderRadius: 6 }
-                        ]
-                    }, { 
-                        responsive: true, maintainAspectRatio: false, 
-                        plugins: { legend: { position: 'bottom' } },
-                        scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } }
-                    });
-
-                    initChart('saEnrollmentChart', 'line', {
-                        labels: ['2020', '2021', '2022', '2023', '2024'],
-                        datasets: [{
-                            label: 'Total Students', data: [800, 950, 1100, 1050, 1250],
-                            borderColor: '#af52de', backgroundColor: 'rgba(175, 82, 222, 0.1)',
-                            fill: true, tension: 0.4, borderWidth: 3, pointRadius: 4
-                        }]
-                    }, { 
-                        responsive: true, maintainAspectRatio: false,
-                        scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } }
-                    });
-
-                    initChart('saDemographicsChart', 'doughnut', {
-                        labels: ['Students', 'Teachers', 'Admin', 'Support Staff'],
-                        datasets: [{
-                            data: [db.allStudents.length, db.users.filter(u=>u.role==='teacher').length, db.users.filter(u=>u.role==='superadmin' || u.role==='headmaster').length, db.users.filter(u=>u.role==='staff').length],
-                            backgroundColor: ['#0071e3', '#34c759', '#ffcc00', '#ff9500'],
-                            borderWidth: 0, hoverOffset: 4
-                        }]
-                    }, { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right' } } });
-
-                    // Calculate feedback metrics
-                    let infra = 0, acad = 0, behav = 0, tech = 0;
-                    db.studentReports.forEach(r => {
-                        if(r.type === 'infra') infra++;
-                        else if(r.type === 'academic') acad++;
-                        else if(r.type === 'behavior') behav++;
-                        else tech++;
-                    });
-
-                    initChart('saFeedbackChart', 'pie', {
-                        labels: ['Infrastructure', 'Academic', 'Behavioral', 'Technical'],
-                        datasets: [{
-                            data: [infra||1, acad||1, behav||1, tech||1], // default 1 to show chart if empty
-                            backgroundColor: ['#ff9500', '#0071e3', '#ff3b30', '#af52de'],
-                            borderWidth: 0
-                        }]
-                    }, { responsive: true, maintainAspectRatio: false });
-                }
-            }
-
-            function renderHeadmaster() {
-                setTimeout(() => {
-                    const b1 = document.getElementById('hm-bar-1');
-                    const b2 = document.getElementById('hm-bar-2');
-                    if(b1) b1.style.width = '92%';
-                    if(b2) b2.style.width = '85%';
-                }, 100);
-            }
-
-            function renderStudentReports() {
-                const tbody = document.getElementById('student-reports-tbody');
-                tbody.innerHTML = '';
-                db.studentReports.forEach((rep, i) => {
-                    let catText = rep.type === 'infra' ? 'Infrastructure' : (rep.type === 'behavior' ? 'Behavioral' : rep.type);
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${rep.date}</td><td>${rep.studentId}</td>
-                            <td style="text-transform: capitalize;">${catText}</td>
-                            <td>${rep.msg}</td>
-                            <td style="color:var(--warning);">${rep.status}</td>
-                            <td>
-                                ${rep.status === 'Pending' ? 
-                                `<button class="btn btn-outline" style="padding:4px 8px; font-size:12px;" onclick="app.actionReport(${i})">Resolve</button>` : 
-                                `<span style="color: var(--success);"><i class="ph ph-check"></i> Resolved</span>`}
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-
-            function renderMaintenanceLogs() {
-                const tbody = document.getElementById('maintenance-logs-tbody');
-                tbody.innerHTML = '';
-                db.maintenanceLogs.forEach((log) => {
-                    let stCol = log.status === 'Pending' ? 'var(--warning)' : 'var(--success)';
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${log.time}</td><td>${log.location}</td>
-                            <td>${log.msg}</td><td>${log.logger}</td>
-                            <td style="color:${stCol}; font-weight:600;">${log.status}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            function actionReport(index) {
-                db.studentReports[index].status = 'Resolved';
-                saveDB();
-                showToast("Report marked as Resolved", "success");
-                renderStudentReports();
-            }
-
-            function renderTeacherTable() {
-                const tbody = document.getElementById('teacher-student-table');
-                const targetSelect = document.getElementById('teacher-msg-target');
-                tbody.innerHTML = '';
-                targetSelect.innerHTML = '<option value="">Select Parent to Message</option>';
-                
-                const classStudents = db.allStudents.slice(0, 15); 
-                classStudents.forEach(s => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${s.regId}</td>
-                            <td>${s.name}</td>
-                            <td>
-                                <label class="switch" style="transform: scale(0.8); margin: 0;">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                </label>
-                            </td>
-                            <td><input type="number" id="grade-math-${s.regId}" value="${s.math}" style="width: 70px; padding: 6px;"></td>
-                            <td><input type="number" id="grade-sci-${s.regId}" value="${s.science}" style="width: 70px; padding: 6px;"></td>
-                        </tr>
-                    `;
-                    targetSelect.innerHTML += `<option value="${s.parentId}">Parent of ${s.name}</option>`;
-                });
-            }
-
-            function renderStudent() {
-                const studentData = currentUser.id === 'student' 
-                    ? db.allStudents.find(s => s.regId === 'STU-10001') 
-                    : db.allStudents.find(s => s.regId === currentUser.id);
-
-                if(!studentData) return;
-
-                document.getElementById('student-profile-name').innerText = studentData.name;
-                document.getElementById('student-profile-grade').innerText = `ID: ${studentData.regId} | ${studentData.grade}`;
-                document.getElementById('student-profile-attendance').innerText = `${studentData.attendance}%`;
-                
-                // Calculate pseudo GPA based on Math & Science
-                let gpa = ((parseInt(studentData.math) + parseInt(studentData.science)) / 200) * 4.0;
-                document.getElementById('student-profile-gpa').innerText = gpa.toFixed(1);
-
-                const gradeBody = document.getElementById('student-grades-table');
-                gradeBody.innerHTML = `
-                    <tr><td>Mathematics</td><td>${studentData.math}/100</td><td>${studentData.math >= 80 ? 'A' : 'B'}</td></tr>
-                    <tr><td>Science</td><td>${studentData.science}/100</td><td>${studentData.science >= 80 ? 'A' : 'B'}</td></tr>
-                `;
-            }
-
-            // --- FEATURE: FLEXIBLE PARENT PAYMENT ---
-            function renderParent() {
-                // Find student linked to this parent (defaulting to the first student for demo user 'parent')
-                const student = currentUser.id === 'parent' 
-                    ? db.allStudents.find(s => s.regId === 'STU-10001')
-                    : db.allStudents.find(s => s.parentId === currentUser.id) || db.allStudents[0];
-                
-                document.getElementById('parent-child-name').innerText = student.name;
-                document.getElementById('parent-child-attendance').innerText = `${student.attendance}%`;
-
-                const feeContainer = document.getElementById('parent-fee-list');
-                feeContainer.innerHTML = '';
-                
-                let unpaidFees = student.fees.filter(f => !f.paid);
-                
-                if(unpaidFees.length === 0) {
-                    feeContainer.innerHTML = `<div style="padding: 10px; color: var(--success); font-weight: 600;"><i class="ph ph-check-circle"></i> All dues cleared for the year.</div>`;
-                    document.getElementById('parent-fee-total').innerText = "$0.00";
-                    return;
-                }
-
-                unpaidFees.forEach((fee, index) => {
-                    feeContainer.innerHTML += `
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="pf-${index}" class="parent-fee-check" value="${fee.amount}" data-month="${fee.month}" onchange="app.calculateParentFee()">
-                            <label for="pf-${index}" style="margin:0; flex:1; cursor:pointer;">${fee.month} Tuition Fee</label>
-                            <span style="font-weight:600; color:var(--danger)">$${fee.amount}</span>
-                        </div>
-                    `;
-                });
-                calculateParentFee();
-            }
-
-            function calculateParentFee() {
-                let total = 0;
-                document.querySelectorAll('.parent-fee-check:checked').forEach(chk => {
-                    total += parseFloat(chk.value);
-                });
-                document.getElementById('parent-fee-total').innerText = `$${total.toFixed(2)}`;
-            }
-
-            function processSelectedFees() {
-                const checked = document.querySelectorAll('.parent-fee-check:checked');
-                if(checked.length === 0) { showToast("Please select at least one month to pay.", "warning"); return; }
-                
-                const student = currentUser.id === 'parent' 
-                    ? db.allStudents.find(s => s.regId === 'STU-10001')
-                    : db.allStudents.find(s => s.parentId === currentUser.id) || db.allStudents[0];
-
-                checked.forEach(chk => {
-                    let monthName = chk.getAttribute('data-month');
-                    let feeObj = student.fees.find(f => f.month === monthName);
-                    if(feeObj) feeObj.paid = true;
-                });
-                
-                saveDB();
-                showToast(`Payment of ${document.getElementById('parent-fee-total').innerText} Successful!`, "success");
-                renderParent();
-            }
-
-            // --- FEATURE: ADMIN OFFLINE FEE UPDATE ---
-            function searchOfflineFeeStudent() {
-                const searchId = document.getElementById('offline-fee-search').value.trim().toUpperCase();
-                const student = db.allStudents.find(s => s.regId === searchId);
-                
-                if(!student) {
-                    showToast("Student not found. Please check ID.", "error");
-                    document.getElementById('offline-fee-result').classList.add('d-none');
-                    return;
-                }
-
-                currentAdminFeeStudent = student;
-                document.getElementById('of-student-name').innerText = `${student.name} (${student.regId})`;
-                document.getElementById('offline-fee-result').classList.remove('d-none');
-
-                const feeContainer = document.getElementById('of-fee-list');
-                feeContainer.innerHTML = '';
-                
-                let unpaidFees = student.fees.filter(f => !f.paid);
-                if(unpaidFees.length === 0) {
-                    feeContainer.innerHTML = `<div style="color:var(--success); padding: 10px; font-weight: 500;"><i class="ph ph-check-circle"></i> No dues pending for this student.</div>`;
-                } else {
-                    unpaidFees.forEach((fee, index) => {
-                        feeContainer.innerHTML += `
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="adm-f-${index}" class="admin-fee-check" data-month="${fee.month}">
-                                <label for="adm-f-${index}" style="margin:0; cursor:pointer; flex: 1;">${fee.month} Tuition</label>
-                                <span style="font-weight:600; color:var(--danger)">$${fee.amount}</span>
-                            </div>
-                        `;
-                    });
-                }
-            }
-
-            function markFeesPaidOffline() {
-                const checked = document.querySelectorAll('.admin-fee-check:checked');
-                if(checked.length === 0) {
-                    showToast("Please select fees to update.", "warning");
-                    return;
-                }
-
-                checked.forEach(chk => {
-                    let monthName = chk.getAttribute('data-month');
-                    let feeObj = currentAdminFeeStudent.fees.find(f => f.month === monthName);
-                    if(feeObj) feeObj.paid = true;
-                });
-                saveDB();
-                showToast("Offline payment updated successfully in database.", "success");
-                searchOfflineFeeStudent(); 
-            }
-
-            // --- FEATURE: STAFF PORTAL ---
-            function renderStaff() {
-                const tbody = document.getElementById('staff-book-table-body');
-                tbody.innerHTML = '';
-                db.libraryLogs.forEach(log => {
-                    let color = log.status === 'missing' ? 'var(--danger)' : 'var(--primary)';
-                    if(log.status === 'returned') color = 'var(--success)';
-                    
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${log.title}</td><td>${log.student || 'N/A'}</td>
-                            <td style="color:${color}; font-weight:600; text-transform:capitalize;">${log.status}</td>
-                            <td>${log.date}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            function submitStaffLog(e) {
-                e.preventDefault();
-                const loc = document.getElementById('staff-log-location').value;
-                const msg = document.getElementById('staff-log-msg').value;
-                
-                db.maintenanceLogs.unshift({
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                    location: loc,
-                    msg: msg,
-                    logger: currentUser.name,
-                    status: 'Pending'
-                });
-                saveDB();
-                showToast("Situation logged and broadcasted to Administration.", "success");
-                e.target.reset();
-            }
-
-            function submitBookTrack(e) {
-                e.preventDefault();
-                db.libraryLogs.unshift({
-                    title: document.getElementById('staff-book-title').value,
-                    student: document.getElementById('staff-book-student').value,
-                    status: document.getElementById('staff-book-status').value,
-                    date: new Date().toISOString().split('T')[0]
-                });
-                saveDB();
-                showToast("Library record updated.", "success");
-                renderStaff();
-                e.target.reset();
-            }
-
-            // --- FEATURE: STUDENT REPORT / FEEDBACK ---
-            function submitStudentReport(e) {
-                e.preventDefault();
-                const type = document.getElementById('student-report-type').value;
-                const msg = document.getElementById('student-report-msg').value;
-                
-                const stuId = currentUser.id === 'student' ? 'STU-10001' : currentUser.id;
-
-                db.studentReports.unshift({
-                    date: new Date().toISOString().split('T')[0],
-                    studentId: stuId,
-                    type: type,
-                    msg: msg,
-                    status: 'Pending'
-                });
-                saveDB();
-                showToast("Your report has been sent securely to the Headmaster.", "success");
-                e.target.reset();
-            }
-
-            function addUser(e) {
-                e.preventDefault();
-                const name = document.getElementById('new-user-name').value;
-                const role = document.getElementById('new-user-role').value;
-                const id = name.split(' ')[0].toLowerCase() + Math.floor(Math.random() * 100);
-                
-                db.users.push({ id, name, role, pass: '123' });
-                saveDB();
-                
-                showToast(`User created! ID: ${id}, Pass: 123`, "success");
-                closeModal('modal-adduser');
-                if(currentUser.role === 'superadmin') renderSuperAdmin();
-                e.target.reset();
-            }
-
-            function sendBroadcast(e) { e.preventDefault(); showToast("Broadcast sent successfully to selected audience.", "success"); e.target.reset(); }
-            function sendDirectMessage(e) { e.preventDefault(); showToast("Direct push notification sent to Parent's mobile device.", "success"); e.target.reset(); }
-            
-            function sendParentChat(e) {
-                e.preventDefault();
-                const input = document.getElementById('parent-chat-input');
-                const chatBox = document.getElementById('parent-chat');
-                if(!input.value.trim()) return;
-
-                chatBox.innerHTML += `<div class="msg msg-sent">${input.value}</div>`;
-                input.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight;
-
-                setTimeout(() => {
-                    chatBox.innerHTML += `<div class="msg msg-received">Thank you for reaching out. I'll look into this matter today.</div>`;
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }, 1000);
-            }
-
-            function saveGrades() {
-                db.allStudents.slice(0, 15).forEach(s => {
-                    const mathInput = document.getElementById(`grade-math-${s.regId}`);
-                    const sciInput = document.getElementById(`grade-sci-${s.regId}`);
-                    if(mathInput && sciInput) { 
-                        s.math = parseInt(mathInput.value); 
-                        s.science = parseInt(sciInput.value); 
+                    // Format DOB for password: YYYY-MM-DD -> DDMMYYYY
+                    let pass = '123'; // fallback
+                    if(application.dob) {
+                        const parts = application.dob.split('-');
+                        if(parts.length === 3) pass = `${parts[2]}${parts[1]}${parts[0]}`;
                     }
-                });
+
+                    // Create Student DB record
+                    db.allStudents.push({
+                        regId: regId,
+                        name: application.name,
+                        grade: application.targetGrade || 'Staff',
+                        status: 'Active',
+                        contact: application.phone
+                    });
+
+                    // Create Auth User Login
+                    db.users.push({
+                        id: application.applicantId, // allow login via their applied email
+                        assignedRegId: regId, // their official ID
+                        name: application.name,
+                        role: application.type === 'student' ? 'student' : 'teacher',
+                        pass: pass
+                    });
+                    
+                    application.generatedId = regId;
+                    application.generatedPass = pass;
+                    showToast(`Enrolled! ID: ${regId} generated.`, "success");
+                } else {
+                    showToast(`Application moved to: ${newStatus.replace('_', ' ')}`, "success");
+                }
+
                 saveDB();
-                showToast("Grades and Attendance saved securely to the system.", "success");
+                renderReviewTable();
+                document.getElementById('review-list-view').classList.remove('d-none');
+                document.getElementById('review-detail-view').classList.add('d-none');
+                updateUIAfterDbSync();
             }
 
-            function togglePortalLock(e) {
-                if(e.target.checked) showToast("Student Portal Access has been Locked.", "error");
-                else showToast("Student Portal Access Unlocked.", "success");
+
+            // --- APPLICANT PORTAL LOGIC ---
+            function renderApplicantDashboard() {
+                const myApp = db.applications.find(a => a.applicantId === currentUser.id);
+                const formSection = document.getElementById('applicant-stage-form');
+                const paySection = document.getElementById('applicant-stage-payment');
+                const enrolledSection = document.getElementById('applicant-stage-enrolled');
+                const msgBox = document.getElementById('portal-closed-msg');
+                const formEl = document.getElementById('admission-form');
+                const typeSelect = document.getElementById('applicant-type');
+
+                formSection.classList.add('d-none');
+                paySection.classList.add('d-none');
+                enrolledSection.classList.add('d-none');
+                msgBox.classList.add('d-none');
+                formEl.classList.remove('d-none');
+
+                if (!myApp || myApp.status === 'draft' || myApp.status === 'needs_revision') {
+                    // Show Form
+                    formSection.classList.remove('d-none');
+                    updateStepper(myApp ? (myApp.status === 'needs_revision' ? 0.5 : 0) : 0);
+                    
+                    if(myApp && myApp.status === 'needs_revision') {
+                        document.getElementById('applicant-notes-box').classList.remove('d-none');
+                        document.getElementById('applicant-notes-text').innerText = myApp.adminNotes || "Please review and correct your details.";
+                    } else {
+                        document.getElementById('applicant-notes-box').classList.add('d-none');
+                    }
+
+                    // Check if open
+                    if (typeSelect.value === 'student' && !db.settings.admissionOpen) {
+                        formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
+                    }
+                    if (typeSelect.value === 'teacher' && !db.settings.recruitmentOpen) {
+                        formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
+                    }
+                } 
+                else if (myApp.status === 'submitted') { updateStepper(1); }
+                else if (myApp.status === 'hm_reviewed') { updateStepper(2); }
+                else if (myApp.status === 'payment_pending') { 
+                    updateStepper(3); 
+                    paySection.classList.remove('d-none');
+                    document.getElementById('applicant-notes-box').classList.add('d-none');
+                    if(myApp.adminNotes) {
+                        document.getElementById('applicant-notes-box').classList.remove('d-none');
+                        document.getElementById('applicant-notes-text').innerText = myApp.adminNotes;
+                    }
+                }
+                else if (myApp.status === 'paid_pending_approval') { updateStepper(3.5); }
+                else if (myApp.status === 'approved') {
+                    updateStepper(4);
+                    enrolledSection.classList.remove('d-none');
+                    document.getElementById('enrolled-final-id').innerText = myApp.generatedId;
+                    document.getElementById('enrolled-final-pass').innerText = myApp.generatedPass;
+                }
             }
 
-            // Init App
-            window.onload = () => { 
-                applyTheme(currentTheme);
-                setupGlobalSearch();
-                navigate('view-login'); 
-            };
+            function updateStepper(stageInt) {
+                const progLine = document.getElementById('applicant-progress-line');
+                const s1 = document.getElementById('step-1');
+                const s2 = document.getElementById('step-2');
+                const s3 = document.getElementById('step-3');
+                const s4 = document.getElementById('step-4');
+                const s5 = document.getElementById('step-5');
+                
+                [s1,s2,s3,s4,s5].forEach(s => { s.classList.remove('completed', 'active', 'rejected'); });
+                
+                let badge = document.getElementById('app-current-status-badge');
+                
+                if(stageInt === 0) { badge.className="status-badge status-draft"; badge.innerText="Draft"; s1.classList.add('active'); progLine.style.width = '0%'; }
+                if(stageInt === 0.5) { badge.className="status-badge status-action"; badge.innerText="Needs Revision"; s1.classList.add('rejected'); progLine.style.width = '0%'; }
+                if(stageInt >= 1) { badge.className="status-badge status-review"; badge.innerText="Under Review"; s1.classList.add('completed'); s2.classList.add('active'); progLine.style.width = '25%'; }
+                if(stageInt >= 2) { badge.className="status-badge status-review"; badge.innerText="Admin Check"; s2.classList.add('completed'); s3.classList.add('active'); progLine.style.width = '50%'; }
+                if(stageInt === 3) { badge.className="status-badge status-review"; badge.innerText="Awaiting Payment"; s3.classList.add('completed'); s4.classList.add('active'); progLine.style.width = '75%'; }
+                if(stageInt === 3.5) { badge.className="status-badge status-review"; badge.innerText="Verifying Payment"; s3.classList.add('completed'); s4.classList.add('active'); progLine.style.width = '75%'; }
+                if(stageInt >= 4) { badge.className="status-badge status-enrolled"; badge.innerText="Enrolled"; s4.classList.add('completed'); s5.classList.add('completed'); progLine.style.width = '100%'; }
+            }
 
-            // Public Interface
+            function toggleApplicationFields() {
+                const type = document.getElementById('applicant-type').value;
+                if(type === 'student') {
+                    document.getElementById('field-grade-wrap').classList.remove('d-none');
+                    document.getElementById('field-qual-wrap').classList.add('d-none');
+                } else {
+                    document.getElementById('field-grade-wrap').classList.add('d-none');
+                    document.getElementById('field-qual-wrap').classList.remove('d-none');
+                }
+                renderApplicantDashboard(); // re-check settings locks
+            }
+
+            function verifyPhoneMock() {
+                const phone = document.getElementById('app-form-phone').value;
+                if(phone.length < 10) { showToast("Enter a valid phone number first.", "error"); return; }
+                // Simulate OTP Prompt logic natively within DOM using simple timeout
+                setTimeout(() => {
+                    let otp = prompt("Simulated OTP sent! Enter any 4 digits to verify:");
+                    if(otp && otp.length >= 4) {
+                        document.getElementById('app-form-phone-verified').value = "true";
+                        document.getElementById('btn-verify-phone').style.display = "none";
+                        document.getElementById('phone-verified-msg').style.display = "block";
+                        showToast("Phone Verified!", "success");
+                    } else {
+                        showToast("Verification failed.", "error");
+                    }
+                }, 500);
+            }
+
+            function submitApplication(e) {
+                e.preventDefault();
+                if(document.getElementById('app-form-phone-verified').value !== "true") {
+                    showToast("Please verify your phone number first.", "warning"); return;
+                }
+
+                const type = document.getElementById('applicant-type').value;
+                const fileInput = document.getElementById('app-form-doc1');
+                const docName = fileInput.files.length > 0 ? fileInput.files[0].name : 'No file attached';
+
+                const newApp = {
+                    id: 'APP-' + Date.now(),
+                    applicantId: currentUser.id,
+                    type: type,
+                    name: document.getElementById('app-form-name').value,
+                    dob: document.getElementById('app-form-dob').value,
+                    phone: document.getElementById('app-form-phone').value,
+                    targetGrade: type === 'student' ? document.getElementById('app-form-grade').value : null,
+                    targetQual: type === 'teacher' ? document.getElementById('app-form-qual').value : null,
+                    documentName: docName,
+                    status: 'submitted',
+                    submittedAt: new Date().toISOString().split('T')[0]
+                };
+
+                // Find and replace if it was a revision
+                const existingIdx = db.applications.findIndex(a => a.applicantId === currentUser.id);
+                if(existingIdx > -1) {
+                    newApp.id = db.applications[existingIdx].id; // keep same tracking ID
+                    db.applications[existingIdx] = newApp;
+                } else {
+                    db.applications.push(newApp);
+                }
+
+                saveDB();
+                showToast("Application Submitted Successfully!", "success");
+                renderApplicantDashboard();
+            }
+
+            function submitFeePayment(e) {
+                e.preventDefault();
+                const ref = document.getElementById('app-payment-ref').value.trim();
+                const myApp = db.applications.find(a => a.applicantId === currentUser.id);
+                if(myApp) {
+                    myApp.paymentRef = ref;
+                    myApp.status = 'paid_pending_approval';
+                    saveDB();
+                    showToast("Payment information sent for verification.", "success");
+                    renderApplicantDashboard();
+                }
+            }
+
+            // Init
+            window.onload = () => { applyTheme(currentTheme); };
+
+            // Public API
             return {
-                handleAuth, logout, openModal, closeModal, 
-                addUser, renderTeacherTable, sendBroadcast, 
-                sendDirectMessage, sendParentChat, showToast, saveGrades, togglePortalLock, 
-                filterTable, exportDataToCSV,
-                calculateParentFee, processSelectedFees, searchOfflineFeeStudent, markFeesPaidOffline,
-                openCalendar, addCalendarEvent, actionReport, submitStaffLog, submitBookTrack, submitStudentReport,
-                toggleTheme
+                handleAuth, logout, toggleTheme, openModal, closeModal,
+                togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
+                toggleApplicationFields, verifyPhoneMock, submitApplication, submitFeePayment
             };
         })();
     </script>
