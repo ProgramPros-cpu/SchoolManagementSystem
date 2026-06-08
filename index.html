@@ -83,7 +83,15 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
         }
 
-        /* Inputs & Buttons */
+        /* Inputs, Buttons & Search */
+        .search-bar { position: relative; width: 100%; max-width: 300px; }
+        .search-bar i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; z-index: 2; }
+        .search-bar input { padding-left: 40px !important; border-radius: 30px !important; background: var(--input-bg) !important; }
+        .search-results { position: absolute; top: 110%; left: 0; width: 100%; background: var(--modal-bg); border: 1px solid var(--input-border); border-radius: var(--radius-md); box-shadow: var(--card-shadow); max-height: 300px; overflow-y: auto; z-index: 1000; display: none; padding: 8px;}
+        .search-results.active { display: block; }
+        .search-item { padding: 10px 14px; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-size: 14px;}
+        .search-item:hover { background: var(--table-hover); }
+
         .input-group { margin-bottom: 16px; display: flex; flex-direction: column; width: 100%; }
         .input-group label { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; margin-left: 4px; }
         input[type="text"], input[type="password"], input[type="tel"], input[type="number"], input[type="email"], input[type="date"], input[type="search"], select, textarea, input[type="file"] {
@@ -109,10 +117,16 @@
         tr:hover td { background: var(--table-hover); }
 
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 24px; }
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 24px; }
         .data-center-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-        .data-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px 16px; border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-main); }
+        .data-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px 16px; border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-main); position: relative;}
         .data-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: var(--primary); }
         .data-btn i { font-size: 32px; }
+
+        .metric-card { text-align: center; }
+        .metric-value { font-size: 36px; font-weight: 700; margin: 12px 0 4px; color: var(--primary); }
+        .metric-label { font-size: 14px; color: var(--text-muted); }
+        .chart-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; }
 
         /* Switch */
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
@@ -121,6 +135,20 @@
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         input:checked + .slider { background-color: var(--success); }
         input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Calendar */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 16px; background: rgba(0,0,0,0.02); padding: 8px; border-radius: var(--radius-md); }
+        [data-theme="dark"] .calendar-grid { background: rgba(255,255,255,0.02); }
+        .calendar-header-day { font-weight: 600; text-align: center; padding: 8px; font-size: 12px; color: var(--text-muted); text-transform: uppercase;}
+        .calendar-day { background: var(--input-bg); padding: 8px; border-radius: var(--radius-sm); min-height: 80px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); font-size: 13px; border: 1px solid transparent; transition: 0.2s; color: var(--text-main);}
+        .calendar-day:hover { border-color: var(--primary); transform: scale(1.02); }
+        .calendar-day.empty { background: transparent; box-shadow: none; }
+        .calendar-day.empty:hover { border-color: transparent; transform: none; }
+        .calendar-day.has-event { border: 1px solid rgba(0, 113, 227, 0.3); background: rgba(0, 113, 227, 0.05); }
+        .event-badge { display: block; font-size: 10px; padding: 4px 6px; border-radius: 4px; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+        .event-holiday { background: var(--danger); color: white; }
+        .event-exam { background: var(--purple); color: white; }
+        .event-general { background: var(--primary); color: white; }
 
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 1000; padding: 20px;}
@@ -158,6 +186,7 @@
         .user-name { font-weight: 600; font-size: 14px; color: var(--text-main); }
         .user-role { font-size: 12px; color: var(--text-muted); text-transform: capitalize; }
         .theme-toggle { background: transparent; border: none; font-size: 24px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: 0.2s;}
+        .theme-toggle:hover { background: var(--table-hover); }
 
         main { padding: 32px 5%; flex: 1; display: flex; flex-direction: column; }
         .view { display: none; animation: fadeIn 0.4s ease; }
@@ -182,11 +211,13 @@
         .status-enrolled { background: rgba(52,199,89,0.2); color: var(--success); }
 
         @media (max-width: 768px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
+            .dashboard-grid, .chart-grid { grid-template-columns: 1fr; }
             main { padding: 16px 5%; }
             .stepper-progress, .stepper::before { top: 15px; }
             .step { width: 30px; height: 30px; border-width: 2px; font-size: 12px;}
             .step-label { font-size: 10px; top: 35px; white-space: normal; text-align: center; width: 60px;}
+            .header-actions .search-bar { width: 100%; order: 3; max-width: 100%; }
+            .user-info { border-left: none; padding-left: 0; }
         }
     </style>
 </head>
@@ -196,6 +227,14 @@
     <header id="app-header">
         <div class="header-brand"><i class="ph-fill ph-graduation-cap" style="color: var(--primary); font-size: 28px;"></i> EduCore System</div>
         <div class="header-actions">
+            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="app.openModal('modal-calendar')">
+                <i class="ph ph-calendar-blank"></i> Calendar
+            </button>
+            <div class="search-bar" id="global-search-container" style="display: none;">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="search" id="global-search-input" placeholder="Search ID, Name..." autocomplete="off">
+                <div class="search-results" id="global-search-results"></div>
+            </div>
             <button class="theme-toggle" onclick="app.toggleTheme()" id="theme-toggle-btn" title="Toggle Dark/Light Mode"><i class="ph ph-moon"></i></button>
             <div class="user-info">
                 <div class="user-name" id="display-user-name">John Doe</div>
@@ -242,7 +281,7 @@
                                 <option value="applicant">New Applicant (Admission/Recruitment)</option>
                                 <option value="student">Existing Student</option>
                                 <option value="parent">Parent</option>
-                                <option value="staff">Facility/Staff</option>
+                                <option value="staff">Facility/Staff/Library</option>
                             </select>
                         </div>
                     </div>
@@ -253,7 +292,9 @@
                         <b style="color: var(--text-main);"><i class="ph ph-info"></i> Demo Credentials (Pass: 123)</b><br>
                         • Super Admin: <code>joykumbhakar001@gmail.com</code><br>
                         • Headmaster: <code>joykumbhakar77@gmail.com</code><br>
-                        • Standard Student: <code>STU-10001</code>
+                        • Teacher: <code>teacher</code><br>
+                        • Staff: <code>staff</code><br>
+                        • Student: <code>STU-10001</code>
                     </div>
                 </form>
             </div>
@@ -265,6 +306,25 @@
         <section id="view-superadmin" class="view">
             <div class="section-title">
                 <h2>Super Admin Control Center</h2>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="dashboard-grid">
+                <div class="glass-card metric-card">
+                    <div class="metric-label">Total System Users</div>
+                    <div class="metric-value" id="sa-total-users">0</div>
+                    <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Active tracking</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-label">Total Revenue (YTD)</div>
+                    <div class="metric-value" style="color: var(--success);">$2.4M</div>
+                    <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Target Exceeded</div>
+                </div>
+                <div class="glass-card metric-card">
+                    <div class="metric-label">System Health</div>
+                    <div class="metric-value" style="color: var(--primary);">99.9%</div>
+                    <div style="font-size: 12px; color: var(--text-muted);"><i class="ph ph-cloud-check"></i> Cloud Sync Active</div>
+                </div>
             </div>
 
             <div class="dashboard-grid">
@@ -309,7 +369,34 @@
                             <i class="ph-fill ph-student"></i>
                             <span>Student Registry</span>
                         </div>
+                        <div class="data-btn" style="color: var(--purple);" onclick="app.openModal('modal-all-users')">
+                            <i class="ph-fill ph-users-three"></i>
+                            <span>User Management</span>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Advanced Analytics Charts -->
+            <div class="section-title mt-4">
+                <h3>Advanced System Analytics</h3>
+            </div>
+            <div class="chart-grid">
+                <div class="glass-card">
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Revenue vs Expenses</h4>
+                    <div class="chart-wrapper"><canvas id="saRevenueChart"></canvas></div>
+                </div>
+                <div class="glass-card">
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Student Enrollment Trend</h4>
+                    <div class="chart-wrapper"><canvas id="saEnrollmentChart"></canvas></div>
+                </div>
+                <div class="glass-card">
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">User Demographics</h4>
+                    <div class="chart-wrapper"><canvas id="saDemographicsChart"></canvas></div>
+                </div>
+                <div class="glass-card">
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Feedback & Incident Overview</h4>
+                    <div class="chart-wrapper"><canvas id="saFeedbackChart"></canvas></div>
                 </div>
             </div>
         </section>
@@ -328,6 +415,20 @@
                     <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Review newly submitted student and teacher applications.</p>
                     <button class="btn btn-primary btn-block" onclick="app.openModal('modal-review-apps', 'hm')">
                         <i class="ph ph-files"></i> Open Review Queue (<span id="hm-badge-count">0</span>)
+                    </button>
+                </div>
+                <div class="glass-card">
+                    <h3>Student Report / Feedback Review</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Review concerns sent by students regarding infrastructure, academics, or behavior.</p>
+                    <button class="btn btn-danger btn-block" onclick="app.openModal('modal-student-reports')">
+                        <i class="ph ph-warning-octagon"></i> Check Student Feedback
+                    </button>
+                </div>
+                <div class="glass-card">
+                    <h3>Staff Facility / Maintenance Logs</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">View and resolve infrastructure situations logged by campus staff.</p>
+                    <button class="btn btn-outline btn-block" onclick="app.openModal('modal-maintenance-logs')">
+                        <i class="ph ph-wrench"></i> View Maintenance Logs
                     </button>
                 </div>
             </div>
@@ -468,11 +569,182 @@
             </div>
         </section>
 
-        <!-- Existing Empty Views for Structure Integrity -->
-        <section id="view-teacher" class="view"><div class="section-title"><h2>Teacher Portal</h2></div><p>Simulated empty view.</p></section>
-        <section id="view-student" class="view"><div class="section-title"><h2>Student Portal</h2></div><p>Simulated empty view.</p></section>
-        <section id="view-parent" class="view"><div class="section-title"><h2>Parent Portal</h2></div><p>Simulated empty view.</p></section>
-        <section id="view-staff" class="view"><div class="section-title"><h2>Staff Portal</h2></div><p>Simulated empty view.</p></section>
+        <!-- ==========================================
+             E. TEACHER PORTAL
+             ========================================== -->
+        <section id="view-teacher" class="view">
+            <div class="section-title">
+                <h2>Teacher Workspace</h2>
+                <div class="search-bar" style="max-width: 250px;">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="search" id="teacher-class-search" placeholder="Filter student..." onkeyup="app.filterTable('teacher-class-search', 'teacher-class-table')">
+                </div>
+            </div>
+            
+            <div class="glass-card mt-4">
+                <div class="flex-between mb-4">
+                    <h3>My Classes</h3>
+                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap:wrap;">
+                        <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="app.exportDataToCSV('teacher-class-table', 'Class_Roster.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    </div>
+                </div>
+                <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                    <table id="teacher-class-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacher-student-table">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             F. STUDENT PORTAL
+             ========================================== -->
+        <section id="view-student" class="view">
+            <div class="section-title">
+                <h2>Student Portal</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <h3>My Profile</h3>
+                    <div class="mt-4" style="display: flex; align-items: center; gap: 16px;">
+                        <div style="width: 64px; height: 64px; background: rgba(0, 113, 227, 0.1); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;"><i class="ph-fill ph-student"></i></div>
+                        <div>
+                            <h4 id="student-profile-name">Student Name</h4>
+                            <div class="metric-label" id="student-profile-grade">ID: STU-XXXXX | Grade ...</div>
+                        </div>
+                    </div>
+                    <hr style="border:0; border-top: 1px solid var(--input-border); margin: 24px 0;">
+                    <div class="metric-label">Status: <span style="font-weight: 600; color: var(--success); float:right;" id="student-profile-status">Active</span></div>
+                </div>
+
+                <!-- Student Feedback System -->
+                <div class="glass-card">
+                    <h3>Report an Issue / Feedback</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Your report will be reviewed confidentially by the Headmaster.</p>
+                    <form onsubmit="app.submitStudentReport(event)">
+                        <div class="input-group">
+                            <select id="student-report-type" required>
+                                <option value="">Select Category</option>
+                                <option value="academic">Academic / Teacher Exchange Issue</option>
+                                <option value="behavior">Behavioral / Rude Behavior Incident</option>
+                                <option value="infra">Infrastructure / Broken Facility (e.g. Bathroom, Null)</option>
+                                <option value="tech">Technical / Website Server Problem</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <textarea id="student-report-msg" rows="3" placeholder="Describe the specific problem or incident in detail..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block" style="color:black;"><i class="ph ph-warning"></i> Submit Report to Headmaster</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             G. PARENT PORTAL
+             ========================================== -->
+        <section id="view-parent" class="view">
+            <div class="section-title">
+                <h2>Parent Portal</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <h3>Linked Child Overview</h3>
+                    <div class="mt-4">
+                        <div class="metric-label mb-4">Student Name: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-name">Loading...</span></div>
+                        <div class="metric-label mb-4">Registration ID: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-id">STU-...</span></div>
+                        <hr style="border:0; border-top: 1px solid var(--input-border); margin: 16px 0;">
+                        <p style="font-size: 13px; color: var(--text-muted);">Please use the Global Calendar to track upcoming events and holidays.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             H. STAFF / FACILITY PORTAL
+             ========================================== -->
+        <section id="view-staff" class="view">
+            <div class="section-title">
+                <h2>Facility & Library Staff Portal</h2>
+            </div>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Update current situations for specific locations around the campus or track library books.</p>
+            
+            <div class="dashboard-grid">
+                <!-- Log a situation report -->
+                <div class="glass-card">
+                    <h3>Log Campus Situation</h3>
+                    <form onsubmit="app.submitStaffLog(event)" class="mt-4">
+                        <div class="input-group">
+                            <label>Location Area</label>
+                            <select id="staff-log-location" required>
+                                <option value="">Select Area</option>
+                                <option value="Lecture Hall A">Lecture Hall A</option>
+                                <option value="Lecture Hall B">Lecture Hall B</option>
+                                <option value="Bathroom (Boys/Main)">Bathroom (Boys/Main)</option>
+                                <option value="Bathroom (Girls/Main)">Bathroom (Girls/Main)</option>
+                                <option value="MDM Hall">MDM Hall (Dining)</option>
+                                <option value="Library">Library</option>
+                                <option value="Playground">Playground</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Action/Situation Needed</label>
+                            <textarea id="staff-log-msg" rows="3" placeholder='e.g., "Need Mr. Joy in Lecture hall", "Bathroom light Bulb expired or need to be fixed"' required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"><i class="ph ph-paper-plane-tilt"></i> Broadcast to Admin</button>
+                    </form>
+                </div>
+
+                <!-- Book Tracking specific for Library Staff -->
+                <div class="glass-card">
+                    <h3>Library Book Tracking</h3>
+                    <form onsubmit="app.submitBookTrack(event)" class="mt-4">
+                        <div class="input-group">
+                            <label>Book Title / ID</label>
+                            <input type="text" id="staff-book-title" placeholder="e.g. Physics Vol 2 (B-104)" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Student Reg ID (if issued)</label>
+                            <input type="text" id="staff-book-student" placeholder="e.g. STU-10001">
+                        </div>
+                        <div class="input-group">
+                            <label>Status</label>
+                            <select id="staff-book-status" required>
+                                <option value="missing">Report Missing / Lost</option>
+                                <option value="issued">Track Issue to Student</option>
+                                <option value="returned">Mark as Returned</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-outline btn-block"><i class="ph ph-books"></i> Update Book Record</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="glass-card mt-4">
+                <div class="flex-between mb-4">
+                    <h3>Recent Library Alerts</h3>
+                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('staff-book-table', 'Library_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                </div>
+                <div class="table-container">
+                    <table id="staff-book-table">
+                        <thead><tr><th>Book Title</th><th>Student ID</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody id="staff-book-table-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -482,6 +754,52 @@
          MODALS 
          ========================================== -->
 
+    <!-- Modal: Global Calendar -->
+    <div class="modal-overlay" id="modal-calendar">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 style="margin-bottom: 4px;">School Event Calendar</h3>
+                    <div style="font-size: 13px; color: var(--text-muted);" id="calendar-month-year">June 2026</div>
+                </div>
+                <div style="display:flex; gap:16px; align-items:center;">
+                    <div id="calendar-admin-controls" style="display: none;">
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="document.getElementById('calendar-add-form').classList.toggle('d-none')">+ Add Event</button>
+                    </div>
+                    <button class="close-btn" onclick="app.closeModal('modal-calendar')"><i class="ph ph-x"></i></button>
+                </div>
+            </div>
+            
+            <div id="calendar-add-form" class="d-none" style="background: var(--table-hover); padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--input-border);">
+                <form onsubmit="app.addCalendarEvent(event)" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap:wrap;">
+                    <div class="input-group" style="width: auto; flex:1; min-width: 150px;">
+                        <label>Date</label>
+                        <input type="date" id="cal-add-date" required>
+                    </div>
+                    <div class="input-group" style="width: auto; flex:2; min-width: 200px;">
+                        <label>Event Title</label>
+                        <input type="text" id="cal-add-title" placeholder="Holiday name or Event" required>
+                    </div>
+                    <div class="input-group" style="width: auto; flex:1; min-width: 150px;">
+                        <label>Type</label>
+                        <select id="cal-add-type">
+                            <option value="holiday">Holiday</option>
+                            <option value="exam">Exam</option>
+                            <option value="general">General Event</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-bottom: 16px;">Save Event</button>
+                </form>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="calendar-header-day">Sun</div><div class="calendar-header-day">Mon</div><div class="calendar-header-day">Tue</div>
+                <div class="calendar-header-day">Wed</div><div class="calendar-header-day">Thu</div><div class="calendar-header-day">Fri</div><div class="calendar-header-day">Sat</div>
+            </div>
+            <div id="calendar-days-container" class="calendar-grid" style="margin-top:0; padding-top:0;"></div>
+        </div>
+    </div>
+
     <!-- Modal: Global Student Registry (Admin) -->
     <div class="modal-overlay" id="modal-all-students">
         <div class="modal-content">
@@ -489,12 +807,82 @@
                 <div>
                     <h3 style="margin-bottom: 4px;">Global Student Registry</h3>
                 </div>
-                <button class="close-btn" onclick="app.closeModal('modal-all-students')"><i class="ph ph-x"></i></button>
+                <div style="display:flex; gap:16px; align-items:center;">
+                    <div class="search-bar" style="width: 250px;">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="search" id="all-student-search" placeholder="Search ID, Name..." onkeyup="app.filterTable('all-student-search', 'global-student-table')">
+                    </div>
+                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('global-student-table', 'Global_Students.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="close-btn" onclick="app.closeModal('modal-all-students')"><i class="ph ph-x"></i></button>
+                </div>
             </div>
             <div class="table-container" style="max-height: 60vh;">
                 <table id="global-student-table">
                     <thead><tr><th>Reg ID</th><th>Full Name</th><th>Grade</th><th>Status</th></tr></thead>
                     <tbody id="global-student-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: User Management Table (Super Admin) -->
+    <div class="modal-overlay" id="modal-all-users">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>User Management</h3>
+                <div style="display:flex; gap:16px; align-items:center;">
+                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="app.exportDataToCSV('sa-user-table-element', 'System_Users.csv')"><i class="ph ph-download-simple"></i> Export Users</button>
+                    <button class="close-btn" onclick="app.closeModal('modal-all-users')"><i class="ph ph-x"></i></button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="sa-user-table-element">
+                    <thead><tr><th>User ID / Email</th><th>Name</th><th>Role</th></tr></thead>
+                    <tbody id="sa-user-table">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Student Reports Review (HM) -->
+    <div class="modal-overlay" id="modal-student-reports">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Student Reports & Feedback</h3>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('student-reports-table', 'Student_Reports.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="close-btn" onclick="app.closeModal('modal-student-reports')"><i class="ph ph-x"></i></button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="student-reports-table">
+                    <thead><tr><th>Date</th><th>Reporter ID</th><th>Category</th><th>Issue Detail</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="student-reports-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Maintenance & Facility Logs (HM/Admin) -->
+    <div class="modal-overlay" id="modal-maintenance-logs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Facility & Maintenance Logs</h3>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('maintenance-logs-table', 'Maintenance_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="close-btn" onclick="app.closeModal('modal-maintenance-logs')"><i class="ph ph-x"></i></button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="maintenance-logs-table">
+                    <thead><tr><th>Time</th><th>Location</th><th>Situation/Requirement</th><th>Logged By</th><th>Status</th></tr></thead>
+                    <tbody id="maintenance-logs-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -575,21 +963,21 @@
             // State
             let currentUser = null;
             let currentTheme = 'light';
-            let db = null;
-            let isDbLoaded = false;
+            let db = generateSeedData(); // Load default data immediately
+            let isDbLoaded = true;       // Prevents the login block
+            let chartInstances = {};
             let currentReviewAppId = null;
             let activeReviewRole = null;
             
             try { currentTheme = localStorage.getItem('educore_theme') || 'light'; } catch (e) {}
 
             // Firebase Initialization 
-            // Using standard setup wrapper as per constraints
             let firebaseConfig;
             if (typeof __firebase_config !== 'undefined') {
                 firebaseConfig = JSON.parse(__firebase_config);
             } else {
                 firebaseConfig = {
-                    apiKey: "AIzaSyAcs--ynKwApvbbzeXpCNm3Qcz2JaikjyA", // Placeholder strictly for demo functionality
+                    apiKey: "AIzaSyAcs--ynKwApvbbzeXpCNm3Qcz2JaikjyA", 
                     authDomain: "schoolmanagementsystem-1d10a.firebaseapp.com",
                     projectId: "schoolmanagementsystem-1d10a",
                     storageBucket: "schoolmanagementsystem-1d10a.firebasestorage.app",
@@ -615,6 +1003,7 @@
                     }
                 } catch (err) {
                     console.error("Firebase Auth error:", err);
+                    setTimeout(() => showToast("Cloud sync unavailable. Running in local mode.", "warning"), 1500);
                 }
             };
             initAuth();
@@ -640,19 +1029,36 @@
                 if (auth.currentUser && db) { setDoc(dbDocRef, db).catch(console.error); }
             }
 
-            // Seed Generation including specific requested roles/Env Vars
+            // Seed Generation
             function generateSeedData() {
                 return {
                     settings: { admissionOpen: true, recruitmentOpen: true },
                     users: [
                         { id: 'joykumbhakar001@gmail.com', name: 'Super Admin', role: 'superadmin', pass: '123' },
                         { id: 'joykumbhakar77@gmail.com', name: 'Headmaster', role: 'headmaster', pass: '123' },
-                        { id: 'STU-10001', name: 'Standard Student', role: 'student', pass: '123' }
+                        { id: 'teacher', name: 'Mr. Anderson', role: 'teacher', pass: '123' },
+                        { id: 'STU-10001', name: 'Alex Smith', role: 'student', pass: '123' },
+                        { id: 'parent', name: 'Mrs. Smith', role: 'parent', pass: '123' },
+                        { id: 'staff', name: 'Mr. Filch', role: 'staff', pass: '123' }
                     ],
                     allStudents: [
-                        { regId: 'STU-10001', name: 'Standard Student', grade: 'Grade 10', status: 'Active' }
+                        { regId: 'STU-10001', name: 'Alex Smith', grade: 'Grade 10', status: 'Active' },
+                        { regId: 'STU-10002', name: 'Taylor Doe', grade: 'Grade 9', status: 'Active' }
                     ],
-                    applications: []
+                    applications: [],
+                    events: [
+                        { date: '2026-06-15', title: 'Summer Break Starts', type: 'holiday' },
+                        { date: '2026-06-25', title: 'Mid-Term Exams Begin', type: 'exam' }
+                    ],
+                    studentReports: [
+                        { date: '2026-06-08', studentId: 'STU-10001', type: 'infra', msg: 'The tap in the boys 2nd floor bathroom is leaking heavily.', status: 'Pending' }
+                    ],
+                    maintenanceLogs: [
+                        { time: '09:30 AM', location: 'Lecture Hall A', msg: 'Need Mr. Joy in Lecture hall', logger: 'Mr. Filch', status: 'Pending' }
+                    ],
+                    libraryLogs: [
+                        { title: 'Physics Vol 2 (B-104)', student: 'STU-10002', status: 'missing', date: '2026-06-05' }
+                    ]
                 };
             }
 
@@ -662,6 +1068,11 @@
                 try { localStorage.setItem('educore_theme', theme); } catch(e) {}
                 const toggleBtn = document.getElementById('theme-toggle-btn');
                 if(toggleBtn) { toggleBtn.innerHTML = theme === 'dark' ? '<i class="ph-fill ph-sun"></i>' : '<i class="ph ph-moon"></i>'; }
+                
+                if (typeof Chart !== 'undefined') {
+                    Chart.defaults.color = theme === 'dark' ? '#a1a1a6' : '#86868b';
+                    if(currentUser && currentUser.role === 'superadmin') renderSuperAdmin(); 
+                }
             }
             function toggleTheme() { currentTheme = currentTheme === 'light' ? 'dark' : 'light'; applyTheme(currentTheme); }
 
@@ -688,8 +1099,24 @@
                     document.getElementById('review-detail-view').classList.add('d-none');
                     renderReviewTable();
                 }
-                if(id === 'modal-all-students') {
-                    renderAllStudents();
+                if(id === 'modal-all-students') renderAllStudents();
+                if(id === 'modal-student-reports') renderStudentReports();
+                if(id === 'modal-maintenance-logs') renderMaintenanceLogs();
+                if(id === 'modal-calendar') {
+                    const controls = document.getElementById('calendar-admin-controls');
+                    if(['superadmin', 'headmaster'].includes(currentUser.role)) {
+                        controls.style.display = 'block';
+                    } else {
+                        controls.style.display = 'none';
+                    }
+                    renderCalendar();
+                }
+                if(id === 'modal-all-users') {
+                    const tbody = document.getElementById('sa-user-table');
+                    tbody.innerHTML = '';
+                    db.users.forEach(u => {
+                        tbody.innerHTML += `<tr><td>${u.id}</td><td>${u.name}</td><td style="text-transform: capitalize;">${u.role}</td></tr>`;
+                    });
                 }
             }
             function closeModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -699,12 +1126,20 @@
                 document.getElementById(viewId).classList.add('active');
 
                 const header = document.getElementById('app-header');
+                const globalSearch = document.getElementById('global-search-container');
+                
                 if (viewId === 'view-login') {
                     header.style.display = 'none';
                 } else {
                     header.style.display = 'flex';
                     document.getElementById('display-user-name').innerText = currentUser.name;
                     document.getElementById('display-user-role').innerText = currentUser.role;
+                    
+                    if(['superadmin', 'headmaster', 'teacher'].includes(currentUser.role)) {
+                        globalSearch.style.display = 'block';
+                    } else {
+                        globalSearch.style.display = 'none';
+                    }
                     updateUIAfterDbSync();
                 }
                 window.scrollTo(0, 0);
@@ -718,14 +1153,109 @@
                     document.getElementById('toggle-recruitment').checked = db.settings.recruitmentOpen;
                     const pendingAdminCount = db.applications.filter(a => a.status === 'hm_reviewed' || a.status === 'paid_pending_approval').length;
                     document.getElementById('admin-badge-count').innerText = `${pendingAdminCount} Pending Action`;
+                    renderSuperAdmin();
                 }
-                if(currentUser.role === 'headmaster') {
+                else if(currentUser.role === 'headmaster') {
                     const pendingHmCount = db.applications.filter(a => a.status === 'submitted').length;
                     document.getElementById('hm-badge-count').innerText = pendingHmCount;
                 }
-                if(currentUser.role === 'applicant') {
-                    renderApplicantDashboard();
+                else if(currentUser.role === 'applicant') { renderApplicantDashboard(); }
+                else if(currentUser.role === 'teacher') { renderTeacherDashboard(); }
+                else if(currentUser.role === 'student') { renderStudentDashboard(); }
+                else if(currentUser.role === 'parent') { renderParentDashboard(); }
+                else if(currentUser.role === 'staff') { renderStaffDashboard(); }
+            }
+
+            // --- UTILITIES (CSV Export & Search Filters) ---
+            function exportDataToCSV(tableId, filename) {
+                const table = document.getElementById(tableId);
+                if (!table) { showToast("No data to export", "error"); return; }
+                
+                let csv = [];
+                let rows = table.querySelectorAll("tr");
+                
+                for (let i = 0; i < rows.length; i++) {
+                    let row = [], cols = rows[i].querySelectorAll("td, th");
+                    for (let j = 0; j < cols.length; j++) {
+                        let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, ""); 
+                        row.push(text);
+                    }
+                    csv.push(row.join(","));
                 }
+                
+                let csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+                let downloadLink = document.createElement("a");
+                downloadLink.download = filename;
+                downloadLink.href = window.URL.createObjectURL(csvFile);
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                showToast(`Downloading ${filename}...`, "success");
+            }
+
+            function filterTable(inputId, tableId) {
+                const filter = document.getElementById(inputId).value.toUpperCase();
+                const table = document.getElementById(tableId);
+                const trs = table.getElementsByTagName('tr');
+                for (let i = 1; i < trs.length; i++) {
+                    let display = 'none';
+                    const tds = trs[i].getElementsByTagName('td');
+                    for(let j=0; j<tds.length; j++) {
+                        if (tds[j].innerText.toUpperCase().indexOf(filter) > -1) {
+                            display = '';
+                            break;
+                        }
+                    }
+                    trs[i].style.display = display;
+                }
+            }
+
+            function setupGlobalSearch() {
+                const input = document.getElementById('global-search-input');
+                const resultsBox = document.getElementById('global-search-results');
+                
+                input.addEventListener('input', function() {
+                    const query = this.value.toLowerCase().trim();
+                    resultsBox.innerHTML = '';
+                    
+                    if(query.length < 2) {
+                        resultsBox.classList.remove('active');
+                        return;
+                    }
+                    
+                    let matches = [];
+                    db.users.forEach(u => {
+                        if(u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query)) {
+                            matches.push({ type: 'User', icon: 'ph-user', text: `${u.name} (@${u.id}) - ${u.role}`});
+                        }
+                    });
+                    db.allStudents.forEach(s => {
+                        if(s.name.toLowerCase().includes(query) || s.regId.toLowerCase().includes(query)) {
+                            matches.push({ type: 'Student', icon: 'ph-student', text: `${s.name} (${s.regId}) - ${s.grade}`});
+                        }
+                    });
+
+                    if(matches.length === 0) {
+                        resultsBox.innerHTML = `<div style="padding: 12px; color: var(--text-muted); text-align:center;">No results found</div>`;
+                    } else {
+                        matches.slice(0, 8).forEach(m => {
+                            resultsBox.innerHTML += `
+                                <div class="search-item" onclick="app.showToast('User data verified.', 'info')">
+                                    <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,113,227,0.1);color:var(--primary);display:flex;justify-content:center;align-items:center;"><i class="ph ${m.icon}"></i></div>
+                                    <div style="font-size: 13px;">${m.text}</div>
+                                </div>
+                            `;
+                        });
+                    }
+                    resultsBox.classList.add('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if(!e.target.closest('#global-search-container')) {
+                        resultsBox.classList.remove('active');
+                    }
+                });
             }
 
             // --- AUTHENTICATION ---
@@ -746,7 +1276,6 @@
                         e.target.reset();
                         showToast(`Welcome, ${user.name}`, "success");
                     } else if (!user) {
-                        // Switch to Sign Up UI
                         document.getElementById('login-fields').classList.add('d-none');
                         document.getElementById('signup-fields').classList.remove('d-none');
                         document.getElementById('auth-btn').innerText = 'Complete Identity Setup';
@@ -756,7 +1285,6 @@
                         showToast("Incorrect Password!", "error");
                     }
                 } else {
-                    // Process Signup
                     const nameInput = document.getElementById('auth-name').value || 'New User';
                     const roleInput = document.getElementById('auth-role').value;
                     
@@ -765,7 +1293,6 @@
                     saveDB();
                     currentUser = newUser;
                     
-                    // Reset UI
                     document.getElementById('login-fields').classList.remove('d-none');
                     document.getElementById('signup-fields').classList.add('d-none');
                     document.getElementById('auth-btn').innerText = 'Authenticate / Continue';
@@ -794,6 +1321,149 @@
                 });
             }
 
+            function initChart(chartId, type, data, options) {
+                if (typeof Chart === 'undefined') return;
+                const ctx = document.getElementById(chartId);
+                if(!ctx) return;
+                if(chartInstances[chartId]) chartInstances[chartId].destroy();
+                chartInstances[chartId] = new Chart(ctx, { type, data, options });
+            }
+
+            function renderSuperAdmin() {
+                document.getElementById('sa-total-users').innerText = db.users.length + db.allStudents.length; 
+                
+                if (typeof Chart !== 'undefined') {
+                    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+                    const gridColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+                    initChart('saRevenueChart', 'bar', {
+                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                        datasets: [
+                            { label: 'Revenue', data: [650, 590, 800, 810], backgroundColor: '#0071e3', borderRadius: 6 },
+                            { label: 'Expenses', data: [400, 420, 390, 450], backgroundColor: '#ff3b30', borderRadius: 6 }
+                        ]
+                    }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } } });
+
+                    initChart('saEnrollmentChart', 'line', {
+                        labels: ['2020', '2021', '2022', '2023', '2024'],
+                        datasets: [{
+                            label: 'Total Students', data: [800, 950, 1100, 1050, 1250],
+                            borderColor: '#af52de', backgroundColor: 'rgba(175, 82, 222, 0.1)',
+                            fill: true, tension: 0.4, borderWidth: 3, pointRadius: 4
+                        }]
+                    }, { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } } });
+
+                    initChart('saDemographicsChart', 'doughnut', {
+                        labels: ['Students', 'Teachers', 'Admin/HM', 'Support Staff'],
+                        datasets: [{
+                            data: [db.allStudents.length, db.users.filter(u=>u.role==='teacher').length, db.users.filter(u=>u.role==='superadmin' || u.role==='headmaster').length, db.users.filter(u=>u.role==='staff').length],
+                            backgroundColor: ['#0071e3', '#34c759', '#ffcc00', '#ff9500'], borderWidth: 0, hoverOffset: 4
+                        }]
+                    }, { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right' } } });
+
+                    let infra = 0, acad = 0, behav = 0, tech = 0;
+                    db.studentReports.forEach(r => {
+                        if(r.type === 'infra') infra++;
+                        else if(r.type === 'academic') acad++;
+                        else if(r.type === 'behavior') behav++;
+                        else tech++;
+                    });
+
+                    initChart('saFeedbackChart', 'pie', {
+                        labels: ['Infrastructure', 'Academic', 'Behavioral', 'Technical'],
+                        datasets: [{
+                            data: [infra||1, acad||1, behav||1, tech||1], 
+                            backgroundColor: ['#ff9500', '#0071e3', '#ff3b30', '#af52de'], borderWidth: 0
+                        }]
+                    }, { responsive: true, maintainAspectRatio: false });
+                }
+            }
+
+            function renderStudentReports() {
+                const tbody = document.getElementById('student-reports-tbody');
+                tbody.innerHTML = '';
+                db.studentReports.forEach((rep, i) => {
+                    let catText = rep.type === 'infra' ? 'Infrastructure' : (rep.type === 'behavior' ? 'Behavioral' : rep.type);
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${rep.date}</td><td>${rep.studentId}</td>
+                            <td style="text-transform: capitalize;">${catText}</td>
+                            <td>${rep.msg}</td>
+                            <td style="color:var(--warning);">${rep.status}</td>
+                            <td>
+                                ${rep.status === 'Pending' ? 
+                                `<button class="btn btn-outline" style="padding:4px 8px; font-size:12px;" onclick="app.actionReport(${i})">Resolve</button>` : 
+                                `<span style="color: var(--success);"><i class="ph ph-check"></i> Resolved</span>`}
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            function renderMaintenanceLogs() {
+                const tbody = document.getElementById('maintenance-logs-tbody');
+                tbody.innerHTML = '';
+                db.maintenanceLogs.forEach((log, i) => {
+                    let stCol = log.status === 'Pending' ? 'var(--warning)' : 'var(--success)';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${log.time}</td><td>${log.location}</td>
+                            <td>${log.msg}</td><td>${log.logger}</td>
+                            <td style="color:${stCol}; font-weight:600;">${log.status}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            function actionReport(index) {
+                db.studentReports[index].status = 'Resolved';
+                saveDB();
+                showToast("Report marked as Resolved", "success");
+                renderStudentReports();
+            }
+
+            // --- CALENDAR SYSTEM ---
+            function renderCalendar() {
+                const container = document.getElementById('calendar-days-container');
+                container.innerHTML = '';
+                const daysInMonth = 30; // June logic
+                const startDayIndex = 1; 
+
+                for(let i=0; i<startDayIndex; i++) {
+                    container.innerHTML += `<div class="calendar-day empty"></div>`;
+                }
+                for(let i=1; i<=daysInMonth; i++) {
+                    let dateStr = `2026-06-${i.toString().padStart(2, '0')}`;
+                    let eventsForDay = db.events.filter(e => e.date === dateStr);
+                    
+                    let eventsHtml = '';
+                    eventsForDay.forEach(e => {
+                        let badgeClass = `event-${e.type}`;
+                        eventsHtml += `<span class="event-badge ${badgeClass}" title="${e.title}">${e.title}</span>`;
+                    });
+
+                    let classes = `calendar-day ${eventsForDay.length > 0 ? 'has-event' : ''}`;
+                    container.innerHTML += `<div class="${classes}">
+                        <div style="font-weight:600; margin-bottom:4px;">${i}</div>
+                        ${eventsHtml}
+                    </div>`;
+                }
+            }
+
+            function addCalendarEvent(e) {
+                e.preventDefault();
+                const date = document.getElementById('cal-add-date').value;
+                const title = document.getElementById('cal-add-title').value;
+                const type = document.getElementById('cal-add-type').value;
+
+                db.events.push({date, title, type});
+                saveDB();
+                showToast("Event Added to Global Calendar", "success");
+                renderCalendar();
+                document.getElementById('calendar-add-form').classList.add('d-none');
+                e.target.reset();
+            }
+
             // --- APPLICATION REVIEW LOGIC (ADMIN/HM) ---
             function getStatusBadge(status) {
                 switch(status) {
@@ -814,10 +1484,8 @@
                 
                 let appsToShow = [];
                 if(activeReviewRole === 'hm') {
-                    // HM sees newly submitted
                     appsToShow = db.applications.filter(a => a.status === 'submitted');
                 } else if (activeReviewRole === 'admin') {
-                    // Admin sees reviewed and payment verifications
                     appsToShow = db.applications.filter(a => a.status === 'hm_reviewed' || a.status === 'paid_pending_approval');
                 }
 
@@ -861,7 +1529,6 @@
                 const payBox = document.getElementById('payment-verify-box');
                 payBox.classList.add('d-none');
 
-                // Dynamic buttons based on status & role
                 if(application.status === 'submitted' && activeReviewRole === 'hm') {
                     actionDiv.innerHTML = `
                         <button class="btn btn-success" onclick="app.processApp('hm_reviewed')"><i class="ph ph-check"></i> Approve & Pass to Admin</button>
@@ -893,19 +1560,16 @@
                 application.status = newStatus;
                 if(notes) application.adminNotes = notes;
 
-                // Auto-Enrollment logic if fully approved
                 if(newStatus === 'approved') {
                     const newIdNum = 10000 + db.allStudents.length + 1;
                     const regId = `STU-${newIdNum}`;
                     
-                    // Format DOB for password: YYYY-MM-DD -> DDMMYYYY
-                    let pass = '123'; // fallback
+                    let pass = '123'; 
                     if(application.dob) {
                         const parts = application.dob.split('-');
                         if(parts.length === 3) pass = `${parts[2]}${parts[1]}${parts[0]}`;
                     }
 
-                    // Create Student DB record
                     db.allStudents.push({
                         regId: regId,
                         name: application.name,
@@ -914,10 +1578,9 @@
                         contact: application.phone
                     });
 
-                    // Create Auth User Login
                     db.users.push({
-                        id: application.applicantId, // allow login via their applied email
-                        assignedRegId: regId, // their official ID
+                        id: application.applicantId, 
+                        assignedRegId: regId, 
                         name: application.name,
                         role: application.type === 'student' ? 'student' : 'teacher',
                         pass: pass
@@ -955,7 +1618,6 @@
                 formEl.classList.remove('d-none');
 
                 if (!myApp || myApp.status === 'draft' || myApp.status === 'needs_revision') {
-                    // Show Form
                     formSection.classList.remove('d-none');
                     updateStepper(myApp ? (myApp.status === 'needs_revision' ? 0.5 : 0) : 0);
                     
@@ -966,7 +1628,6 @@
                         document.getElementById('applicant-notes-box').classList.add('d-none');
                     }
 
-                    // Check if open
                     if (typeSelect.value === 'student' && !db.settings.admissionOpen) {
                         formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
                     }
@@ -1024,13 +1685,12 @@
                     document.getElementById('field-grade-wrap').classList.add('d-none');
                     document.getElementById('field-qual-wrap').classList.remove('d-none');
                 }
-                renderApplicantDashboard(); // re-check settings locks
+                renderApplicantDashboard(); 
             }
 
             function verifyPhoneMock() {
                 const phone = document.getElementById('app-form-phone').value;
                 if(phone.length < 10) { showToast("Enter a valid phone number first.", "error"); return; }
-                // Simulate OTP Prompt logic natively within DOM using simple timeout
                 setTimeout(() => {
                     let otp = prompt("Simulated OTP sent! Enter any 4 digits to verify:");
                     if(otp && otp.length >= 4) {
@@ -1068,10 +1728,9 @@
                     submittedAt: new Date().toISOString().split('T')[0]
                 };
 
-                // Find and replace if it was a revision
                 const existingIdx = db.applications.findIndex(a => a.applicantId === currentUser.id);
                 if(existingIdx > -1) {
-                    newApp.id = db.applications[existingIdx].id; // keep same tracking ID
+                    newApp.id = db.applications[existingIdx].id; 
                     db.applications[existingIdx] = newApp;
                 } else {
                     db.applications.push(newApp);
@@ -1095,14 +1754,96 @@
                 }
             }
 
+            // --- TEACHER / STUDENT / PARENT / STAFF PORTALS ---
+            function renderTeacherDashboard() {
+                const tbody = document.getElementById('teacher-student-table');
+                tbody.innerHTML = '';
+                db.allStudents.forEach(s => {
+                    tbody.innerHTML += `<tr><td>${s.regId}</td><td>${s.name}</td><td>${s.grade}</td><td style="color:var(--success); font-weight:bold;">${s.status}</td></tr>`;
+                });
+            }
+
+            function renderStudentDashboard() {
+                let studentData = db.allStudents.find(s => s.regId === currentUser.id);
+                if(!studentData) studentData = db.allStudents[0]; // fallback
+                document.getElementById('student-profile-name').innerText = studentData.name;
+                document.getElementById('student-profile-grade').innerText = `ID: ${studentData.regId} | ${studentData.grade}`;
+            }
+
+            function submitStudentReport(e) {
+                e.preventDefault();
+                const type = document.getElementById('student-report-type').value;
+                const msg = document.getElementById('student-report-msg').value;
+                
+                db.studentReports.unshift({
+                    date: new Date().toISOString().split('T')[0],
+                    studentId: currentUser.id,
+                    type: type,
+                    msg: msg,
+                    status: 'Pending'
+                });
+                saveDB();
+                showToast("Your report has been sent securely to the Headmaster.", "success");
+                e.target.reset();
+            }
+
+            function renderParentDashboard() {
+                let studentData = db.allStudents[0]; // simplified link logic for parent
+                document.getElementById('parent-child-name').innerText = studentData.name;
+                document.getElementById('parent-child-id').innerText = studentData.regId;
+            }
+
+            function renderStaffDashboard() {
+                const tbody = document.getElementById('staff-book-table-body');
+                tbody.innerHTML = '';
+                db.libraryLogs.forEach(log => {
+                    let color = log.status === 'missing' ? 'var(--danger)' : 'var(--primary)';
+                    if(log.status === 'returned') color = 'var(--success)';
+                    tbody.innerHTML += `<tr><td>${log.title}</td><td>${log.student || 'N/A'}</td><td style="color:${color}; font-weight:600; text-transform:capitalize;">${log.status}</td><td>${log.date}</td></tr>`;
+                });
+            }
+
+            function submitStaffLog(e) {
+                e.preventDefault();
+                const loc = document.getElementById('staff-log-location').value;
+                const msg = document.getElementById('staff-log-msg').value;
+                
+                db.maintenanceLogs.unshift({
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                    location: loc, msg: msg, logger: currentUser.name, status: 'Pending'
+                });
+                saveDB();
+                showToast("Situation logged and broadcasted to Administration.", "success");
+                e.target.reset();
+            }
+
+            function submitBookTrack(e) {
+                e.preventDefault();
+                db.libraryLogs.unshift({
+                    title: document.getElementById('staff-book-title').value,
+                    student: document.getElementById('staff-book-student').value,
+                    status: document.getElementById('staff-book-status').value,
+                    date: new Date().toISOString().split('T')[0]
+                });
+                saveDB();
+                showToast("Library record updated.", "success");
+                renderStaffDashboard();
+                e.target.reset();
+            }
+
             // Init
-            window.onload = () => { applyTheme(currentTheme); };
+            window.onload = () => { 
+                applyTheme(currentTheme); 
+                setupGlobalSearch();
+            };
 
             // Public API
             return {
                 handleAuth, logout, toggleTheme, openModal, closeModal,
                 togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
-                toggleApplicationFields, verifyPhoneMock, submitApplication, submitFeePayment
+                toggleApplicationFields, verifyPhoneMock, submitApplication, submitFeePayment,
+                exportDataToCSV, filterTable, actionReport, submitStudentReport, submitStaffLog, submitBookTrack,
+                addCalendarEvent, showToast
             };
         })();
     </script>
