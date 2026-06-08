@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Primary Meta Tags -->
     <title>EduCore | Advanced School Management System</title>
+    <meta name="title" content="EduCore | Advanced School Management System">
+    <meta name="description" content="EduCore - An advanced, secure, and intelligent School Management System. Features include student admissions, teacher recruitment, AI assistant (J.A.R.V.I.S), and comprehensive dashboards.">
+    <meta name="keywords" content="School Management System, EduCore, ERP, Student Portal, Teacher Portal, Online Admission, Education Platform">
+    <meta name="author" content="EduCore">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://sclmngsys.netlify.app/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sclmngsys.netlify.app/">
+    <meta property="og:title" content="EduCore | Advanced School Management System">
+    <meta property="og:description" content="An advanced, secure, and intelligent School Management System for modern educational institutions.">
+    <meta property="og:image" content="https://sclmngsys.netlify.app/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sclmngsys.netlify.app/">
+    <meta property="twitter:title" content="EduCore | Advanced School Management System">
+    <meta property="twitter:description" content="An advanced, secure, and intelligent School Management System for modern educational institutions.">
+    <meta property="twitter:image" content="https://sclmngsys.netlify.app/og-image.jpg">
     
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Chart.js for Advanced Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Supabase for Storage -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         /* ==========================================================================
@@ -98,6 +122,18 @@
             width: 100%; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--input-border); background: var(--input-bg); font-size: 15px; color: var(--text-main); transition: all 0.2s; outline: none;
         }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15); }
+        input[type="file"] { padding: 10px; font-size: 13px; }
+        
+        .file-upload-wrapper {
+            border: 1px dashed var(--primary);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            background: rgba(0,113,227,0.02);
+            transition: all 0.2s;
+        }
+        .file-upload-wrapper:hover { background: rgba(0,113,227,0.05); border-color: var(--primary-hover); }
+        .animate-spin { animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         
         .btn { padding: 14px 24px; border-radius: var(--radius-md); border: none; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; text-align: center; gap: 8px; }
         .btn-primary { background: var(--primary); color: white; }
@@ -117,6 +153,7 @@
         tr:hover td { background: var(--table-hover); }
 
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 24px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px; }
         .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-bottom: 24px; }
         .data-center-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
         .data-btn { background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px 16px; border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-main); position: relative;}
@@ -522,51 +559,195 @@
                 </div>
 
                 <form id="admission-form" onsubmit="app.submitApplication(event)">
-                    <div class="dashboard-grid" style="gap: 16px; margin-bottom: 0;">
-                        <div class="input-group">
-                            <label>Full Name (As per records)</label>
-                            <input type="text" id="app-form-name" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Date of Birth (Used as Default Password)</label>
-                            <input type="date" id="app-form-dob" required>
-                        </div>
-                    </div>
                     
-                    <div class="dashboard-grid" style="gap: 16px; margin-bottom: 0;">
-                        <div class="input-group" style="position: relative;">
-                            <label>Phone Number</label>
-                            <div style="display:flex; gap: 8px;">
-                                <input type="tel" id="app-form-phone" placeholder="10-digit number" required>
-                                <button type="button" class="btn btn-outline" id="btn-verify-phone" onclick="app.verifyPhoneMock()">Verify</button>
+                    <!-- ==============================================
+                         STUDENT SPECIFIC FIELDS
+                         ============================================== -->
+                    <div id="form-student-fields">
+                        <h4 class="mb-4" style="color: var(--primary);">1. Student Details</h4>
+                        <div class="form-grid">
+                            <div class="input-group"><label>First Name</label><input type="text" id="stu-fname"></div>
+                            <div class="input-group"><label>Middle Name</label><input type="text" id="stu-mname"></div>
+                            <div class="input-group"><label>Last / Nickname</label><input type="text" id="stu-lname"></div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Date of Birth</label><input type="date" id="stu-dob"></div>
+                            <div class="input-group">
+                                <label>Applying for Grade</label>
+                                <select id="stu-grade">
+                                    <option value="Grade 1">Grade 1</option><option value="Grade 5">Grade 5</option>
+                                    <option value="Grade 9">Grade 9</option><option value="Grade 10">Grade 10</option>
+                                </select>
                             </div>
-                            <small id="phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
-                            <input type="hidden" id="app-form-phone-verified" value="false">
                         </div>
-                        
-                        <!-- Dynamic Field: Grade OR Qualification -->
-                        <div class="input-group" id="field-grade-wrap">
-                            <label>Applying for Grade</label>
-                            <select id="app-form-grade">
-                                <option value="Grade 1">Grade 1</option>
-                                <option value="Grade 5">Grade 5</option>
-                                <option value="Grade 9">Grade 9</option>
-                                <option value="Grade 10">Grade 10</option>
-                            </select>
+
+                        <h4 class="mb-4 mt-4" style="color: var(--primary);">2. Current Address</h4>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Village/Town/City</label><input type="text" id="stu-city"></div>
+                            <div class="input-group"><label>Area/Locality</label><input type="text" id="stu-area"></div>
+                            <div class="input-group"><label>District</label><input type="text" id="stu-dist"></div>
+                            <div class="input-group"><label>Sub-Division</label><input type="text" id="stu-subdiv"></div>
+                            <div class="input-group"><label>State</label><input type="text" id="stu-state"></div>
+                            <div class="input-group"><label>Post</label><input type="text" id="stu-post"></div>
+                            <div class="input-group"><label>Country</label><input type="text" id="stu-country"></div>
+                            <div class="input-group"><label>PIN / Zip Code</label><input type="text" id="stu-pin"></div>
+                            <div class="input-group"><label>House/Building/Apt No.</label><input type="text" id="stu-house"></div>
                         </div>
-                        <div class="input-group d-none" id="field-qual-wrap">
-                            <label>Highest Qualification</label>
-                            <input type="text" id="app-form-qual" placeholder="e.g. B.Ed, M.Sc Mathematics">
+
+                        <h4 class="mb-4 mt-4" style="color: var(--primary);">3. Guardian Information</h4>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Guardian Name</label><input type="text" id="stu-gname"></div>
+                            <div class="input-group">
+                                <label>Relationship</label>
+                                <select id="stu-grel">
+                                    <option value="Father">Father</option>
+                                    <option value="Mother">Mother</option>
+                                    <option value="Grandfather">Grandfather</option>
+                                    <option value="Grandmother">Grandmother</option>
+                                    <option value="Legal Guardian">Legal Guardian</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Primary Phone</label>
+                                <div style="display:flex; gap: 8px;">
+                                    <input type="tel" id="stu-gphone" placeholder="10-digit number">
+                                    <button type="button" class="btn btn-outline" id="btn-verify-stu-phone" onclick="app.verifyPhoneMock('stu-gphone', 'stu-phone-verified-msg', 'btn-verify-stu-phone')">Verify</button>
+                                </div>
+                                <small id="stu-phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
+                            </div>
+                            <div class="input-group"><label>Second Phone (Optional)</label><input type="tel" id="stu-gphone2"></div>
+                            <div class="input-group"><label>Email Address (Optional)</label><input type="email" id="stu-gemail"></div>
+                        </div>
+
+                        <h4 class="mb-4 mt-4" style="color: var(--primary);">4. Document Uploads</h4>
+                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Files will automatically convert to secure URL links using the online converter portal.</p>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Last Exam / Year Marksheet (If available)</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-stu-mark')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-stu-mark">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Student Passport Photo</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-stu-photo')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-stu-photo">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Parent/Guardian Passport Photo</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-parent-photo')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-parent-photo">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>DOB / ID Proof Type</label>
+                                <select id="stu-dob-proof-type" style="margin-bottom: 8px;">
+                                    <option value="Aadhaar">Aadhaar Card</option>
+                                    <option value="Birth Certificate">Birth Certificate (Gov/Hospital)</option>
+                                    <option value="Passport">Passport</option>
+                                </select>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-stu-dobproof')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-stu-dobproof">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Parent/Guardian Signature Photo</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-parent-sig')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-parent-sig">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Student Signature Photo</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-stu-sig')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-stu-sig">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-group">
-                        <label>Upload Aadhar / ID Proof (PDF/JPG)</label>
-                        <input type="file" id="app-form-doc1" accept=".pdf,.jpg,.jpeg,.png" required>
-                        <small style="color: var(--text-muted); margin-top: 4px;">For this demo, files are simulated and not uploaded to server.</small>
+                    <!-- ==============================================
+                         TEACHER SPECIFIC FIELDS
+                         ============================================== -->
+                    <div id="form-teacher-fields" class="d-none">
+                        <h4 class="mb-4" style="color: var(--primary);">1. Personal Information</h4>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Full Name</label><input type="text" id="tch-name"></div>
+                            <div class="input-group"><label>Guardian / Spouse Name(s)</label><input type="text" id="tch-gnames"></div>
+                            <div class="input-group"><label>Date of Birth</label><input type="date" id="tch-dob"></div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Primary Phone</label>
+                                <div style="display:flex; gap: 8px;">
+                                    <input type="tel" id="tch-phone" placeholder="10-digit number">
+                                    <button type="button" class="btn btn-outline" id="btn-verify-tch-phone" onclick="app.verifyPhoneMock('tch-phone', 'tch-phone-verified-msg', 'btn-verify-tch-phone')">Verify</button>
+                                </div>
+                                <small id="tch-phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
+                            </div>
+                            <div class="input-group"><label>Email Address</label><input type="email" id="tch-email"></div>
+                        </div>
+
+                        <h4 class="mb-4 mt-4" style="color: var(--primary);">2. Documents & Verification</h4>
+                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Files will automatically convert to secure URL links using the online converter portal.</p>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Curriculum Vitae (CV)</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.doc,.docx" onchange="app.uploadToLink(this, 'url-tch-cv')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-tch-cv">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Proof of Identity (POI)</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-tch-poi')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-tch-poi">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Proof of Address (POA)</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-tch-poa')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-tch-poa">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Graduation or Above Certificates</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.jpg,.png" multiple onchange="app.uploadToLink(this, 'url-tch-certs')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-tch-certs">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Other Govt. Issued Documents</label>
+                                <div class="file-upload-wrapper">
+                                    <input type="file" accept=".pdf,.jpg,.png" multiple onchange="app.uploadToLink(this, 'url-tch-gov')">
+                                    <div class="status-msg mt-4" style="font-size: 13px;"></div>
+                                    <input type="hidden" id="url-tch-gov">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-block mt-4" id="btn-submit-app"><i class="ph ph-paper-plane-tilt"></i> Submit for Review</button>
+                    <input type="hidden" id="app-form-phone-verified" value="false">
+                    <button type="submit" class="btn btn-primary btn-block mt-4" id="btn-submit-app"><i class="ph ph-paper-plane-tilt"></i> Submit Application</button>
                 </form>
             </div>
 
@@ -962,22 +1143,14 @@
                 <button class="btn btn-outline mb-4" style="padding: 6px 12px; font-size: 13px;" onclick="document.getElementById('review-list-view').classList.remove('d-none'); document.getElementById('review-detail-view').classList.add('d-none');"><i class="ph ph-arrow-left"></i> Back to List</button>
                 
                 <div class="glass-card" style="padding: 20px; background: var(--input-bg);">
-                    <div class="dashboard-grid">
-                        <div>
-                            <div style="font-size: 12px; color: var(--text-muted); font-weight:600; text-transform:uppercase;">Applicant Details</div>
-                            <h2 id="rev-det-name" style="margin-bottom: 8px;">Name</h2>
-                            <div class="mb-4"><span class="status-badge" id="rev-det-type" style="background: var(--primary); color: white;">Type</span></div>
-                            
-                            <p><strong>Phone:</strong> <span id="rev-det-phone"></span> (Verified)</p>
-                            <p><strong>DOB:</strong> <span id="rev-det-dob"></span></p>
-                            <p><strong>Applying For:</strong> <span id="rev-det-target"></span></p>
-                            <p class="mt-4"><strong>Document Attached:</strong> <i class="ph ph-file-pdf"></i> <span id="rev-det-doc">doc.pdf</span></p>
-                        </div>
-                        <div id="payment-verify-box" class="d-none" style="background: rgba(52, 199, 89, 0.1); border: 1px solid var(--success); padding: 16px; border-radius: var(--radius-md);">
-                            <h4 style="color: var(--success); margin-bottom: 8px;"><i class="ph ph-shield-check"></i> Payment Claim Verification</h4>
-                            <p style="font-size: 14px;"><strong>Reported UPI/Ref:</strong> <span id="rev-det-payment-ref" style="font-family: monospace; font-size: 16px; font-weight: bold;">---</span></p>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Verify this against bank statement before approving.</p>
-                        </div>
+                    <div id="rev-det-dynamic-content">
+                        <!-- Content dynamically built by JS matching student or teacher detailed inputs -->
+                    </div>
+                    
+                    <div id="payment-verify-box" class="d-none mt-4" style="background: rgba(52, 199, 89, 0.1); border: 1px solid var(--success); padding: 16px; border-radius: var(--radius-md);">
+                        <h4 style="color: var(--success); margin-bottom: 8px;"><i class="ph ph-shield-check"></i> Payment Claim Verification</h4>
+                        <p style="font-size: 14px;"><strong>Reported UPI/Ref:</strong> <span id="rev-det-payment-ref" style="font-family: monospace; font-size: 16px; font-weight: bold;">---</span></p>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Verify this against bank statement before approving.</p>
                     </div>
                     
                     <hr style="border: 0; border-top: 1px solid var(--input-border); margin: 24px 0;">
@@ -1025,6 +1198,12 @@
             Support staff manages library books and maintenance. Students can report facility issues directly to the Headmaster. Keep responses concise and formatted plainly.`;
             
             try { currentTheme = localStorage.getItem('educore_theme') || 'light'; } catch (e) {}
+
+            // Supabase Initialization
+            // Keys applied directly since plain HTML doesn't natively parse process.env without a bundler.
+            const supabaseUrl = typeof __supabase_url !== 'undefined' ? __supabase_url : 'https://zzbvoemasapkqunzzsmo.supabase.co';
+            const supabaseKey = typeof __supabase_key !== 'undefined' ? __supabase_key : 'sb_publishable_JQ59ESinyBkxWpggTfQXew_so_Ls2-b';
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
             // Firebase Initialization 
             let firebaseConfig;
@@ -1084,7 +1263,7 @@
                 if (auth.currentUser && db) { setDoc(dbDocRef, db).catch(console.error); }
             }
 
-            // Seed Generation (Without Hardcoded Demo texts in UI)
+            // Seed Generation
             function generateSeedData() {
                 return {
                     settings: { admissionOpen: true, recruitmentOpen: true },
@@ -1679,6 +1858,246 @@
                 e.target.reset();
             }
 
+            // --- APPLICATION FORMS & TRACKING ---
+            function toggleApplicationFields() {
+                const type = document.getElementById('applicant-type').value;
+                if(type === 'student') {
+                    document.getElementById('form-student-fields').classList.remove('d-none');
+                    document.getElementById('form-teacher-fields').classList.add('d-none');
+                } else {
+                    document.getElementById('form-student-fields').classList.add('d-none');
+                    document.getElementById('form-teacher-fields').classList.remove('d-none');
+                }
+                renderApplicantDashboard(); 
+            }
+
+            function verifyPhoneMock(inputId, msgId, btnId) {
+                const phone = document.getElementById(inputId).value;
+                if(phone.length < 10) { showToast("Enter a valid 10-digit phone number first.", "error"); return; }
+                setTimeout(() => {
+                    let otp = prompt("Simulated OTP sent! Enter any 4 digits to verify:");
+                    if(otp && otp.length >= 4) {
+                        document.getElementById('app-form-phone-verified').value = "true";
+                        document.getElementById(btnId).style.display = "none";
+                        document.getElementById(msgId).style.display = "block";
+                        showToast("Phone Verified!", "success");
+                    } else {
+                        showToast("Verification failed.", "error");
+                    }
+                }, 500);
+            }
+
+            async function uploadToLink(inputElement, targetHiddenId) {
+                const file = inputElement.files[0];
+                if (!file) return;
+
+                const statusEl = inputElement.parentElement.querySelector('.status-msg');
+                const targetHidden = document.getElementById(targetHiddenId);
+
+                statusEl.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Uploading to secure server...`;
+                statusEl.style.color = 'var(--warning)';
+
+                try {
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+                    const filePath = `applications/${fileName}`;
+
+                    // Upload to Supabase Storage (bucket: 'documents')
+                    // Make sure you create a public bucket named "documents" in your Supabase project!
+                    const { data, error } = await supabase.storage
+                        .from('documents')
+                        .upload(filePath, file);
+
+                    if (error) throw error;
+
+                    // Get Public URL
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('documents')
+                        .getPublicUrl(filePath);
+
+                    targetHidden.value = publicUrl;
+                    statusEl.innerHTML = `<i class="ph ph-check-circle"></i> Uploaded: <a href="${publicUrl}" target="_blank" style="color:var(--primary);text-decoration:underline;">${file.name}</a>`;
+                    statusEl.style.color = 'var(--success)';
+                } catch (err) {
+                    console.error("Upload error:", err);
+                    statusEl.innerHTML = `<i class="ph ph-x-circle"></i> Upload Failed`;
+                    statusEl.style.color = 'var(--danger)';
+                    showToast("Failed to upload document.", "error");
+                }
+            }
+
+            function submitApplication(e) {
+                e.preventDefault();
+                if(document.getElementById('app-form-phone-verified').value !== "true") {
+                    showToast("Please verify your phone number first.", "warning"); return;
+                }
+
+                const type = document.getElementById('applicant-type').value;
+                let payload = {
+                    id: 'APP-' + Date.now(),
+                    applicantId: currentUser.id,
+                    type: type,
+                    status: 'submitted',
+                    submittedAt: new Date().toISOString().split('T')[0]
+                };
+
+                if (type === 'student') {
+                    const first = document.getElementById('stu-fname').value;
+                    const middle = document.getElementById('stu-mname').value;
+                    const last = document.getElementById('stu-lname').value;
+                    payload.name = `${first} ${middle} ${last}`.replace(/\s+/g, ' ').trim();
+                    payload.dob = document.getElementById('stu-dob').value;
+                    payload.targetGrade = document.getElementById('stu-grade').value;
+                    payload.phone = document.getElementById('stu-gphone').value;
+                    
+                    payload.details = {
+                        firstName: first, middleName: middle, lastName: last,
+                        address: {
+                            village: document.getElementById('stu-city').value,
+                            area: document.getElementById('stu-area').value,
+                            district: document.getElementById('stu-dist').value,
+                            subdiv: document.getElementById('stu-subdiv').value,
+                            state: document.getElementById('stu-state').value,
+                            post: document.getElementById('stu-post').value,
+                            country: document.getElementById('stu-country').value,
+                            pin: document.getElementById('stu-pin').value,
+                            house: document.getElementById('stu-house').value
+                        },
+                        guardian: {
+                            name: document.getElementById('stu-gname').value,
+                            relation: document.getElementById('stu-grel').value,
+                            phone2: document.getElementById('stu-gphone2').value,
+                            email: document.getElementById('stu-gemail').value
+                        },
+                        documents: {
+                            marksheet: document.getElementById('url-stu-mark').value,
+                            stuPhoto: document.getElementById('url-stu-photo').value,
+                            parentPhoto: document.getElementById('url-parent-photo').value,
+                            dobProofType: document.getElementById('stu-dob-proof-type').value,
+                            dobProofUrl: document.getElementById('url-stu-dobproof').value,
+                            parentSig: document.getElementById('url-parent-sig').value,
+                            stuSig: document.getElementById('url-stu-sig').value
+                        }
+                    };
+                } else {
+                    payload.name = document.getElementById('tch-name').value;
+                    payload.dob = document.getElementById('tch-dob').value;
+                    payload.phone = document.getElementById('tch-phone').value;
+                    payload.targetGrade = "Staff Position";
+
+                    payload.details = {
+                        guardianNames: document.getElementById('tch-gnames').value,
+                        email: document.getElementById('tch-email').value,
+                        documents: {
+                            cv: document.getElementById('url-tch-cv').value,
+                            poi: document.getElementById('url-tch-poi').value,
+                            poa: document.getElementById('url-tch-poa').value,
+                            certs: document.getElementById('url-tch-certs').value,
+                            govDocs: document.getElementById('url-tch-gov').value
+                        }
+                    };
+                }
+
+                const existingIdx = db.applications.findIndex(a => a.applicantId === currentUser.id);
+                if(existingIdx > -1) {
+                    payload.id = db.applications[existingIdx].id; 
+                    db.applications[existingIdx] = payload;
+                } else {
+                    db.applications.push(payload);
+                }
+
+                saveDB();
+                showToast("Application Submitted Successfully!", "success");
+                renderApplicantDashboard();
+            }
+
+            function renderApplicantDashboard() {
+                const myApp = db.applications.find(a => a.applicantId === currentUser.id);
+                const formSection = document.getElementById('applicant-stage-form');
+                const paySection = document.getElementById('applicant-stage-payment');
+                const enrolledSection = document.getElementById('applicant-stage-enrolled');
+                const msgBox = document.getElementById('portal-closed-msg');
+                const formEl = document.getElementById('admission-form');
+                const typeSelect = document.getElementById('applicant-type');
+
+                formSection.classList.add('d-none');
+                paySection.classList.add('d-none');
+                enrolledSection.classList.add('d-none');
+                msgBox.classList.add('d-none');
+                formEl.classList.remove('d-none');
+
+                if (!myApp || myApp.status === 'draft' || myApp.status === 'needs_revision') {
+                    formSection.classList.remove('d-none');
+                    updateStepper(myApp ? (myApp.status === 'needs_revision' ? 0.5 : 0) : 0);
+                    
+                    if(myApp && myApp.status === 'needs_revision') {
+                        document.getElementById('applicant-notes-box').classList.remove('d-none');
+                        document.getElementById('applicant-notes-text').innerText = myApp.adminNotes || "Please review and correct your details.";
+                    } else {
+                        document.getElementById('applicant-notes-box').classList.add('d-none');
+                    }
+
+                    if (typeSelect.value === 'student' && !db.settings.admissionOpen) {
+                        formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
+                    }
+                    if (typeSelect.value === 'teacher' && !db.settings.recruitmentOpen) {
+                        formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
+                    }
+                } 
+                else if (myApp.status === 'submitted') { updateStepper(1); formSection.classList.remove('d-none'); formEl.classList.add('d-none'); document.getElementById('applicant-notes-box').innerHTML = "Your application is under review."; document.getElementById('applicant-notes-box').classList.remove('d-none'); }
+                else if (myApp.status === 'hm_reviewed') { updateStepper(2); formSection.classList.remove('d-none'); formEl.classList.add('d-none'); }
+                else if (myApp.status === 'payment_pending') { 
+                    updateStepper(3); 
+                    paySection.classList.remove('d-none');
+                    document.getElementById('applicant-notes-box').classList.add('d-none');
+                    if(myApp.adminNotes) {
+                        document.getElementById('applicant-notes-box').classList.remove('d-none');
+                        document.getElementById('applicant-notes-text').innerText = myApp.adminNotes;
+                    }
+                }
+                else if (myApp.status === 'paid_pending_approval') { updateStepper(3.5); paySection.classList.remove('d-none'); }
+                else if (myApp.status === 'approved') {
+                    updateStepper(4);
+                    enrolledSection.classList.remove('d-none');
+                    document.getElementById('enrolled-final-id').innerText = myApp.generatedId;
+                    document.getElementById('enrolled-final-pass').innerText = myApp.generatedPass;
+                }
+            }
+
+            function updateStepper(stageInt) {
+                const progLine = document.getElementById('applicant-progress-line');
+                const s1 = document.getElementById('step-1');
+                const s2 = document.getElementById('step-2');
+                const s3 = document.getElementById('step-3');
+                const s4 = document.getElementById('step-4');
+                const s5 = document.getElementById('step-5');
+                
+                [s1,s2,s3,s4,s5].forEach(s => { s.classList.remove('completed', 'active', 'rejected'); });
+                
+                let badge = document.getElementById('app-current-status-badge');
+                
+                if(stageInt === 0) { badge.className="status-badge status-draft"; badge.innerText="Draft"; s1.classList.add('active'); progLine.style.width = '0%'; }
+                if(stageInt === 0.5) { badge.className="status-badge status-action"; badge.innerText="Needs Revision"; s1.classList.add('rejected'); progLine.style.width = '0%'; }
+                if(stageInt >= 1) { badge.className="status-badge status-review"; badge.innerText="Under Review"; s1.classList.add('completed'); s2.classList.add('active'); progLine.style.width = '25%'; }
+                if(stageInt >= 2) { badge.className="status-badge status-review"; badge.innerText="Admin Check"; s2.classList.add('completed'); s3.classList.add('active'); progLine.style.width = '50%'; }
+                if(stageInt === 3) { badge.className="status-badge status-review"; badge.innerText="Awaiting Payment"; s3.classList.add('completed'); s4.classList.add('active'); progLine.style.width = '75%'; }
+                if(stageInt === 3.5) { badge.className="status-badge status-review"; badge.innerText="Verifying Payment"; s3.classList.add('completed'); s4.classList.add('active'); progLine.style.width = '75%'; }
+                if(stageInt >= 4) { badge.className="status-badge status-enrolled"; badge.innerText="Enrolled"; s4.classList.add('completed'); s5.classList.add('completed'); progLine.style.width = '100%'; }
+            }
+
+            function submitFeePayment(e) {
+                e.preventDefault();
+                const ref = document.getElementById('app-payment-ref').value.trim();
+                const myApp = db.applications.find(a => a.applicantId === currentUser.id);
+                if(myApp) {
+                    myApp.paymentRef = ref;
+                    myApp.status = 'paid_pending_approval';
+                    saveDB();
+                    showToast("Payment information sent for verification.", "success");
+                    renderApplicantDashboard();
+                }
+            }
+
             // --- APPLICATION REVIEW LOGIC (ADMIN/HM) ---
             function getStatusBadge(status) {
                 switch(status) {
@@ -1722,41 +2141,90 @@
                 });
             }
 
+            function formatLink(url) {
+                return url ? `<a href="${url}" target="_blank" style="color:var(--primary);text-decoration:underline;">View Doc <i class="ph ph-arrow-square-out"></i></a>` : 'Not Provided';
+            }
+
             function viewAppDetail(appId) {
-                const application = db.applications.find(a => a.id === appId);
-                if(!application) return;
+                const appObj = db.applications.find(a => a.id === appId);
+                if(!appObj) return;
                 currentReviewAppId = appId;
 
                 document.getElementById('review-list-view').classList.add('d-none');
                 document.getElementById('review-detail-view').classList.remove('d-none');
 
-                document.getElementById('rev-det-name').innerText = application.name;
-                document.getElementById('rev-det-type').innerText = application.type.toUpperCase();
-                document.getElementById('rev-det-phone').innerText = application.phone;
-                document.getElementById('rev-det-dob').innerText = application.dob;
-                document.getElementById('rev-det-target').innerText = application.targetGrade || application.targetQual;
-                document.getElementById('rev-det-doc').innerText = application.documentName || 'No Doc';
-                
+                let html = `<div style="font-size: 12px; color: var(--text-muted); font-weight:600; text-transform:uppercase;">Applicant Overview</div>
+                            <h2 style="margin-bottom: 8px;">${appObj.name}</h2>
+                            <div class="mb-4"><span class="status-badge" style="background: var(--primary); color: white;">${appObj.type.toUpperCase()} - ${appObj.targetGrade || 'Staff'}</span></div>
+                            <p><strong>Primary Phone:</strong> ${appObj.phone} <span style="color:var(--success); font-size:12px;"><i class="ph-fill ph-check-circle"></i> Verified</span></p>
+                            <p><strong>DOB:</strong> ${appObj.dob}</p><hr style="border:0; border-top:1px solid var(--input-border); margin:16px 0;">`;
+
+                if(appObj.type === 'student') {
+                    const det = appObj.details;
+                    html += `
+                        <div class="dashboard-grid">
+                            <div>
+                                <h4 class="mb-4">Address Information</h4>
+                                <p><strong>Locality:</strong> ${det.address.village}, ${det.address.area}</p>
+                                <p><strong>District/Sub:</strong> ${det.address.district}, ${det.address.subdiv}</p>
+                                <p><strong>State/Country:</strong> ${det.address.state}, ${det.address.country} - ${det.address.pin}</p>
+                                <p><strong>House/Apt:</strong> ${det.address.house}</p>
+                            </div>
+                            <div>
+                                <h4 class="mb-4">Guardian Information</h4>
+                                <p><strong>Name:</strong> ${det.guardian.name} (${det.guardian.relation})</p>
+                                <p><strong>Alt Phone:</strong> ${det.guardian.phone2 || 'N/A'}</p>
+                                <p><strong>Email:</strong> ${det.guardian.email || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <h4 class="mb-4">Document Links</h4>
+                                <p><strong>Marksheet:</strong> ${formatLink(det.documents.marksheet)}</p>
+                                <p><strong>Student Photo:</strong> ${formatLink(det.documents.stuPhoto)}</p>
+                                <p><strong>Parent Photo:</strong> ${formatLink(det.documents.parentPhoto)}</p>
+                                <p><strong>${det.documents.dobProofType}:</strong> ${formatLink(det.documents.dobProofUrl)}</p>
+                                <p><strong>Signatures:</strong> ${formatLink(det.documents.stuSig)} (Stu), ${formatLink(det.documents.parentSig)} (Par)</p>
+                            </div>
+                        </div>`;
+                } else {
+                    const det = appObj.details;
+                    html += `
+                        <div class="dashboard-grid">
+                            <div>
+                                <h4 class="mb-4">Contact & Guardians</h4>
+                                <p><strong>Guardian/Spouse:</strong> ${det.guardianNames}</p>
+                                <p><strong>Email:</strong> ${det.email}</p>
+                            </div>
+                            <div>
+                                <h4 class="mb-4">Document Links</h4>
+                                <p><strong>CV:</strong> ${formatLink(det.documents.cv)}</p>
+                                <p><strong>Identity (POI):</strong> ${formatLink(det.documents.poi)}</p>
+                                <p><strong>Address (POA):</strong> ${formatLink(det.documents.poa)}</p>
+                                <p><strong>Certificates:</strong> ${formatLink(det.documents.certs)}</p>
+                                <p><strong>Gov Docs:</strong> ${formatLink(det.documents.govDocs)}</p>
+                            </div>
+                        </div>`;
+                }
+
+                document.getElementById('rev-det-dynamic-content').innerHTML = html;
                 document.getElementById('rev-action-notes').value = '';
 
                 const actionDiv = document.getElementById('rev-action-buttons');
-                actionDiv.innerHTML = '';
                 const payBox = document.getElementById('payment-verify-box');
                 payBox.classList.add('d-none');
 
-                if(application.status === 'submitted' && activeReviewRole === 'hm') {
+                if(appObj.status === 'submitted' && activeReviewRole === 'hm') {
                     actionDiv.innerHTML = `
                         <button class="btn btn-success" onclick="app.processApp('hm_reviewed')"><i class="ph ph-check"></i> Approve & Pass to Admin</button>
                         <button class="btn btn-danger" onclick="app.processApp('needs_revision')"><i class="ph ph-x"></i> Reject / Request Revision</button>
                     `;
-                } else if(application.status === 'hm_reviewed' && activeReviewRole === 'admin') {
+                } else if(appObj.status === 'hm_reviewed' && activeReviewRole === 'admin') {
                     actionDiv.innerHTML = `
                         <button class="btn btn-primary" onclick="app.processApp('payment_pending')"><i class="ph ph-check"></i> Verify Details & Request Payment</button>
                         <button class="btn btn-danger" onclick="app.processApp('needs_revision')"><i class="ph ph-x"></i> Reject / Request Revision</button>
                     `;
-                } else if(application.status === 'paid_pending_approval' && activeReviewRole === 'admin') {
+                } else if(appObj.status === 'paid_pending_approval' && activeReviewRole === 'admin') {
                     payBox.classList.remove('d-none');
-                    document.getElementById('rev-det-payment-ref').innerText = application.paymentRef;
+                    document.getElementById('rev-det-payment-ref').innerText = appObj.paymentRef;
                     actionDiv.innerHTML = `
                         <button class="btn btn-success" onclick="app.processApp('approved')"><i class="ph ph-shield-check"></i> Payment Valid - Complete Enrollment</button>
                         <button class="btn btn-danger" onclick="app.processApp('payment_pending')"><i class="ph ph-x"></i> Invalid Payment - Request Again</button>
@@ -1777,7 +2245,7 @@
 
                 if(newStatus === 'approved') {
                     const newIdNum = 10000 + db.allStudents.length + 1;
-                    const regId = `STU-${newIdNum}`;
+                    const regId = application.type === 'student' ? `STU-${newIdNum}` : `TCH-${newIdNum}`;
                     
                     let pass = '123'; 
                     if(application.dob) {
@@ -1815,160 +2283,6 @@
                 updateUIAfterDbSync();
             }
 
-
-            // --- APPLICANT PORTAL LOGIC ---
-            function renderApplicantDashboard() {
-                const myApp = db.applications.find(a => a.applicantId === currentUser.id);
-                const formSection = document.getElementById('applicant-stage-form');
-                const paySection = document.getElementById('applicant-stage-payment');
-                const enrolledSection = document.getElementById('applicant-stage-enrolled');
-                const msgBox = document.getElementById('portal-closed-msg');
-                const formEl = document.getElementById('admission-form');
-                const typeSelect = document.getElementById('applicant-type');
-
-                formSection.classList.add('d-none');
-                paySection.classList.add('d-none');
-                enrolledSection.classList.add('d-none');
-                msgBox.classList.add('d-none');
-                formEl.classList.remove('d-none');
-
-                if (!myApp || myApp.status === 'draft' || myApp.status === 'needs_revision') {
-                    formSection.classList.remove('d-none');
-                    updateStepper(myApp ? (myApp.status === 'needs_revision' ? 0.5 : 0) : 0);
-                    
-                    if(myApp && myApp.status === 'needs_revision') {
-                        document.getElementById('applicant-notes-box').classList.remove('d-none');
-                        document.getElementById('applicant-notes-text').innerText = myApp.adminNotes || "Please review and correct your details.";
-                    } else {
-                        document.getElementById('applicant-notes-box').classList.add('d-none');
-                    }
-
-                    if (typeSelect.value === 'student' && !db.settings.admissionOpen) {
-                        formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
-                    }
-                    if (typeSelect.value === 'teacher' && !db.settings.recruitmentOpen) {
-                        formEl.classList.add('d-none'); msgBox.classList.remove('d-none');
-                    }
-                } 
-                else if (myApp.status === 'submitted') { updateStepper(1); }
-                else if (myApp.status === 'hm_reviewed') { updateStepper(2); }
-                else if (myApp.status === 'payment_pending') { 
-                    updateStepper(3); 
-                    paySection.classList.remove('d-none');
-                    document.getElementById('applicant-notes-box').classList.add('d-none');
-                    if(myApp.adminNotes) {
-                        document.getElementById('applicant-notes-box').classList.remove('d-none');
-                        document.getElementById('applicant-notes-text').innerText = myApp.adminNotes;
-                    }
-                }
-                else if (myApp.status === 'paid_pending_approval') { updateStepper(3.5); }
-                else if (myApp.status === 'approved') {
-                    updateStepper(4);
-                    enrolledSection.classList.remove('d-none');
-                    document.getElementById('enrolled-final-id').innerText = myApp.generatedId;
-                    document.getElementById('enrolled-final-pass').innerText = myApp.generatedPass;
-                }
-            }
-
-            function updateStepper(stageInt) {
-                const progLine = document.getElementById('applicant-progress-line');
-                const s1 = document.getElementById('step-1');
-                const s2 = document.getElementById('step-2');
-                const s3 = document.getElementById('step-3');
-                const s4 = document.getElementById('step-4');
-                const s5 = document.getElementById('step-5');
-                
-                [s1,s2,s3,s4,s5].forEach(s => { s.classList.remove('completed', 'active', 'rejected'); });
-                
-                let badge = document.getElementById('app-current-status-badge');
-                
-                if(stageInt === 0) { badge.className="status-badge status-draft"; badge.innerText="Draft"; s1.classList.add('active'); progLine.style.width = '0%'; }
-                if(stageInt === 0.5) { badge.className="status-badge status-action"; badge.innerText="Needs Revision"; s1.classList.add('rejected'); progLine.style.width = '0%'; }
-                if(stageInt >= 1) { badge.className="status-badge status-review"; badge.innerText="Under Review"; s1.classList.add('completed'); s2.classList.add('active'); progLine.style.width = '25%'; }
-                if(stageInt >= 2) { badge.className="status-badge status-review"; badge.innerText="Admin Check"; s2.classList.add('completed'); s3.classList.add('active'); progLine.style.width = '50%'; }
-                if(stageInt === 3) { badge.className="status-badge status-review"; badge.innerText="Awaiting Payment"; s3.classList.add('completed'); s4.classList.add('active'); progLine.style.width = '75%'; }
-                if(stageInt === 3.5) { badge.className="status-badge status-review"; badge.innerText="Verifying Payment"; s3.classList.add('completed'); s4.classList.add('active'); progLine.style.width = '75%'; }
-                if(stageInt >= 4) { badge.className="status-badge status-enrolled"; badge.innerText="Enrolled"; s4.classList.add('completed'); s5.classList.add('completed'); progLine.style.width = '100%'; }
-            }
-
-            function toggleApplicationFields() {
-                const type = document.getElementById('applicant-type').value;
-                if(type === 'student') {
-                    document.getElementById('field-grade-wrap').classList.remove('d-none');
-                    document.getElementById('field-qual-wrap').classList.add('d-none');
-                } else {
-                    document.getElementById('field-grade-wrap').classList.add('d-none');
-                    document.getElementById('field-qual-wrap').classList.remove('d-none');
-                }
-                renderApplicantDashboard(); 
-            }
-
-            function verifyPhoneMock() {
-                const phone = document.getElementById('app-form-phone').value;
-                if(phone.length < 10) { showToast("Enter a valid phone number first.", "error"); return; }
-                setTimeout(() => {
-                    let otp = prompt("Simulated OTP sent! Enter any 4 digits to verify:");
-                    if(otp && otp.length >= 4) {
-                        document.getElementById('app-form-phone-verified').value = "true";
-                        document.getElementById('btn-verify-phone').style.display = "none";
-                        document.getElementById('phone-verified-msg').style.display = "block";
-                        showToast("Phone Verified!", "success");
-                    } else {
-                        showToast("Verification failed.", "error");
-                    }
-                }, 500);
-            }
-
-            function submitApplication(e) {
-                e.preventDefault();
-                if(document.getElementById('app-form-phone-verified').value !== "true") {
-                    showToast("Please verify your phone number first.", "warning"); return;
-                }
-
-                const type = document.getElementById('applicant-type').value;
-                const fileInput = document.getElementById('app-form-doc1');
-                const docName = fileInput.files.length > 0 ? fileInput.files[0].name : 'No file attached';
-
-                const newApp = {
-                    id: 'APP-' + Date.now(),
-                    applicantId: currentUser.id,
-                    type: type,
-                    name: document.getElementById('app-form-name').value,
-                    dob: document.getElementById('app-form-dob').value,
-                    phone: document.getElementById('app-form-phone').value,
-                    targetGrade: type === 'student' ? document.getElementById('app-form-grade').value : null,
-                    targetQual: type === 'teacher' ? document.getElementById('app-form-qual').value : null,
-                    documentName: docName,
-                    status: 'submitted',
-                    submittedAt: new Date().toISOString().split('T')[0]
-                };
-
-                const existingIdx = db.applications.findIndex(a => a.applicantId === currentUser.id);
-                if(existingIdx > -1) {
-                    newApp.id = db.applications[existingIdx].id; 
-                    db.applications[existingIdx] = newApp;
-                } else {
-                    db.applications.push(newApp);
-                }
-
-                saveDB();
-                showToast("Application Submitted Successfully!", "success");
-                renderApplicantDashboard();
-            }
-
-            function submitFeePayment(e) {
-                e.preventDefault();
-                const ref = document.getElementById('app-payment-ref').value.trim();
-                const myApp = db.applications.find(a => a.applicantId === currentUser.id);
-                if(myApp) {
-                    myApp.paymentRef = ref;
-                    myApp.status = 'paid_pending_approval';
-                    saveDB();
-                    showToast("Payment information sent for verification.", "success");
-                    renderApplicantDashboard();
-                }
-            }
-
             // --- TEACHER / STUDENT / PARENT / STAFF PORTALS ---
             function renderTeacherDashboard() {
                 const tbody = document.getElementById('teacher-student-table');
@@ -1979,7 +2293,6 @@
             }
 
             function renderStudentDashboard() {
-                // Find dynamically linked student details
                 let studentData = db.allStudents.find(s => s.regId === currentUser.assignedRegId || s.regId === currentUser.id);
                 if(!studentData && db.allStudents.length > 0) studentData = db.allStudents[0]; 
 
@@ -2007,9 +2320,8 @@
             }
 
             function renderParentDashboard() {
-                // Determine linked child dynamically based on Parent Auth Id mapping
                 let studentData = db.allStudents.find(s => s.parentId === currentUser.id);
-                if(!studentData && db.allStudents.length > 0) studentData = db.allStudents[0]; // fallback display if none strictly mapped
+                if(!studentData && db.allStudents.length > 0) studentData = db.allStudents[0]; 
 
                 if (studentData) {
                     document.getElementById('parent-child-name').innerText = studentData.name;
@@ -2068,7 +2380,7 @@
             return {
                 handleAuth, logout, toggleTheme, openModal, closeModal, loginWithGoogle,
                 togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
-                toggleApplicationFields, verifyPhoneMock, submitApplication, submitFeePayment,
+                toggleApplicationFields, verifyPhoneMock, uploadToLink, submitApplication, submitFeePayment,
                 exportDataToCSV, filterTable, actionReport, submitStudentReport, submitStaffLog, submitBookTrack,
                 addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery
             };
