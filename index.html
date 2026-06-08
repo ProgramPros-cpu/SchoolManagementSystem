@@ -178,6 +178,27 @@
         .step.active .step-label { color: var(--primary); }
         .step.rejected .step-label { color: var(--danger); }
 
+        /* J.A.R.V.I.S. AI Assistant UI */
+        #jarvis-fab { position: fixed; bottom: 24px; left: 24px; width: 60px; height: 60px; background: linear-gradient(135deg, #af52de, #0071e3); border-radius: 50%; box-shadow: 0 10px 30px rgba(0, 113, 227, 0.4); display: none; justify-content: center; align-items: center; color: white; font-size: 28px; cursor: pointer; z-index: 900; transition: transform 0.3s, box-shadow 0.3s; }
+        #jarvis-fab:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0, 113, 227, 0.6); }
+        
+        #jarvis-panel { position: fixed; bottom: 100px; left: 24px; width: 350px; height: 500px; z-index: 900; display: flex; flex-direction: column; padding: 0; overflow: hidden; transform-origin: bottom left; transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; pointer-events: none; transform: scale(0.9); }
+        #jarvis-panel.active { opacity: 1; pointer-events: auto; transform: scale(1); }
+        
+        .jarvis-header { background: linear-gradient(135deg, #af52de, #0071e3); padding: 16px; color: white; display: flex; align-items: center; justify-content: space-between; }
+        .jarvis-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: var(--modal-bg); }
+        .jarvis-footer { padding: 12px; background: var(--input-bg); border-top: 1px solid var(--input-border); display: flex; gap: 8px;}
+        
+        .chat-bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.4; }
+        .chat-user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-ai { background: var(--table-hover); color: var(--text-main); border: 1px solid var(--input-border); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        .typing-indicator { display: flex; gap: 4px; padding: 4px 8px; }
+        .typing-dot { width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
         /* Header & Main Views */
         header { padding: 16px 5%; background: var(--card-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--input-border); display: none; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 16px; transition: background 0.3s;}
         .header-brand { font-size: 20px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
@@ -218,6 +239,7 @@
             .step-label { font-size: 10px; top: 35px; white-space: normal; text-align: center; width: 60px;}
             .header-actions .search-bar { width: 100%; order: 3; max-width: 100%; }
             .user-info { border-left: none; padding-left: 0; }
+            #jarvis-panel { width: calc(100% - 48px); left: 24px; right: 24px; bottom: 90px; }
         }
     </style>
 </head>
@@ -232,12 +254,12 @@
             </button>
             <div class="search-bar" id="global-search-container" style="display: none;">
                 <i class="ph ph-magnifying-glass"></i>
-                <input type="search" id="global-search-input" placeholder="Search ID, Name..." autocomplete="off">
+                <input type="search" id="global-search-input" placeholder="Search User, Student..." autocomplete="off">
                 <div class="search-results" id="global-search-results"></div>
             </div>
             <button class="theme-toggle" onclick="app.toggleTheme()" id="theme-toggle-btn" title="Toggle Dark/Light Mode"><i class="ph ph-moon"></i></button>
             <div class="user-info">
-                <div class="user-name" id="display-user-name">John Doe</div>
+                <div class="user-name" id="display-user-name">Loading...</div>
                 <div class="user-role" id="display-user-role">Role</div>
             </div>
             <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px; border-color: var(--danger); color: var(--danger);" onclick="app.logout()">
@@ -245,6 +267,28 @@
             </button>
         </div>
     </header>
+
+    <!-- J.A.R.V.I.S. AI Interface -->
+    <div id="jarvis-fab" onclick="app.toggleJarvis()"><i class="ph-fill ph-robot"></i></div>
+    <div id="jarvis-panel" class="glass-card">
+        <div class="jarvis-header">
+            <div style="display:flex; align-items:center; gap: 8px;">
+                <i class="ph-fill ph-robot" style="font-size: 24px;"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 16px;">J.A.R.V.I.S.</div>
+                    <div style="font-size: 11px; opacity: 0.8;">EduCore Intelligent Assistant</div>
+                </div>
+            </div>
+            <button onclick="app.toggleJarvis()" style="background:transparent; border:none; color:white; cursor:pointer; font-size:20px;"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="jarvis-body" id="jarvis-chat-history">
+            <div class="chat-bubble chat-ai">Greetings. I am J.A.R.V.I.S., your campus AI system. How may I assist you today?</div>
+        </div>
+        <form class="jarvis-footer" onsubmit="app.submitJarvisQuery(event)">
+            <input type="text" id="jarvis-input" placeholder="Ask J.A.R.V.I.S..." style="flex:1; border-radius: 20px; padding: 10px 16px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); outline:none;" autocomplete="off" required>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px; border-radius: 20px;"><i class="ph-fill ph-paper-plane-right"></i></button>
+        </form>
+    </div>
 
     <main>
         <!-- ==========================================
@@ -257,7 +301,7 @@
                 
                 <form id="login-form" onsubmit="app.handleAuth(event)">
                     <div class="input-group" style="text-align: left;">
-                        <label for="auth-id">Email / System ID / Phone</label>
+                        <label for="auth-id">Email / System ID</label>
                         <input type="text" id="auth-id" placeholder="Enter your Email or ID" required autocomplete="username">
                     </div>
                     
@@ -299,15 +343,6 @@
                         </svg>
                         Continue with Google
                     </button>
-
-                    <div style="margin-top: 24px; font-size: 12px; color: var(--text-muted); background: var(--input-bg); padding: 16px; border-radius: 8px; border: 1px solid var(--input-border); text-align: left; line-height: 1.6;">
-                        <b style="color: var(--text-main);"><i class="ph ph-info"></i> Demo Credentials (Pass: 123)</b><br>
-                        • Super Admin: <code>joykumbhakar001@gmail.com</code><br>
-                        • Headmaster: <code>joykumbhakar77@gmail.com</code><br>
-                        • Teacher: <code>teacher</code><br>
-                        • Staff: <code>staff</code><br>
-                        • Student: <code>STU-10001</code>
-                    </div>
                 </form>
             </div>
         </section>
@@ -328,9 +363,9 @@
                     <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Active tracking</div>
                 </div>
                 <div class="glass-card metric-card">
-                    <div class="metric-label">Total Revenue (YTD)</div>
-                    <div class="metric-value" style="color: var(--success);">$2.4M</div>
-                    <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Target Exceeded</div>
+                    <div class="metric-label">Total Expected Revenue</div>
+                    <div class="metric-value" style="color: var(--success);" id="sa-total-revenue">$0</div>
+                    <div style="font-size: 12px; color: var(--success);"><i class="ph ph-trend-up"></i> Based on Active Students</div>
                 </div>
                 <div class="glass-card metric-card">
                     <div class="metric-label">System Health</div>
@@ -391,23 +426,23 @@
 
             <!-- Advanced Analytics Charts -->
             <div class="section-title mt-4">
-                <h3>Advanced System Analytics</h3>
+                <h3>Advanced System Analytics <span style="font-size:12px; color:var(--primary); font-weight:normal;">(Live Data)</span></h3>
             </div>
             <div class="chart-grid">
                 <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Revenue vs Expenses</h4>
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Application Funnel Status</h4>
                     <div class="chart-wrapper"><canvas id="saRevenueChart"></canvas></div>
                 </div>
                 <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Student Enrollment Trend</h4>
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Enrolled Students by Grade</h4>
                     <div class="chart-wrapper"><canvas id="saEnrollmentChart"></canvas></div>
                 </div>
                 <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">User Demographics</h4>
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">System Roles Overview</h4>
                     <div class="chart-wrapper"><canvas id="saDemographicsChart"></canvas></div>
                 </div>
                 <div class="glass-card">
-                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Feedback & Incident Overview</h4>
+                    <h4 style="margin-bottom: 16px; color: var(--text-muted);">Feedback & Incident Report Distribution</h4>
                     <div class="chart-wrapper"><canvas id="saFeedbackChart"></canvas></div>
                 </div>
             </div>
@@ -632,7 +667,7 @@
                         <div style="width: 64px; height: 64px; background: rgba(0, 113, 227, 0.1); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;"><i class="ph-fill ph-student"></i></div>
                         <div>
                             <h4 id="student-profile-name">Student Name</h4>
-                            <div class="metric-label" id="student-profile-grade">ID: STU-XXXXX | Grade ...</div>
+                            <div class="metric-label" id="student-profile-grade">Loading Profile...</div>
                         </div>
                     </div>
                     <hr style="border:0; border-top: 1px solid var(--input-border); margin: 24px 0;">
@@ -674,7 +709,7 @@
                     <h3>Linked Child Overview</h3>
                     <div class="mt-4">
                         <div class="metric-label mb-4">Student Name: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-name">Loading...</span></div>
-                        <div class="metric-label mb-4">Registration ID: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-id">STU-...</span></div>
+                        <div class="metric-label mb-4">Registration ID: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-id">Loading...</span></div>
                         <hr style="border:0; border-top: 1px solid var(--input-border); margin: 16px 0;">
                         <p style="font-size: 13px; color: var(--text-muted);">Please use the Global Calendar to track upcoming events and holidays.</p>
                     </div>
@@ -772,7 +807,7 @@
             <div class="modal-header">
                 <div>
                     <h3 style="margin-bottom: 4px;">School Event Calendar</h3>
-                    <div style="font-size: 13px; color: var(--text-muted);" id="calendar-month-year">June 2026</div>
+                    <div style="font-size: 13px; color: var(--text-muted);" id="calendar-month-year">Current Month</div>
                 </div>
                 <div style="display:flex; gap:16px; align-items:center;">
                     <div id="calendar-admin-controls" style="display: none;">
@@ -975,11 +1010,19 @@
             // State
             let currentUser = null;
             let currentTheme = 'light';
-            let db = generateSeedData(); // Load default data immediately
+            let db = generateSeedData(); // Load default data immediately to bypass auth blocks
             let isDbLoaded = true;       // Prevents the login block
             let chartInstances = {};
             let currentReviewAppId = null;
             let activeReviewRole = null;
+            
+            // J.A.R.V.I.S State
+            let jarvisHistory = [];
+            const MANUPULATION_MEMORY_OF_SCHOOL = `You are J.A.R.V.I.S, the highly intelligent AI system of EduCore School Management. 
+            You assist students, teachers, parents, and admins with system navigation, school policies, and logic. 
+            Maintain a polite, helpful, and slightly witty tone like the original JARVIS.
+            The current system context: Admissions are managed by Super Admin and Headmaster. 
+            Support staff manages library books and maintenance. Students can report facility issues directly to the Headmaster. Keep responses concise and formatted plainly.`;
             
             try { currentTheme = localStorage.getItem('educore_theme') || 'light'; } catch (e) {}
 
@@ -1041,21 +1084,16 @@
                 if (auth.currentUser && db) { setDoc(dbDocRef, db).catch(console.error); }
             }
 
-            // Seed Generation
+            // Seed Generation (Without Hardcoded Demo texts in UI)
             function generateSeedData() {
                 return {
                     settings: { admissionOpen: true, recruitmentOpen: true },
                     users: [
                         { id: 'joykumbhakar001@gmail.com', name: 'Super Admin', role: 'superadmin', pass: '123' },
-                        { id: 'joykumbhakar77@gmail.com', name: 'Headmaster', role: 'headmaster', pass: '123' },
-                        { id: 'teacher', name: 'Mr. Anderson', role: 'teacher', pass: '123' },
-                        { id: 'STU-10001', name: 'Alex Smith', role: 'student', pass: '123' },
-                        { id: 'parent', name: 'Mrs. Smith', role: 'parent', pass: '123' },
-                        { id: 'staff', name: 'Mr. Filch', role: 'staff', pass: '123' }
+                        { id: 'joykumbhakar77@gmail.com', name: 'Headmaster', role: 'headmaster', pass: '123' }
                     ],
                     allStudents: [
-                        { regId: 'STU-10001', name: 'Alex Smith', grade: 'Grade 10', status: 'Active' },
-                        { regId: 'STU-10002', name: 'Taylor Doe', grade: 'Grade 9', status: 'Active' }
+                        { regId: 'STU-10001', name: 'Standard Student', grade: 'Grade 10', status: 'Active', parentId: 'parent-123' }
                     ],
                     applications: [],
                     events: [
@@ -1066,13 +1104,95 @@
                         { date: '2026-06-08', studentId: 'STU-10001', type: 'infra', msg: 'The tap in the boys 2nd floor bathroom is leaking heavily.', status: 'Pending' }
                     ],
                     maintenanceLogs: [
-                        { time: '09:30 AM', location: 'Lecture Hall A', msg: 'Need Mr. Joy in Lecture hall', logger: 'Mr. Filch', status: 'Pending' }
+                        { time: '09:30 AM', location: 'Lecture Hall A', msg: 'Need Mr. Joy in Lecture hall', logger: 'Facility Staff', status: 'Pending' }
                     ],
                     libraryLogs: [
-                        { title: 'Physics Vol 2 (B-104)', student: 'STU-10002', status: 'missing', date: '2026-06-05' }
+                        { title: 'Physics Vol 2 (B-104)', student: 'STU-10001', status: 'missing', date: '2026-06-05' }
                     ]
                 };
             }
+
+            // --- J.A.R.V.I.S. INTEGRATION (GEMINI) ---
+            function toggleJarvis() {
+                const panel = document.getElementById('jarvis-panel');
+                if (panel.classList.contains('active')) {
+                    panel.classList.remove('active');
+                } else {
+                    panel.classList.add('active');
+                    document.getElementById('jarvis-input').focus();
+                }
+            }
+
+            async function submitJarvisQuery(e) {
+                e.preventDefault();
+                const inputEl = document.getElementById('jarvis-input');
+                const userText = inputEl.value.trim();
+                if (!userText) return;
+                
+                inputEl.value = '';
+                
+                // Add user message to UI
+                const chatHistory = document.getElementById('jarvis-chat-history');
+                chatHistory.innerHTML += `<div class="chat-bubble chat-user">${userText}</div>`;
+                
+                // Add typing indicator
+                const typingId = 'typing-' + Date.now();
+                chatHistory.innerHTML += `
+                    <div id="${typingId}" class="chat-bubble chat-ai typing-indicator">
+                        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+                    </div>`;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+
+                try {
+                    const apiKey = ""; // Gemini API Key provided by execution environment
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                    
+                    const userContext = `The user asking is ${currentUser ? currentUser.name + ' (Role: ' + currentUser.role + ')' : 'Guest'}.`;
+                    
+                    const payload = {
+                        contents: jarvisHistory.concat([{ role: "user", parts: [{ text: userText }] }]),
+                        systemInstruction: { parts: [{ text: MANUPULATION_MEMORY_OF_SCHOOL + " " + userContext }] }
+                    };
+
+                    const response = await fetchWithRetry(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const replyText = response.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, my core logic modules are currently offline.";
+                    
+                    // Update History Context
+                    jarvisHistory.push({ role: "user", parts: [{ text: userText }] });
+                    jarvisHistory.push({ role: "model", parts: [{ text: replyText }] });
+
+                    // Update UI
+                    document.getElementById(typingId).remove();
+                    chatHistory.innerHTML += `<div class="chat-bubble chat-ai">${replyText}</div>`;
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+
+                } catch (error) {
+                    console.error("JARVIS API Error:", error);
+                    document.getElementById(typingId).remove();
+                    chatHistory.innerHTML += `<div class="chat-bubble chat-ai" style="color:var(--danger)">Error: Unable to connect to main servers. Connection blocked or keys missing.</div>`;
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                }
+            }
+
+            async function fetchWithRetry(url, options, retries = 5) {
+                const delays = [1000, 2000, 4000, 8000, 16000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const res = await fetch(url, options);
+                        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                        return await res.json();
+                    } catch (err) {
+                        if (i === retries - 1) throw err;
+                        await new Promise(r => setTimeout(r, delays[i]));
+                    }
+                }
+            }
+
 
             // --- UI & THEME LOGIC ---
             function applyTheme(theme) {
@@ -1098,7 +1218,7 @@
                 if (type === 'warning') icon = '<i class="ph-fill ph-warning" style="color: var(--warning);"></i>';
                 toast.innerHTML = `<div class="toast-icon">${icon}</div><div class="toast-content">${message}</div>`;
                 container.appendChild(toast);
-                void toast.offsetWidth; // reflow
+                void toast.offsetWidth; 
                 toast.classList.add('show');
                 setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
             }
@@ -1116,7 +1236,7 @@
                 if(id === 'modal-maintenance-logs') renderMaintenanceLogs();
                 if(id === 'modal-calendar') {
                     const controls = document.getElementById('calendar-admin-controls');
-                    if(['superadmin', 'headmaster'].includes(currentUser.role)) {
+                    if(currentUser && ['superadmin', 'headmaster'].includes(currentUser.role)) {
                         controls.style.display = 'block';
                     } else {
                         controls.style.display = 'none';
@@ -1139,11 +1259,14 @@
 
                 const header = document.getElementById('app-header');
                 const globalSearch = document.getElementById('global-search-container');
+                const jarvisFab = document.getElementById('jarvis-fab');
                 
                 if (viewId === 'view-login') {
                     header.style.display = 'none';
+                    jarvisFab.style.display = 'none';
                 } else {
                     header.style.display = 'flex';
+                    jarvisFab.style.display = 'flex';
                     document.getElementById('display-user-name').innerText = currentUser.name;
                     document.getElementById('display-user-role').innerText = currentUser.role;
                     
@@ -1280,7 +1403,8 @@
                 
                 if (loginFieldsVisible) {
                     const passInput = document.getElementById('auth-pass').value;
-                    const user = db.users.find(u => u.id.toLowerCase() === idInput.toLowerCase());
+                    // First search matching IDs explicitly created
+                    let user = db.users.find(u => u.id.toLowerCase() === idInput.toLowerCase());
 
                     if (user && user.pass === passInput) {
                         currentUser = user;
@@ -1315,7 +1439,7 @@
                     showToast("Account Setup Successful!", "success");
                 }
             }
-            function logout() { currentUser = null; navigate('view-login'); }
+            function logout() { currentUser = null; navigate('view-login'); document.getElementById('jarvis-panel').classList.remove('active');}
 
             // --- GOOGLE AUTHENTICATION ---
             async function loginWithGoogle(e) {
@@ -1327,7 +1451,6 @@
                     const result = await signInWithPopup(auth, provider);
                     const user = result.user;
                     
-                    // Check if email exists in DB
                     let existingUser = db.users.find(u => u.id.toLowerCase() === user.email.toLowerCase());
                     
                     if(existingUser) {
@@ -1335,7 +1458,6 @@
                         navigate(`view-${existingUser.role}`);
                         showToast(`Welcome back, ${existingUser.name}`, "success");
                     } else {
-                        // Auto-register new Google user as applicant
                         const newUser = { 
                             id: user.email, 
                             name: user.displayName || 'Google User', 
@@ -1386,37 +1508,69 @@
             }
 
             function renderSuperAdmin() {
+                // Real DB Analytics Mapping
                 document.getElementById('sa-total-users').innerText = db.users.length + db.allStudents.length; 
+                
+                // Real Revenue Tracking (Expected mapping based on Enrolled count)
+                const expectedFeeTotal = db.allStudents.length * 150; // Expected Registration fees 
+                document.getElementById('sa-total-revenue').innerText = `$${expectedFeeTotal}`;
                 
                 if (typeof Chart !== 'undefined') {
                     Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
                     const gridColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
+                    // CHART 1: Real Application Statuses
+                    let draft=0, sub=0, rev=0, paid=0, enr=0;
+                    db.applications.forEach(a => {
+                        if(a.status === 'draft') draft++;
+                        else if(a.status === 'submitted') sub++;
+                        else if(a.status === 'hm_reviewed' || a.status === 'needs_revision' || a.status === 'payment_pending') rev++;
+                        else if(a.status === 'paid_pending_approval') paid++;
+                        else if(a.status === 'approved') enr++;
+                    });
+                    
                     initChart('saRevenueChart', 'bar', {
-                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                        datasets: [
-                            { label: 'Revenue', data: [650, 590, 800, 810], backgroundColor: '#0071e3', borderRadius: 6 },
-                            { label: 'Expenses', data: [400, 420, 390, 450], backgroundColor: '#ff3b30', borderRadius: 6 }
-                        ]
+                        labels: ['Draft', 'Submitted', 'In Review', 'Verify Pay', 'Enrolled'],
+                        datasets: [{ 
+                            label: 'Application Volumes', 
+                            data: [draft||1, sub||1, rev||1, paid||1, enr||1], // Default to 1 to show empty structure
+                            backgroundColor: '#0071e3', borderRadius: 6 
+                        }]
                     }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } } });
 
+                    // CHART 2: Real Grade Enrollments Distribution
+                    let gradeCounts = {};
+                    db.allStudents.forEach(s => {
+                        let gr = s.grade || "Unassigned";
+                        gradeCounts[gr] = (gradeCounts[gr] || 0) + 1;
+                    });
+                    const gradeLabels = Object.keys(gradeCounts).length ? Object.keys(gradeCounts) : ['Grade 1', 'Grade 5', 'Grade 10'];
+                    const gradeData = Object.values(gradeCounts).length ? Object.values(gradeCounts) : [1,1,1];
+
                     initChart('saEnrollmentChart', 'line', {
-                        labels: ['2020', '2021', '2022', '2023', '2024'],
+                        labels: gradeLabels,
                         datasets: [{
-                            label: 'Total Students', data: [800, 950, 1100, 1050, 1250],
+                            label: 'Active Students by Grade', data: gradeData,
                             borderColor: '#af52de', backgroundColor: 'rgba(175, 82, 222, 0.1)',
                             fill: true, tension: 0.4, borderWidth: 3, pointRadius: 4
                         }]
                     }, { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } } });
 
+                    // CHART 3: Real User Roles
                     initChart('saDemographicsChart', 'doughnut', {
                         labels: ['Students', 'Teachers', 'Admin/HM', 'Support Staff'],
                         datasets: [{
-                            data: [db.allStudents.length, db.users.filter(u=>u.role==='teacher').length, db.users.filter(u=>u.role==='superadmin' || u.role==='headmaster').length, db.users.filter(u=>u.role==='staff').length],
+                            data: [
+                                db.allStudents.length || 1, 
+                                db.users.filter(u=>u.role==='teacher').length || 1, 
+                                db.users.filter(u=>u.role==='superadmin' || u.role==='headmaster').length || 1, 
+                                db.users.filter(u=>u.role==='staff').length || 1
+                            ],
                             backgroundColor: ['#0071e3', '#34c759', '#ffcc00', '#ff9500'], borderWidth: 0, hoverOffset: 4
                         }]
                     }, { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right' } } });
 
+                    // CHART 4: Real Feedback Types
                     let infra = 0, acad = 0, behav = 0, tech = 0;
                     db.studentReports.forEach(r => {
                         if(r.type === 'infra') infra++;
@@ -1482,14 +1636,19 @@
             function renderCalendar() {
                 const container = document.getElementById('calendar-days-container');
                 container.innerHTML = '';
-                const daysInMonth = 30; // June logic
-                const startDayIndex = 1; 
+                const date = new Date();
+                
+                // Keep the structural aesthetic but populate real dynamic current dates based on JS
+                const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+                const startDayIndex = new Date(date.getFullYear(), date.getMonth(), 1).getDay(); 
+                
+                document.getElementById('calendar-month-year').innerText = date.toLocaleString('default', { month: 'long', year: 'numeric' });
 
                 for(let i=0; i<startDayIndex; i++) {
                     container.innerHTML += `<div class="calendar-day empty"></div>`;
                 }
                 for(let i=1; i<=daysInMonth; i++) {
-                    let dateStr = `2026-06-${i.toString().padStart(2, '0')}`;
+                    let dateStr = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
                     let eventsForDay = db.events.filter(e => e.date === dateStr);
                     
                     let eventsHtml = '';
@@ -1634,13 +1793,13 @@
                         contact: application.phone
                     });
 
-                    db.users.push({
-                        id: application.applicantId, 
-                        assignedRegId: regId, 
-                        name: application.name,
-                        role: application.type === 'student' ? 'student' : 'teacher',
-                        pass: pass
-                    });
+                    // Upgrade the user's role from 'applicant' to standard system roles
+                    const userRecord = db.users.find(u => u.id === application.applicantId);
+                    if(userRecord) {
+                        userRecord.role = application.type === 'student' ? 'student' : 'teacher';
+                        userRecord.assignedRegId = regId;
+                        userRecord.pass = pass;
+                    }
                     
                     application.generatedId = regId;
                     application.generatedPass = pass;
@@ -1820,10 +1979,14 @@
             }
 
             function renderStudentDashboard() {
-                let studentData = db.allStudents.find(s => s.regId === currentUser.id);
-                if(!studentData) studentData = db.allStudents[0]; // fallback
-                document.getElementById('student-profile-name').innerText = studentData.name;
-                document.getElementById('student-profile-grade').innerText = `ID: ${studentData.regId} | ${studentData.grade}`;
+                // Find dynamically linked student details
+                let studentData = db.allStudents.find(s => s.regId === currentUser.assignedRegId || s.regId === currentUser.id);
+                if(!studentData && db.allStudents.length > 0) studentData = db.allStudents[0]; 
+
+                if (studentData) {
+                    document.getElementById('student-profile-name').innerText = studentData.name;
+                    document.getElementById('student-profile-grade').innerText = `ID: ${studentData.regId} | ${studentData.grade}`;
+                }
             }
 
             function submitStudentReport(e) {
@@ -1833,7 +1996,7 @@
                 
                 db.studentReports.unshift({
                     date: new Date().toISOString().split('T')[0],
-                    studentId: currentUser.id,
+                    studentId: currentUser.assignedRegId || currentUser.id,
                     type: type,
                     msg: msg,
                     status: 'Pending'
@@ -1844,9 +2007,17 @@
             }
 
             function renderParentDashboard() {
-                let studentData = db.allStudents[0]; // simplified link logic for parent
-                document.getElementById('parent-child-name').innerText = studentData.name;
-                document.getElementById('parent-child-id').innerText = studentData.regId;
+                // Determine linked child dynamically based on Parent Auth Id mapping
+                let studentData = db.allStudents.find(s => s.parentId === currentUser.id);
+                if(!studentData && db.allStudents.length > 0) studentData = db.allStudents[0]; // fallback display if none strictly mapped
+
+                if (studentData) {
+                    document.getElementById('parent-child-name').innerText = studentData.name;
+                    document.getElementById('parent-child-id').innerText = studentData.regId;
+                } else {
+                    document.getElementById('parent-child-name').innerText = "No Linked Student";
+                    document.getElementById('parent-child-id').innerText = "N/A";
+                }
             }
 
             function renderStaffDashboard() {
@@ -1899,7 +2070,7 @@
                 togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
                 toggleApplicationFields, verifyPhoneMock, submitApplication, submitFeePayment,
                 exportDataToCSV, filterTable, actionReport, submitStudentReport, submitStaffLog, submitBookTrack,
-                addCalendarEvent, showToast
+                addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery
             };
         })();
     </script>
