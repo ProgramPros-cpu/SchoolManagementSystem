@@ -1339,7 +1339,7 @@
                 chatHistory.scrollTop = chatHistory.scrollHeight;
 
                 try {
-                    const apiKey = ""; // Gemini API Key provided by execution environment
+                    const apiKey = "GEMINI_API_KEY"; // Gemini API Key provided by execution environment
                     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                     
                     const userContext = `The user asking is ${currentUser ? currentUser.name + ' (Role: ' + currentUser.role + ')' : 'Guest'}.`;
