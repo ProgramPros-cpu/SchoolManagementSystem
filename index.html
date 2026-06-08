@@ -611,7 +611,7 @@
                                 <label>Primary Phone</label>
                                 <div style="display:flex; gap: 8px;">
                                     <input type="tel" id="stu-gphone" placeholder="10-digit number">
-                                    <button type="button" class="btn btn-outline" id="btn-verify-stu-phone" onclick="app.verifyPhoneMock('stu-gphone', 'stu-phone-verified-msg', 'btn-verify-stu-phone')">Verify</button>
+                                    <button type="button" class="btn btn-outline" id="btn-verify-stu-phone" onclick="app.verifyPhoneSupabase('stu-gphone', 'stu-phone-verified-msg', 'btn-verify-stu-phone')">Verify</button>
                                 </div>
                                 <small id="stu-phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
                             </div>
@@ -693,7 +693,7 @@
                                 <label>Primary Phone</label>
                                 <div style="display:flex; gap: 8px;">
                                     <input type="tel" id="tch-phone" placeholder="10-digit number">
-                                    <button type="button" class="btn btn-outline" id="btn-verify-tch-phone" onclick="app.verifyPhoneMock('tch-phone', 'tch-phone-verified-msg', 'btn-verify-tch-phone')">Verify</button>
+                                    <button type="button" class="btn btn-outline" id="btn-verify-tch-phone" onclick="app.verifyPhoneSupabase('tch-phone', 'tch-phone-verified-msg', 'btn-verify-tch-phone')">Verify</button>
                                 </div>
                                 <small id="tch-phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
                             </div>
@@ -1167,6 +1167,22 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Document Viewer (In-Portal Preview) -->
+    <div class="modal-overlay" id="modal-doc-viewer" style="z-index: 1050;">
+        <div class="modal-content" style="max-width: 900px; padding: 16px; height: 85vh; display: flex; flex-direction: column;">
+            <div class="modal-header" style="margin-bottom: 12px; padding-bottom: 12px; top: 0;">
+                <h3 style="margin: 0;"><i class="ph ph-file-text" style="color: var(--primary);"></i> Document Viewer</h3>
+                <button class="close-btn" onclick="app.closeDocViewer()"><i class="ph ph-x"></i></button>
+            </div>
+            <div id="doc-viewer-container" style="flex: 1; overflow: hidden; background: var(--input-bg); border-radius: var(--radius-sm); border: 1px solid var(--input-border); display: flex; align-items: center; justify-content: center;">
+                <!-- Iframe or Img injected here -->
+            </div>
+            <div style="text-align: right; margin-top: 16px;">
+                <a id="doc-viewer-download-btn" href="#" target="_blank" class="btn btn-primary"><i class="ph ph-download-simple"></i> Open Original / Download</a>
             </div>
         </div>
     </div>
@@ -1871,20 +1887,64 @@
                 renderApplicantDashboard(); 
             }
 
-            function verifyPhoneMock(inputId, msgId, btnId) {
-                const phone = document.getElementById(inputId).value;
-                if(phone.length < 10) { showToast("Enter a valid 10-digit phone number first.", "error"); return; }
-                setTimeout(() => {
-                    let otp = prompt("Simulated OTP sent! Enter any 4 digits to verify:");
-                    if(otp && otp.length >= 4) {
-                        document.getElementById('app-form-phone-verified').value = "true";
-                        document.getElementById(btnId).style.display = "none";
-                        document.getElementById(msgId).style.display = "block";
-                        showToast("Phone Verified!", "success");
+            async function verifyPhoneSupabase(inputId, msgId, btnId) {
+                let phone = document.getElementById(inputId).value.trim();
+                if(phone.length < 10) { showToast("Enter a valid phone number first.", "error"); return; }
+                
+                // Supabase requires E.164 format (e.g., +91...). Defaulting to +91 if exactly 10 digits are entered.
+                if (!phone.startsWith('+')) {
+                    if (phone.length === 10) {
+                        phone = '+91' + phone;
                     } else {
-                        showToast("Verification failed.", "error");
+                        showToast("Please include the country code (e.g., +91...)", "warning");
+                        return;
                     }
-                }, 500);
+                }
+
+                const btn = document.getElementById(btnId);
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Sending...`;
+                btn.disabled = true;
+
+                try {
+                    // 1. Request OTP from Supabase
+                    const { error: sendError } = await supabase.auth.signInWithOtp({
+                        phone: phone,
+                    });
+
+                    if (sendError) throw sendError;
+
+                    // 2. Prompt user for the code
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    
+                    let otp = prompt(`An OTP was sent to ${phone}. Enter the code below:`);
+                    if (!otp) return; // User cancelled
+
+                    // 3. Verify the OTP
+                    btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Verifying...`;
+                    btn.disabled = true;
+
+                    const { error: verifyError } = await supabase.auth.verifyOtp({
+                        phone: phone,
+                        token: otp,
+                        type: 'sms'
+                    });
+
+                    if (verifyError) throw verifyError;
+
+                    // 4. Success handling
+                    document.getElementById('app-form-phone-verified').value = "true";
+                    btn.style.display = "none";
+                    document.getElementById(msgId).style.display = "block";
+                    showToast("Phone Verified Successfully!", "success");
+
+                } catch (err) {
+                    console.error("Phone verification error:", err);
+                    showToast(err.message || "Verification failed.", "error");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
             }
 
             async function uploadToLink(inputElement, targetHiddenId) {
@@ -2135,14 +2195,37 @@
                             <td style="text-transform: capitalize;">${app.type}</td>
                             <td>${getStatusBadge(app.status)}</td>
                             <td>${app.submittedAt || 'N/A'}</td>
-                            <td><button class="btn btn-outline" style="padding: 4px 10px; font-size:12px;" onclick="app.viewAppDetail('${app.id}')">View</button></td>
+                            <td><button class="btn btn-outline" style="padding: 4px 10px; font-size:12px;" onclick="app.viewAppDetail('${app.id}')">View Details</button></td>
                         </tr>
                     `;
                 });
             }
 
             function formatLink(url) {
-                return url ? `<a href="${url}" target="_blank" style="color:var(--primary);text-decoration:underline;">View Doc <i class="ph ph-arrow-square-out"></i></a>` : 'Not Provided';
+                if (!url) return '<span style="color:var(--text-muted); font-size:13px;">Not Provided</span>';
+                return `<button type="button" class="btn btn-outline" style="padding: 4px 10px; font-size: 12px; margin-bottom: 4px;" onclick="app.openDocViewer('${url}')"><i class="ph ph-eye"></i> View Doc</button>`;
+            }
+
+            function openDocViewer(url) {
+                const container = document.getElementById('doc-viewer-container');
+                const dlBtn = document.getElementById('doc-viewer-download-btn');
+                
+                dlBtn.href = url;
+                
+                // Simple regex to check if it's an image
+                if (url.match(/\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i)) {
+                    container.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius: 8px;">`;
+                } else {
+                    // Use iframe for PDF and other document types
+                    container.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none; border-radius: 8px; background:white;"></iframe>`;
+                }
+                
+                document.getElementById('modal-doc-viewer').classList.add('active');
+            }
+
+            function closeDocViewer() {
+                document.getElementById('modal-doc-viewer').classList.remove('active');
+                document.getElementById('doc-viewer-container').innerHTML = ''; // Clear iframe to stop playback/loading
             }
 
             function viewAppDetail(appId) {
@@ -2380,9 +2463,9 @@
             return {
                 handleAuth, logout, toggleTheme, openModal, closeModal, loginWithGoogle,
                 togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
-                toggleApplicationFields, verifyPhoneMock, uploadToLink, submitApplication, submitFeePayment,
+                toggleApplicationFields, verifyPhoneSupabase, uploadToLink, submitApplication, submitFeePayment,
                 exportDataToCSV, filterTable, actionReport, submitStudentReport, submitStaffLog, submitBookTrack,
-                addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery
+                addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery, openDocViewer, closeDocViewer
             };
         })();
     </script>
