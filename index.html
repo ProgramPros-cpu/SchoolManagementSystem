@@ -9,7 +9,9 @@
     <meta name="title" content="EduCore | Advanced School Management System">
     <meta name="description" content="EduCore - An advanced, secure, and intelligent School Management System. Features include student admissions, teacher recruitment, AI assistant (J.A.R.V.I.S), and comprehensive dashboards.">
     <meta name="keywords" content="School Management System, EduCore, ERP, Student Portal, Teacher Portal, Online Admission, Education Platform">
-    
+    <meta name="author" content="EduCore">
+    <meta name="robots" content="index, follow">
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Chart.js for Advanced Analytics -->
@@ -125,6 +127,7 @@
         .btn-success { background: var(--success); color: white; }
         .btn-warning { background: var(--warning); color: #000; }
         .btn-block { width: 100%; }
+        .btn-sm { padding: 8px 16px; font-size: 13px; }
 
         /* Tables & Grids */
         .table-container { width: 100%; overflow-x: auto; border-radius: var(--radius-md); background: var(--input-bg); border: 1px solid var(--input-border); }
@@ -183,7 +186,7 @@
         .toast.show { transform: translateX(0); opacity: 1; }
         .toast-icon { font-size: 20px; }
 
-        /* Progress Stepper */
+        /* Progress Stepper for Application Tracking */
         .stepper { display: flex; justify-content: space-between; position: relative; margin: 40px 0; max-width: 800px; margin-left: auto; margin-right: auto;}
         .stepper::before { content: ''; position: absolute; top: 18px; left: 0; right: 0; height: 4px; background: var(--input-border); z-index: 1; border-radius: 4px; }
         .stepper-progress { position: absolute; top: 18px; left: 0; height: 4px; background: var(--primary); z-index: 1; border-radius: 4px; transition: width 0.4s ease; }
@@ -196,7 +199,13 @@
         .step.active .step-label { color: var(--primary); }
         .step.rejected .step-label { color: var(--danger); }
 
-        /* J.A.R.V.I.S. AI */
+        /* Timeline / Progress Stack for Parent Portal */
+        .timeline { position: relative; max-width: 100%; margin: 20px 0; padding-left: 24px; border-left: 3px solid var(--primary); }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-dot { position: absolute; left: -32px; top: 0; width: 14px; height: 14px; background: var(--primary); border: 3px solid var(--modal-bg); border-radius: 50%; }
+        .timeline-content { background: var(--input-bg); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--input-border); box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+
+        /* J.A.R.V.I.S. AI Assistant UI */
         #jarvis-fab { position: fixed; bottom: 24px; left: 24px; width: 60px; height: 60px; background: linear-gradient(135deg, #af52de, #0071e3); border-radius: 50%; box-shadow: 0 10px 30px rgba(0, 113, 227, 0.4); display: none; justify-content: center; align-items: center; color: white; font-size: 28px; cursor: pointer; z-index: 900; transition: transform 0.3s, box-shadow 0.3s; }
         #jarvis-fab:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0, 113, 227, 0.6); }
         
@@ -242,7 +251,7 @@
         .mb-4 { margin-bottom: 16px; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
         .status-draft { background: rgba(134,134,139,0.2); color: var(--text-muted); }
         .status-review { background: rgba(255,204,0,0.2); color: var(--warning); }
         .status-action { background: rgba(255,59,48,0.2); color: var(--danger); }
@@ -259,6 +268,13 @@
             .user-info { border-left: none; padding-left: 0; }
             #jarvis-panel { width: calc(100% - 48px); left: 24px; right: 24px; bottom: 90px; }
         }
+
+        /* Printable Marksheet Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #doc-viewer-container, #doc-viewer-container * { visibility: visible; }
+            #doc-viewer-container { position: absolute; left: 0; top: 0; width: 100%; padding: 0; border: none; }
+        }
     </style>
 </head>
 <body>
@@ -267,7 +283,7 @@
     <header id="app-header">
         <div class="header-brand"><i class="ph-fill ph-graduation-cap" style="color: var(--primary); font-size: 28px;"></i> EduCore System</div>
         <div class="header-actions">
-            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="app.openModal('modal-calendar')">
+            <button class="btn btn-outline btn-sm" onclick="app.openModal('modal-calendar')">
                 <i class="ph ph-calendar-blank"></i> Calendar
             </button>
             <div class="search-bar" id="global-search-container" style="display: none;">
@@ -280,14 +296,11 @@
                 <div class="user-name" id="display-user-name">Loading...</div>
                 <div class="user-role" id="display-user-role">Role</div>
             </div>
-            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px; border-color: var(--danger); color: var(--danger);" onclick="app.logout()">
+            <button class="btn btn-outline btn-sm" style="border-color: var(--danger); color: var(--danger);" onclick="app.logout()">
                 <i class="ph ph-sign-out"></i> Logout
             </button>
         </div>
     </header>
-
-    <!-- Hidden Recaptcha for Firebase Phone Auth -->
-    <div id="recaptcha-container" style="position: absolute; top: 0; right: 0; opacity: 0; pointer-events: none; z-index: -1;"></div>
 
     <!-- J.A.R.V.I.S. AI Interface -->
     <div id="jarvis-fab" onclick="app.toggleJarvis()"><i class="ph-fill ph-robot"></i></div>
@@ -333,7 +346,7 @@
                         </div>
                     </div>
 
-                    <!-- Sign Up Flow Fields -->
+                    <!-- Sign Up Flow Fields (Hidden initially) -->
                     <div id="signup-fields" class="d-none">
                         <p style="font-size: 13px; color: var(--danger); margin-bottom: 16px; text-align:left;">New Identity detected. Let's set up your profile.</p>
                         <div class="input-group" style="text-align: left;">
@@ -396,7 +409,7 @@
             </div>
 
             <div class="dashboard-grid">
-                <!-- System Settings -->
+                <!-- System Settings for Portals -->
                 <div class="glass-card">
                     <h3>Public Portal Controls</h3>
                     <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Open or close public admission and recruitment gateways.</p>
@@ -544,19 +557,30 @@
 
                 <form id="admission-form" onsubmit="app.submitApplication(event)">
                     
-                    <!-- STUDENT FIELDS -->
+                    <!-- ==============================================
+                         STUDENT SPECIFIC FIELDS
+                         ============================================== -->
                     <div id="form-student-fields">
                         <h4 class="mb-4" style="color: var(--primary);">1. Student Details</h4>
                         <div class="form-grid">
-                            <div class="input-group"><label>First Name</label><input type="text" id="stu-fname"></div>
+                            <div class="input-group"><label>First Name</label><input type="text" id="stu-fname" required></div>
                             <div class="input-group"><label>Middle Name</label><input type="text" id="stu-mname"></div>
-                            <div class="input-group"><label>Last / Nickname</label><input type="text" id="stu-lname"></div>
+                            <div class="input-group"><label>Last / Nickname</label><input type="text" id="stu-lname" required></div>
                         </div>
                         <div class="form-grid">
-                            <div class="input-group"><label>Date of Birth</label><input type="date" id="stu-dob"></div>
+                            <div class="input-group"><label>Date of Birth</label><input type="date" id="stu-dob" required></div>
+                            <div class="input-group">
+                                <label>Gender</label>
+                                <select id="stu-gender" required>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Prefer not to say">Prefer not to say</option>
+                                </select>
+                            </div>
                             <div class="input-group">
                                 <label>Applying for Grade</label>
-                                <select id="stu-grade">
+                                <select id="stu-grade" required>
                                     <option value="Grade 1">Grade 1</option><option value="Grade 5">Grade 5</option>
                                     <option value="Grade 9">Grade 9</option><option value="Grade 10">Grade 10</option>
                                 </select>
@@ -578,7 +602,7 @@
 
                         <h4 class="mb-4 mt-4" style="color: var(--primary);">3. Guardian Information</h4>
                         <div class="form-grid">
-                            <div class="input-group"><label>Guardian Name</label><input type="text" id="stu-gname"></div>
+                            <div class="input-group"><label>Guardian Name</label><input type="text" id="stu-gname" required></div>
                             <div class="input-group">
                                 <label>Relationship</label>
                                 <select id="stu-grel">
@@ -592,7 +616,7 @@
                             <div class="input-group">
                                 <label>Primary Phone</label>
                                 <div style="display:flex; gap: 8px;">
-                                    <input type="tel" id="stu-gphone" placeholder="+91 10-digit number">
+                                    <input type="tel" id="stu-gphone" placeholder="10-digit number" required>
                                     <button type="button" class="btn btn-outline" id="btn-verify-stu-phone" onclick="app.verifyPhoneFirebase('stu-gphone', 'stu-phone-verified-msg', 'btn-verify-stu-phone')">Verify</button>
                                 </div>
                                 <small id="stu-phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
@@ -602,7 +626,7 @@
                         </div>
 
                         <h4 class="mb-4 mt-4" style="color: var(--primary);">4. Document Uploads</h4>
-                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Files will upload to Firebase Storage.</p>
+                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Files will automatically convert to secure URL links using the online converter portal.</p>
                         <div class="form-grid">
                             <div class="input-group">
                                 <label>Last Exam / Year Marksheet (If available)</label>
@@ -632,7 +656,7 @@
                                 <label>DOB / ID Proof Type</label>
                                 <select id="stu-dob-proof-type" style="margin-bottom: 8px;">
                                     <option value="Aadhaar">Aadhaar Card</option>
-                                    <option value="Birth Certificate">Birth Certificate</option>
+                                    <option value="Birth Certificate">Birth Certificate (Gov/Hospital)</option>
                                     <option value="Passport">Passport</option>
                                 </select>
                                 <div class="file-upload-wrapper">
@@ -660,7 +684,9 @@
                         </div>
                     </div>
 
-                    <!-- TEACHER FIELDS -->
+                    <!-- ==============================================
+                         TEACHER SPECIFIC FIELDS
+                         ============================================== -->
                     <div id="form-teacher-fields" class="d-none">
                         <h4 class="mb-4" style="color: var(--primary);">1. Personal Information</h4>
                         <div class="form-grid">
@@ -670,9 +696,18 @@
                         </div>
                         <div class="form-grid">
                             <div class="input-group">
+                                <label>Gender</label>
+                                <select id="tch-gender">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Prefer not to say">Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
                                 <label>Primary Phone</label>
                                 <div style="display:flex; gap: 8px;">
-                                    <input type="tel" id="tch-phone" placeholder="+91 10-digit number">
+                                    <input type="tel" id="tch-phone" placeholder="10-digit number">
                                     <button type="button" class="btn btn-outline" id="btn-verify-tch-phone" onclick="app.verifyPhoneFirebase('tch-phone', 'tch-phone-verified-msg', 'btn-verify-tch-phone')">Verify</button>
                                 </div>
                                 <small id="tch-phone-verified-msg" style="color: var(--success); display: none; margin-top: 4px;"><i class="ph ph-check-circle"></i> Verified</small>
@@ -681,6 +716,7 @@
                         </div>
 
                         <h4 class="mb-4 mt-4" style="color: var(--primary);">2. Documents & Verification</h4>
+                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Files will automatically convert to secure URL links using the online converter portal.</p>
                         <div class="form-grid">
                             <div class="input-group">
                                 <label>Curriculum Vitae (CV)</label>
@@ -732,23 +768,29 @@
 
             <!-- Stage 4: Payment Required -->
             <div id="applicant-stage-payment" class="glass-card d-none" style="text-align: center;">
-                <i class="ph-fill ph-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 16px;"></i>
+                <i class="ph-fill ph-qr-code" style="font-size: 60px; color: var(--primary); margin-bottom: 16px;"></i>
                 <h3 style="margin-bottom: 8px;">Application Verified!</h3>
-                <p style="color: var(--text-muted); margin-bottom: 24px;">Please pay the Registration / Admission Fee to generate your official ID.</p>
+                <p style="color: var(--text-muted); margin-bottom: 24px;">Please scan the QR code to pay the Registration / Admission Fee.</p>
                 
                 <div style="background: var(--input-bg); border: 1px solid var(--input-border); padding: 24px; border-radius: var(--radius-md); max-width: 400px; margin: 0 auto; text-align: left;">
                     <div class="flex-between mb-4">
                         <span style="font-weight: 600;">Fee Amount:</span>
                         <span style="font-size: 24px; font-weight: 700; color: var(--primary);">$150.00</span>
                     </div>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Pay via Bank Transfer or UPI and enter the reference number below.</p>
+                    
+                    <div style="text-align: center; margin: 24px 0; background: white; padding: 16px; border-radius: var(--radius-md); display: inline-block; width: 100%;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=educore@upi&pn=EduCore+System&am=150.00&cu=INR" alt="UPI QR Code" style="max-width: 100%; border-radius: 8px;">
+                        <p style="font-size: 13px; font-weight: 600; color: #333; margin-top: 8px;">educore@upi</p>
+                    </div>
+
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">After successful payment, enter the phone number linked to your UPI app so the admin can verify it in the transaction history.</p>
                     
                     <form onsubmit="app.submitFeePayment(event)">
                         <div class="input-group">
-                            <label>UPI / Bank Reference Number</label>
-                            <input type="text" id="app-payment-ref" placeholder="e.g. 301928371928" required>
+                            <label>Phone Number Used for UPI Payment</label>
+                            <input type="tel" id="app-payment-phone" placeholder="e.g. +91 9876543210" required>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block"><i class="ph ph-shield-check"></i> Submit Payment Info</button>
+                        <button type="submit" class="btn btn-success btn-block"><i class="ph ph-check-circle"></i> Payment Done</button>
                     </form>
                 </div>
             </div>
@@ -790,9 +832,9 @@
             
             <div class="glass-card mt-4">
                 <div class="flex-between mb-4">
-                    <h3>My Classes</h3>
+                    <h3>My Assigned Classes: <span style="color:var(--primary);" id="teacher-assigned-class-label">All</span></h3>
                     <div style="display: flex; gap: 12px; align-items: center; flex-wrap:wrap;">
-                        <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="app.exportDataToCSV('teacher-class-table', 'Class_Roster.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                        <button class="btn btn-outline btn-sm" onclick="app.exportDataToCSV('teacher-class-table', 'Class_Roster.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
                     </div>
                 </div>
                 <div class="table-container" style="max-height: 400px; overflow-y: auto;">
@@ -803,9 +845,11 @@
                                 <th>Name</th>
                                 <th>Grade</th>
                                 <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="teacher-student-table">
+                            <!-- Populated via JS -->
                         </tbody>
                     </table>
                 </div>
@@ -833,6 +877,7 @@
                     <div class="metric-label">Status: <span style="font-weight: 600; color: var(--success); float:right;" id="student-profile-status">Active</span></div>
                 </div>
 
+                <!-- Student Feedback System -->
                 <div class="glass-card">
                     <h3>Report an Issue / Feedback</h3>
                     <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Your report will be reviewed confidentially by the Headmaster.</p>
@@ -853,6 +898,23 @@
                     </form>
                 </div>
             </div>
+
+            <!-- Documents Section -->
+            <div class="glass-card mt-4">
+                <div class="flex-between mb-4">
+                    <h3>Official Documents & Marksheets</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Date Issued</th><th>Title</th><th>Type</th><th>Issued By</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="student-docs-table">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <!-- ==========================================
@@ -862,14 +924,42 @@
             <div class="section-title">
                 <h2>Parent Portal</h2>
             </div>
+            
             <div class="dashboard-grid">
+                <!-- Linked Child Details & Contacts -->
                 <div class="glass-card">
                     <h3>Linked Child Overview</h3>
                     <div class="mt-4">
                         <div class="metric-label mb-4">Student Name: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-name">Loading...</span></div>
                         <div class="metric-label mb-4">Registration ID: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-id">Loading...</span></div>
-                        <hr style="border:0; border-top: 1px solid var(--input-border); margin: 16px 0;">
-                        <p style="font-size: 13px; color: var(--text-muted);">Please use the Global Calendar to track upcoming events and holidays.</p>
+                        <div class="metric-label mb-4">Current Grade: <span style="font-weight: 600; float:right; color:var(--text-main);" id="parent-child-grade">Loading...</span></div>
+                    </div>
+                    
+                    <hr style="border:0; border-top: 1px solid var(--input-border); margin: 24px 0;">
+                    
+                    <h4 style="margin-bottom: 16px;">School Contacts</h4>
+                    <div id="parent-contact-hm" style="background: rgba(0,113,227,0.05); border: 1px solid rgba(0,113,227,0.2); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Headmaster</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">Admin Office</div>
+                        </div>
+                        <a href="#" id="contact-hm-btn" class="btn btn-primary btn-sm"><i class="ph ph-phone"></i> Contact</a>
+                    </div>
+                    <div id="parent-contact-teacher" style="background: rgba(52,199,89,0.05); border: 1px solid rgba(52,199,89,0.2); padding: 12px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Class Teacher</div>
+                            <div style="font-size: 12px; color: var(--text-muted);" id="contact-teacher-name">Loading...</div>
+                        </div>
+                        <a href="#" id="contact-teacher-btn" class="btn btn-success btn-sm"><i class="ph ph-phone"></i> Contact</a>
+                    </div>
+                </div>
+
+                <!-- Academic Progress Timeline -->
+                <div class="glass-card">
+                    <h3>Academic Progress Timeline</h3>
+                    <p style="font-size: 13px; color: var(--text-muted);">A chronological record of official marksheets and exams.</p>
+                    <div class="timeline" id="parent-academic-timeline">
+                        <!-- Populated dynamically via JS -->
                     </div>
                 </div>
             </div>
@@ -880,11 +970,13 @@
              ========================================== -->
         <section id="view-staff" class="view">
             <div class="section-title">
-                <h2>Facility & Library Staff Portal</h2>
+                <h2>Facility & Support Staff Portal</h2>
+                <div class="metric-label">Dept: <span style="font-weight:bold; color:var(--primary); text-transform:capitalize;" id="staff-dept-label">General</span></div>
             </div>
             <p style="color: var(--text-muted); margin-bottom: 24px;">Update current situations for specific locations around the campus or track library books.</p>
             
             <div class="dashboard-grid">
+                <!-- Log a situation report -->
                 <div class="glass-card">
                     <h3>Log Campus Situation</h3>
                     <form onsubmit="app.submitStaffLog(event)" class="mt-4">
@@ -909,7 +1001,8 @@
                     </form>
                 </div>
 
-                <div class="glass-card">
+                <!-- Book Tracking specific for Library Staff -->
+                <div class="glass-card" id="staff-library-panel">
                     <h3>Library Book Tracking</h3>
                     <form onsubmit="app.submitBookTrack(event)" class="mt-4">
                         <div class="input-group">
@@ -933,20 +1026,22 @@
                 </div>
             </div>
             
-            <div class="glass-card mt-4">
+            <div class="glass-card mt-4" id="staff-library-logs-panel">
                 <div class="flex-between mb-4">
                     <h3>Recent Library Alerts</h3>
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('staff-book-table', 'Library_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="btn btn-outline btn-sm" onclick="app.exportDataToCSV('staff-book-table', 'Library_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
                 </div>
                 <div class="table-container">
                     <table id="staff-book-table">
                         <thead><tr><th>Book Title</th><th>Student ID</th><th>Status</th><th>Date</th></tr></thead>
                         <tbody id="staff-book-table-body">
+                            <!-- Populated via JS -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
+
     </main>
 
     <div class="toast-container" id="toast-container"></div>
@@ -955,6 +1050,7 @@
          MODALS 
          ========================================== -->
 
+    <!-- Modal: Global Calendar -->
     <div class="modal-overlay" id="modal-calendar">
         <div class="modal-content">
             <div class="modal-header">
@@ -964,7 +1060,7 @@
                 </div>
                 <div style="display:flex; gap:16px; align-items:center;">
                     <div id="calendar-admin-controls" style="display: none;">
-                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="document.getElementById('calendar-add-form').classList.toggle('d-none')">+ Add Event</button>
+                        <button class="btn btn-primary btn-sm" onclick="document.getElementById('calendar-add-form').classList.toggle('d-none')">+ Add Event</button>
                     </div>
                     <button class="close-btn" onclick="app.closeModal('modal-calendar')"><i class="ph ph-x"></i></button>
                 </div>
@@ -988,7 +1084,7 @@
                             <option value="general">General Event</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin-bottom: 16px;">Save Event</button>
+                    <button type="submit" class="btn btn-primary btn-sm" style="margin-bottom: 16px;">Save Event</button>
                 </form>
             </div>
 
@@ -1000,55 +1096,203 @@
         </div>
     </div>
 
+    <!-- Modal: Global Student Registry (Admin/HM/Teacher) -->
     <div class="modal-overlay" id="modal-all-students">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <h3 style="margin-bottom: 4px;">Global Student Registry</h3>
+                    <h3 style="margin-bottom: 4px;">Student Registry</h3>
                 </div>
                 <div style="display:flex; gap:16px; align-items:center;">
                     <div class="search-bar" style="width: 250px;">
                         <i class="ph ph-magnifying-glass"></i>
                         <input type="search" id="all-student-search" placeholder="Search ID, Name..." onkeyup="app.filterTable('all-student-search', 'global-student-table')">
                     </div>
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('global-student-table', 'Global_Students.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="btn btn-outline btn-sm" onclick="app.exportDataToCSV('global-student-table', 'Global_Students.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
                     <button class="close-btn" onclick="app.closeModal('modal-all-students')"><i class="ph ph-x"></i></button>
                 </div>
             </div>
             <div class="table-container" style="max-height: 60vh;">
                 <table id="global-student-table">
-                    <thead><tr><th>Reg ID</th><th>Full Name</th><th>Grade</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Reg ID</th><th>Full Name</th><th>Grade</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody id="global-student-tbody"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Modal: User Management Table (Admin) -->
     <div class="modal-overlay" id="modal-all-users">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>User Management</h3>
                 <div style="display:flex; gap:16px; align-items:center;">
-                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="app.exportDataToCSV('sa-user-table-element', 'System_Users.csv')"><i class="ph ph-download-simple"></i> Export Users</button>
+                    <button class="btn btn-primary btn-sm" onclick="app.toggleAdminUserForm()"><i class="ph ph-plus"></i> Add User</button>
+                    <button class="btn btn-outline btn-sm" onclick="app.exportDataToCSV('sa-user-table-element', 'System_Users.csv')"><i class="ph ph-download-simple"></i> Export Users</button>
                     <button class="close-btn" onclick="app.closeModal('modal-all-users')"><i class="ph ph-x"></i></button>
                 </div>
             </div>
+
+            <!-- Admin Create User Form -->
+            <div id="admin-create-user-panel" class="d-none glass-card mb-4" style="background: var(--input-bg);">
+                <h4 class="mb-4">Create / Edit User</h4>
+                <form onsubmit="app.adminSaveUser(event)">
+                    <input type="hidden" id="admin-edit-user-original-id">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Email / System ID</label>
+                            <input type="text" id="admin-add-id" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" id="admin-add-name" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Role</label>
+                            <select id="admin-add-role" required onchange="app.handleAdminRoleChange()">
+                                <option value="student">Student</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="staff">Support Staff</option>
+                                <option value="headmaster">Headmaster</option>
+                                <option value="superadmin">Super Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="text" id="admin-add-pass" required placeholder="Default Password">
+                        </div>
+                        
+                        <!-- Teacher Specific -->
+                        <div class="input-group d-none" id="admin-add-class-wrapper">
+                            <label>Assigned Class</label>
+                            <select id="admin-add-class">
+                                <option value="Grade 1">Grade 1</option><option value="Grade 5">Grade 5</option>
+                                <option value="Grade 9">Grade 9</option><option value="Grade 10">Grade 10</option>
+                            </select>
+                        </div>
+
+                        <!-- Staff Specific -->
+                        <div class="input-group d-none" id="admin-add-dept-wrapper">
+                            <label>Department</label>
+                            <select id="admin-add-dept">
+                                <option value="library-staff">Library Staff</option>
+                                <option value="hallroom-staff">Hallroom Staff</option>
+                                <option value="office-staff">Office Staff</option>
+                                <option value="bathroom-staff">Cleaning / Bathroom</option>
+                                <option value="security">Security</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Student Specific -->
+                        <div class="input-group d-none" id="admin-add-student-wrapper">
+                            <label>Grade/Class</label>
+                            <select id="admin-add-stu-grade">
+                                <option value="Grade 1">Grade 1</option>
+                                <option value="Grade 5">Grade 5</option>
+                                <option value="Grade 9">Grade 9</option>
+                                <option value="Grade 10">Grade 10</option>
+                            </select>
+                            <label class="mt-4">Parent User ID (Optional)</label>
+                            <input type="text" id="admin-add-stu-parent" placeholder="e.g. parent@email.com">
+                        </div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="app.toggleAdminUserForm()">Cancel</button>
+                        <button type="submit" class="btn btn-success btn-sm">Save User</button>
+                    </div>
+                </form>
+            </div>
+
             <div class="table-container">
                 <table id="sa-user-table-element">
-                    <thead><tr><th>User ID / Email</th><th>Name</th><th>Role</th></tr></thead>
+                    <thead><tr><th>User ID / Email</th><th>Name</th><th>Role</th><th>Detail</th><th>Action</th></tr></thead>
                     <tbody id="sa-user-table">
+                        <!-- Populated via JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Modal: Issue Document / Editor (Admin/HM/Teacher) -->
+    <div class="modal-overlay" id="modal-issue-doc">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <div>
+                    <h3 style="margin-bottom: 4px;">Issue Document / Marksheet</h3>
+                    <div style="font-size: 13px; color: var(--text-muted);">Target Student ID: <strong id="issue-doc-student-id-label"></strong></div>
+                </div>
+                <button class="close-btn" onclick="app.closeModal('modal-issue-doc')"><i class="ph ph-x"></i></button>
+            </div>
+            
+            <form onsubmit="app.saveIssuedDocument(event)">
+                <input type="hidden" id="issue-doc-student-id">
+                <input type="hidden" id="issue-doc-edit-id">
+                
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Document Title</label>
+                        <input type="text" id="issue-doc-title" placeholder="e.g. Mid-Term Marksheet 2026" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Document Type</label>
+                        <select id="issue-doc-type" required onchange="app.toggleDocEditorType()">
+                            <option value="marksheet">Marksheet (Inbuilt Editor)</option>
+                            <option value="certificate">External URL (Certificate / Letter)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- URL input for external docs -->
+                <div id="issue-doc-url-wrapper" class="input-group d-none">
+                    <label>Document URL</label>
+                    <input type="url" id="issue-doc-url" placeholder="https://link-to-pdf...">
+                </div>
+
+                <!-- Marksheet Data Editor -->
+                <div id="issue-doc-marksheet-wrapper">
+                    <div class="flex-between mb-4">
+                        <label style="font-weight: 600; font-size: 14px;">Marks Editor</label>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="app.addMarksheetRow()"><i class="ph ph-plus"></i> Add Subject</button>
+                    </div>
+                    <div class="table-container" style="overflow: visible;">
+                        <table style="min-width: 500px;">
+                            <thead>
+                                <tr><th>Subject Name</th><th>Marks Obtained</th><th>Total Marks</th><th>Remarks</th><th></th></tr>
+                            </thead>
+                            <tbody id="marksheet-editor-tbody">
+                                <!-- Default empty row -->
+                                <tr>
+                                    <td><input type="text" class="mark-sub" placeholder="Subject" required></td>
+                                    <td><input type="number" class="mark-obt" placeholder="0" required style="width: 80px;"></td>
+                                    <td><input type="number" class="mark-tot" placeholder="100" required style="width: 80px;" value="100"></td>
+                                    <td><input type="text" class="mark-rem" placeholder="e.g. Good"></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm" style="padding: 6px; height:auto;" onclick="this.parentElement.parentElement.remove()"><i class="ph ph-trash"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-4" style="text-align: right;">
+                    <button type="submit" class="btn btn-success"><i class="ph ph-paper-plane-tilt"></i> Issue Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal: Student Reports Review (HM) -->
     <div class="modal-overlay" id="modal-student-reports">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Student Reports & Feedback</h3>
                 <div style="display:flex; gap:10px;">
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('student-reports-table', 'Student_Reports.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="btn btn-outline btn-sm" onclick="app.exportDataToCSV('student-reports-table', 'Student_Reports.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
                     <button class="close-btn" onclick="app.closeModal('modal-student-reports')"><i class="ph ph-x"></i></button>
                 </div>
             </div>
@@ -1056,18 +1300,20 @@
                 <table id="student-reports-table">
                     <thead><tr><th>Date</th><th>Reporter ID</th><th>Category</th><th>Issue Detail</th><th>Status</th><th>Action</th></tr></thead>
                     <tbody id="student-reports-tbody">
+                        <!-- Populated by JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Modal: Maintenance & Facility Logs (HM/Admin) -->
     <div class="modal-overlay" id="modal-maintenance-logs">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Facility & Maintenance Logs</h3>
                 <div style="display:flex; gap:10px;">
-                    <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="app.exportDataToCSV('maintenance-logs-table', 'Maintenance_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
+                    <button class="btn btn-outline btn-sm" onclick="app.exportDataToCSV('maintenance-logs-table', 'Maintenance_Logs.csv')"><i class="ph ph-download-simple"></i> Export CSV</button>
                     <button class="close-btn" onclick="app.closeModal('modal-maintenance-logs')"><i class="ph ph-x"></i></button>
                 </div>
             </div>
@@ -1075,12 +1321,14 @@
                 <table id="maintenance-logs-table">
                     <thead><tr><th>Time</th><th>Location</th><th>Situation/Requirement</th><th>Logged By</th><th>Status</th></tr></thead>
                     <tbody id="maintenance-logs-tbody">
+                        <!-- Populated by JS -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Modal: Application Review (Admin/HM) -->
     <div class="modal-overlay" id="modal-review-apps">
         <div class="modal-content" style="max-width: 1000px;">
             <div class="modal-header">
@@ -1088,6 +1336,7 @@
                 <button class="close-btn" onclick="app.closeModal('modal-review-apps')"><i class="ph ph-x"></i></button>
             </div>
             
+            <!-- Table List View -->
             <div id="review-list-view">
                 <div class="table-container">
                     <table>
@@ -1095,26 +1344,30 @@
                             <tr><th>Applicant Name</th><th>Type</th><th>Status</th><th>Submitted</th><th>Action</th></tr>
                         </thead>
                         <tbody id="review-apps-tbody">
+                            <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Single Application Details View (Hidden initially) -->
             <div id="review-detail-view" class="d-none">
-                <button class="btn btn-outline mb-4" style="padding: 6px 12px; font-size: 13px;" onclick="document.getElementById('review-list-view').classList.remove('d-none'); document.getElementById('review-detail-view').classList.add('d-none');"><i class="ph ph-arrow-left"></i> Back to List</button>
+                <button class="btn btn-outline btn-sm mb-4" onclick="document.getElementById('review-list-view').classList.remove('d-none'); document.getElementById('review-detail-view').classList.add('d-none');"><i class="ph ph-arrow-left"></i> Back to List</button>
                 
                 <div class="glass-card" style="padding: 20px; background: var(--input-bg);">
                     <div id="rev-det-dynamic-content">
+                        <!-- Content dynamically built by JS matching student or teacher detailed inputs -->
                     </div>
                     
                     <div id="payment-verify-box" class="d-none mt-4" style="background: rgba(52, 199, 89, 0.1); border: 1px solid var(--success); padding: 16px; border-radius: var(--radius-md);">
                         <h4 style="color: var(--success); margin-bottom: 8px;"><i class="ph ph-shield-check"></i> Payment Claim Verification</h4>
-                        <p style="font-size: 14px;"><strong>Reported UPI/Ref:</strong> <span id="rev-det-payment-ref" style="font-family: monospace; font-size: 16px; font-weight: bold;">---</span></p>
-                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Verify this against bank statement before approving.</p>
+                        <p style="font-size: 14px;"><strong>Reported UPI Phone Number:</strong> <span id="rev-det-payment-phone" style="font-family: monospace; font-size: 16px; font-weight: bold;">---</span></p>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Verify this phone number in your UPI transaction history to confirm full payment was received before approving.</p>
                     </div>
                     
                     <hr style="border: 0; border-top: 1px solid var(--input-border); margin: 24px 0;">
                     
+                    <!-- Action Forms -->
                     <div id="action-area">
                         <div class="input-group">
                             <label>Admin/HM Remarks (Required for Revision/Rejection)</label>
@@ -1122,6 +1375,7 @@
                         </div>
                         
                         <div style="display: flex; gap: 12px; flex-wrap: wrap;" id="rev-action-buttons">
+                            <!-- Buttons injected by JS based on role and status -->
                         </div>
                     </div>
                 </div>
@@ -1129,16 +1383,42 @@
         </div>
     </div>
 
+    <!-- Modal: Document Viewer (In-Portal Preview / Print) -->
     <div class="modal-overlay" id="modal-doc-viewer" style="z-index: 1050;">
         <div class="modal-content" style="max-width: 900px; padding: 16px; height: 85vh; display: flex; flex-direction: column;">
             <div class="modal-header" style="margin-bottom: 12px; padding-bottom: 12px; top: 0;">
                 <h3 style="margin: 0;"><i class="ph ph-file-text" style="color: var(--primary);"></i> Document Viewer</h3>
-                <button class="close-btn" onclick="app.closeDocViewer()"><i class="ph ph-x"></i></button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-sm" onclick="window.print()"><i class="ph ph-printer"></i> Print / Save PDF</button>
+                    <button class="close-btn" onclick="app.closeDocViewer()"><i class="ph ph-x"></i></button>
+                </div>
             </div>
-            <div id="doc-viewer-container" style="flex: 1; overflow: hidden; background: var(--input-bg); border-radius: var(--radius-sm); border: 1px solid var(--input-border); display: flex; align-items: center; justify-content: center;">
+            <div id="doc-viewer-container" style="flex: 1; overflow: auto; background: white; color: black; border-radius: var(--radius-sm); border: 1px solid var(--input-border); display: flex; align-items: center; justify-content: center; padding: 24px;">
+                <!-- Iframe, Img, or Generated HTML injected here -->
             </div>
-            <div style="text-align: right; margin-top: 16px;">
-                <a id="doc-viewer-download-btn" href="#" target="_blank" class="btn btn-primary"><i class="ph ph-download-simple"></i> Open Original / Download</a>
+            <div style="text-align: right; margin-top: 16px;" id="doc-viewer-action-area">
+                <a id="doc-viewer-download-btn" href="#" target="_blank" class="btn btn-primary"><i class="ph ph-download-simple"></i> Open Original Externally</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Manage Student Documents -->
+    <div class="modal-overlay" id="modal-manage-docs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 style="margin-bottom: 4px;">Manage Student Documents</h3>
+                    <div style="font-size: 13px; color: var(--text-muted);">Target Student ID: <strong id="manage-docs-student-id-label"></strong></div>
+                </div>
+                <button class="close-btn" onclick="app.closeModal('modal-manage-docs')"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="table-container">
+                <table id="manage-docs-table">
+                    <thead><tr><th>Date Issued</th><th>Title</th><th>Type</th><th>Actions</th></tr></thead>
+                    <tbody id="manage-docs-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -1149,15 +1429,19 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, linkWithPhoneNumber, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         window.app = (function() {
             // State
             let currentUser = null;
             let currentTheme = 'light';
-            let db = generateSeedData(); // Load default data immediately to bypass auth blocks
-            let isDbLoaded = true;       // Prevents the login block
+            // Live Firebase logic expects empty arrays to populate from real data.
+            let db = {
+                settings: { admissionOpen: true, recruitmentOpen: true },
+                users: [], allStudents: [], applications: [], events: [], studentReports: [], maintenanceLogs: [], libraryLogs: []
+            }; 
+            let isDbLoaded = false;
             let chartInstances = {};
             let currentReviewAppId = null;
             let activeReviewRole = null;
@@ -1190,7 +1474,6 @@
             const firebaseApp = initializeApp(firebaseConfig);
             const auth = getAuth(firebaseApp);
             const firestore = getFirestore(firebaseApp);
-            const storage = getStorage(firebaseApp);
             
             const fbAppId = typeof __app_id !== 'undefined' ? __app_id : 'schoolmanagementsystem-1d10a';
             const dbDocRef = doc(firestore, 'artifacts', fbAppId, 'public', 'data', 'school_db', 'main_doc');
@@ -1204,22 +1487,40 @@
                         await signInAnonymously(auth);
                     }
                 } catch (err) {
-                    console.error("Firebase Auth error:", err);
-                    setTimeout(() => showToast("Cloud sync unavailable. Running in local mode.", "warning"), 1500);
+                    console.warn("Firebase Auth error (Running gracefully in local mode):", err.message);
                 }
             };
             initAuth();
 
-            // Handle Cloud Data Tracking
+            // Handle Cloud Data Tracking & Session Restoration
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     onSnapshot(dbDocRef, (snap) => {
                         if (snap.exists()) {
-                            db = snap.data();
+                            // Ensure arrays exist if migrating from old DB schema
+                            let fetchedDb = snap.data();
+                            fetchedDb.users = fetchedDb.users || [];
+                            fetchedDb.allStudents = fetchedDb.allStudents || [];
+                            db = fetchedDb;
                             isDbLoaded = true;
+
+                            // Restore session
+                            if (!currentUser) {
+                                const storedId = localStorage.getItem('educore_uid');
+                                if (storedId) {
+                                    const foundUser = db.users.find(u => u.id.toLowerCase() === storedId.toLowerCase());
+                                    if (foundUser) {
+                                        currentUser = foundUser;
+                                        navigate(`view-${foundUser.role}`);
+                                    } else {
+                                        localStorage.removeItem('educore_uid');
+                                    }
+                                }
+                            }
+
                             if (currentUser) { updateUIAfterDbSync(); }
                         } else {
-                            db = generateSeedData();
+                            // Fallback mapping if document doesnt exist
                             setDoc(dbDocRef, db);
                             isDbLoaded = true;
                         }
@@ -1229,34 +1530,6 @@
 
             function saveDB() {
                 if (auth.currentUser && db) { setDoc(dbDocRef, db).catch(console.error); }
-            }
-
-            // Seed Generation
-            function generateSeedData() {
-                return {
-                    settings: { admissionOpen: true, recruitmentOpen: true },
-                    users: [
-                        { id: 'joykumbhakar001@gmail.com', name: 'Super Admin', role: 'superadmin', pass: '123' },
-                        { id: 'joykumbhakar77@gmail.com', name: 'Headmaster', role: 'headmaster', pass: '123' }
-                    ],
-                    allStudents: [
-                        { regId: 'STU-10001', name: 'Standard Student', grade: 'Grade 10', status: 'Active', parentId: 'parent-123' }
-                    ],
-                    applications: [],
-                    events: [
-                        { date: '2026-06-15', title: 'Summer Break Starts', type: 'holiday' },
-                        { date: '2026-06-25', title: 'Mid-Term Exams Begin', type: 'exam' }
-                    ],
-                    studentReports: [
-                        { date: '2026-06-08', studentId: 'STU-10001', type: 'infra', msg: 'The tap in the boys 2nd floor bathroom is leaking heavily.', status: 'Pending' }
-                    ],
-                    maintenanceLogs: [
-                        { time: '09:30 AM', location: 'Lecture Hall A', msg: 'Need Mr. Joy in Lecture hall', logger: 'Facility Staff', status: 'Pending' }
-                    ],
-                    libraryLogs: [
-                        { title: 'Physics Vol 2 (B-104)', student: 'STU-10001', status: 'missing', date: '2026-06-05' }
-                    ]
-                };
             }
 
             // --- J.A.R.V.I.S. INTEGRATION (GEMINI) ---
@@ -1278,9 +1551,11 @@
                 
                 inputEl.value = '';
                 
+                // Add user message to UI
                 const chatHistory = document.getElementById('jarvis-chat-history');
                 chatHistory.innerHTML += `<div class="chat-bubble chat-user">${userText}</div>`;
                 
+                // Add typing indicator
                 const typingId = 'typing-' + Date.now();
                 chatHistory.innerHTML += `
                     <div id="${typingId}" class="chat-bubble chat-ai typing-indicator">
@@ -1289,7 +1564,7 @@
                 chatHistory.scrollTop = chatHistory.scrollHeight;
 
                 try {
-                    const apiKey = ""; // API Key provided by execution environment
+                    const apiKey = "GEMINI_API_KEY"; // Gemini API Key provided by execution environment
                     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                     
                     const userContext = `The user asking is ${currentUser ? currentUser.name + ' (Role: ' + currentUser.role + ')' : 'Guest'}.`;
@@ -1307,9 +1582,11 @@
 
                     const replyText = response.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, my core logic modules are currently offline.";
                     
+                    // Update History Context
                     jarvisHistory.push({ role: "user", parts: [{ text: userText }] });
                     jarvisHistory.push({ role: "model", parts: [{ text: replyText }] });
 
+                    // Update UI
                     document.getElementById(typingId).remove();
                     chatHistory.innerHTML += `<div class="chat-bubble chat-ai">${replyText}</div>`;
                     chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -1317,7 +1594,7 @@
                 } catch (error) {
                     console.error("JARVIS API Error:", error);
                     document.getElementById(typingId).remove();
-                    chatHistory.innerHTML += `<div class="chat-bubble chat-ai" style="color:var(--danger)">Error: Unable to connect to main servers.</div>`;
+                    chatHistory.innerHTML += `<div class="chat-bubble chat-ai" style="color:var(--danger)">Error: Unable to connect to main servers. Connection blocked or keys missing.</div>`;
                     chatHistory.scrollTop = chatHistory.scrollHeight;
                 }
             }
@@ -1335,7 +1612,6 @@
                     }
                 }
             }
-
 
             // --- UI & THEME LOGIC ---
             function applyTheme(theme) {
@@ -1387,11 +1663,7 @@
                     renderCalendar();
                 }
                 if(id === 'modal-all-users') {
-                    const tbody = document.getElementById('sa-user-table');
-                    tbody.innerHTML = '';
-                    db.users.forEach(u => {
-                        tbody.innerHTML += `<tr><td>${u.id}</td><td>${u.name}</td><td style="text-transform: capitalize;">${u.role}</td></tr>`;
-                    });
+                    renderAdminUsersTable();
                 }
             }
             function closeModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -1454,7 +1726,9 @@
                 
                 for (let i = 0; i < rows.length; i++) {
                     let row = [], cols = rows[i].querySelectorAll("td, th");
+                    // Exclude the 'Action' columns normally positioned at the end
                     for (let j = 0; j < cols.length; j++) {
+                        if(cols[j].innerText.includes('Action') || cols[j].querySelector('.btn')) continue; 
                         let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, ""); 
                         row.push(text);
                     }
@@ -1519,7 +1793,7 @@
                     } else {
                         matches.slice(0, 8).forEach(m => {
                             resultsBox.innerHTML += `
-                                <div class="search-item" onclick="app.showToast('User data verified.', 'info')">
+                                <div class="search-item" onclick="app.showToast('Search item selected.', 'info')">
                                     <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,113,227,0.1);color:var(--primary);display:flex;justify-content:center;align-items:center;"><i class="ph ${m.icon}"></i></div>
                                     <div style="font-size: 13px;">${m.text}</div>
                                 </div>
@@ -1552,6 +1826,7 @@
                         currentUser = user;
                         navigate(`view-${user.role}`);
                         e.target.reset();
+                        localStorage.setItem('educore_uid', currentUser.id);
                         showToast(`Welcome, ${user.name}`, "success");
                     } else if (!user) {
                         document.getElementById('login-fields').classList.add('d-none');
@@ -1570,6 +1845,7 @@
                     db.users.push(newUser);
                     saveDB();
                     currentUser = newUser;
+                    localStorage.setItem('educore_uid', currentUser.id);
                     
                     document.getElementById('login-fields').classList.remove('d-none');
                     document.getElementById('signup-fields').classList.add('d-none');
@@ -1581,7 +1857,7 @@
                     showToast("Account Setup Successful!", "success");
                 }
             }
-            function logout() { currentUser = null; navigate('view-login'); document.getElementById('jarvis-panel').classList.remove('active');}
+            function logout() { currentUser = null; localStorage.removeItem('educore_uid'); navigate('view-login'); document.getElementById('jarvis-panel').classList.remove('active');}
 
             // --- GOOGLE AUTHENTICATION ---
             async function loginWithGoogle(e) {
@@ -1597,6 +1873,7 @@
                     
                     if(existingUser) {
                         currentUser = existingUser;
+                        localStorage.setItem('educore_uid', currentUser.id);
                         navigate(`view-${existingUser.role}`);
                         showToast(`Welcome back, ${existingUser.name}`, "success");
                     } else {
@@ -1609,6 +1886,7 @@
                         db.users.push(newUser);
                         saveDB();
                         currentUser = newUser;
+                        localStorage.setItem('educore_uid', currentUser.id);
                         
                         navigate(`view-${newUser.role}`);
                         showToast("Google Sign-In Successful! Welcome to the portal.", "success");
@@ -1633,13 +1911,355 @@
                 showToast(`${key} is now ${val ? 'Open' : 'Closed'}`, "success");
             }
 
+            // Admin User Management Extention
+            function toggleAdminUserForm() {
+                const panel = document.getElementById('admin-create-user-panel');
+                panel.classList.toggle('d-none');
+                if(!panel.classList.contains('d-none')) {
+                    document.getElementById('admin-add-id').value = '';
+                    document.getElementById('admin-add-name').value = '';
+                    document.getElementById('admin-add-pass').value = '';
+                    document.getElementById('admin-edit-user-original-id').value = '';
+                    handleAdminRoleChange();
+                }
+            }
+
+            function handleAdminRoleChange() {
+                const role = document.getElementById('admin-add-role').value;
+                const classWrap = document.getElementById('admin-add-class-wrapper');
+                const deptWrap = document.getElementById('admin-add-dept-wrapper');
+                const stuWrap = document.getElementById('admin-add-student-wrapper');
+                
+                classWrap.classList.add('d-none');
+                deptWrap.classList.add('d-none');
+                stuWrap.classList.add('d-none');
+
+                if (role === 'teacher') classWrap.classList.remove('d-none');
+                if (role === 'staff') deptWrap.classList.remove('d-none');
+                if (role === 'student') stuWrap.classList.remove('d-none');
+            }
+
+            function adminSaveUser(e) {
+                e.preventDefault();
+                const id = document.getElementById('admin-add-id').value.trim();
+                const name = document.getElementById('admin-add-name').value.trim();
+                const pass = document.getElementById('admin-add-pass').value;
+                const role = document.getElementById('admin-add-role').value;
+                const origId = document.getElementById('admin-edit-user-original-id').value;
+
+                let userObj = { id, name, role, pass: pass || '123' };
+
+                if (role === 'teacher') userObj.assignedClass = document.getElementById('admin-add-class').value;
+                if (role === 'staff') userObj.department = document.getElementById('admin-add-dept').value;
+                
+                let stuGrade = '', stuParent = '';
+                if (role === 'student') {
+                    stuGrade = document.getElementById('admin-add-stu-grade').value;
+                    stuParent = document.getElementById('admin-add-stu-parent').value;
+                }
+
+                if (origId) {
+                    // Edit mode
+                    const idx = db.users.findIndex(u => u.id === origId);
+                    if (idx > -1) {
+                        userObj.assignedRegId = db.users[idx].assignedRegId; // Preserve generated ID if any
+                        db.users[idx] = userObj;
+                    }
+                    
+                    if (role === 'student' && userObj.assignedRegId) {
+                        let stuData = db.allStudents.find(s => s.regId === userObj.assignedRegId);
+                        if (stuData) {
+                            stuData.name = name;
+                            stuData.grade = stuGrade;
+                            stuData.parentId = stuParent;
+                        }
+                    }
+                    showToast("User updated successfully.", "success");
+                } else {
+                    // Create mode
+                    if(db.users.find(u => u.id === id)) {
+                        showToast("User ID already exists!", "error");
+                        return;
+                    }
+                    
+                    if (role === 'student') {
+                        const newIdNum = 10000 + db.allStudents.length + 1;
+                        const regId = `STU-${newIdNum}`;
+                        userObj.assignedRegId = regId;
+                        
+                        db.allStudents.push({
+                            regId: regId,
+                            name: name,
+                            grade: stuGrade,
+                            status: 'Active',
+                            parentId: stuParent,
+                            issuedDocuments: []
+                        });
+                    }
+                    
+                    db.users.push(userObj);
+                    showToast("User created successfully.", "success");
+                }
+
+                saveDB();
+                toggleAdminUserForm();
+                renderAdminUsersTable();
+                if(document.getElementById('view-superadmin').classList.contains('active')) renderSuperAdmin();
+            }
+
+            function adminEditUser(id) {
+                const user = db.users.find(u => u.id === id);
+                if (!user) return;
+                toggleAdminUserForm();
+                
+                document.getElementById('admin-edit-user-original-id').value = user.id;
+                document.getElementById('admin-add-id').value = user.id;
+                document.getElementById('admin-add-name').value = user.name;
+                document.getElementById('admin-add-pass').value = user.pass;
+                document.getElementById('admin-add-role').value = user.role;
+                
+                handleAdminRoleChange();
+                if (user.role === 'teacher' && user.assignedClass) document.getElementById('admin-add-class').value = user.assignedClass;
+                if (user.role === 'staff' && user.department) document.getElementById('admin-add-dept').value = user.department;
+                if (user.role === 'student' && user.assignedRegId) {
+                    let stuData = db.allStudents.find(s => s.regId === user.assignedRegId);
+                    if(stuData) {
+                        document.getElementById('admin-add-stu-grade').value = stuData.grade;
+                        document.getElementById('admin-add-stu-parent').value = stuData.parentId || '';
+                    }
+                }
+            }
+
+            function adminDeleteUser(id) {
+                if (confirm(`Are you sure you want to delete user ${id}?`)) {
+                    db.users = db.users.filter(u => u.id !== id);
+                    saveDB();
+                    showToast("User deleted.", "success");
+                    renderAdminUsersTable();
+                }
+            }
+
+            function renderAdminUsersTable() {
+                const tbody = document.getElementById('sa-user-table');
+                tbody.innerHTML = '';
+                db.users.forEach(u => {
+                    let details = '-';
+                    if (u.role === 'teacher') details = `Class: ${u.assignedClass || 'None'}`;
+                    if (u.role === 'staff') details = `Dept: ${u.department || 'General'}`;
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${u.id}</td>
+                            <td>${u.name}</td>
+                            <td style="text-transform: capitalize;">${u.role}</td>
+                            <td style="font-size:12px; color:var(--text-muted);">${details}</td>
+                            <td>
+                                <button class="btn btn-outline btn-sm" onclick="app.adminEditUser('${u.id}')" style="padding:4px 8px; margin-right:4px;"><i class="ph ph-pencil"></i></button>
+                                <button class="btn btn-danger btn-sm" onclick="app.adminDeleteUser('${u.id}')" style="padding:4px 8px;"><i class="ph ph-trash"></i></button>
+                            </td>
+                        </tr>`;
+                });
+            }
+
+            function deleteStudentData(regId) {
+                if(confirm("Are you sure you want to completely remove this student record?")) {
+                    db.allStudents = db.allStudents.filter(s => s.regId !== regId);
+                    saveDB();
+                    showToast("Student record deleted.", "success");
+                    renderAllStudents();
+                    if(currentUser.role === 'teacher') renderTeacherDashboard();
+                }
+            }
+
             function renderAllStudents() {
                 const tbody = document.getElementById('global-student-tbody');
                 tbody.innerHTML = '';
                 db.allStudents.forEach(s => {
-                    tbody.innerHTML += `<tr><td>${s.regId}</td><td>${s.name}</td><td>${s.grade}</td><td style="color:var(--success); font-weight:bold;">${s.status}</td></tr>`;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${s.regId}</td>
+                            <td>${s.name}</td>
+                            <td>${s.grade}</td>
+                            <td style="color:var(--success); font-weight:bold;">${s.status}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" style="padding:4px 8px; margin-right:4px;" onclick="app.openIssueDocModal('${s.regId}')"><i class="ph ph-file-plus"></i> Issue Doc</button>
+                                <button class="btn btn-outline btn-sm" style="padding:4px 8px; margin-right:4px;" onclick="app.openManageDocsModal('${s.regId}')"><i class="ph ph-folder"></i> Manage</button>
+                                <button class="btn btn-danger btn-sm" style="padding:4px 8px;" onclick="app.deleteStudentData('${s.regId}')"><i class="ph ph-trash"></i></button>
+                            </td>
+                        </tr>`;
                 });
             }
+
+            // Inbuilt Marksheet Editor Logic
+            function openIssueDocModal(studentId, editDocId = null) {
+                document.getElementById('issue-doc-student-id').value = studentId;
+                document.getElementById('issue-doc-student-id-label').innerText = studentId;
+                document.getElementById('issue-doc-edit-id').value = editDocId || '';
+                
+                const tbody = document.getElementById('marksheet-editor-tbody');
+                
+                if (editDocId) {
+                    let studentObj = db.allStudents.find(s => s.regId === studentId);
+                    let doc = studentObj.issuedDocuments.find(d => d.id === editDocId);
+                    
+                    document.getElementById('issue-doc-title').value = doc.title;
+                    document.getElementById('issue-doc-type').value = doc.type;
+                    toggleDocEditorType();
+                    
+                    if (doc.type === 'marksheet') {
+                        tbody.innerHTML = '';
+                        doc.content.forEach(m => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td><input type="text" class="mark-sub" value="${m.subject}" required></td>
+                                <td><input type="number" class="mark-obt" value="${m.obtained}" required style="width: 80px;"></td>
+                                <td><input type="number" class="mark-tot" value="${m.total}" required style="width: 80px;"></td>
+                                <td><input type="text" class="mark-rem" value="${m.remarks || ''}"></td>
+                                <td><button type="button" class="btn btn-danger btn-sm" style="padding: 6px; height:auto;" onclick="this.parentElement.parentElement.remove()"><i class="ph ph-trash"></i></button></td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    } else {
+                        document.getElementById('issue-doc-url').value = doc.url;
+                    }
+                } else {
+                    document.getElementById('issue-doc-title').value = '';
+                    document.getElementById('issue-doc-url').value = '';
+                    
+                    // reset table
+                    tbody.innerHTML = `
+                        <tr>
+                            <td><input type="text" class="mark-sub" placeholder="Subject" required></td>
+                            <td><input type="number" class="mark-obt" placeholder="0" required style="width: 80px;"></td>
+                            <td><input type="number" class="mark-tot" placeholder="100" required style="width: 80px;" value="100"></td>
+                            <td><input type="text" class="mark-rem" placeholder="e.g. Good"></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" style="padding: 6px; height:auto;" onclick="this.parentElement.parentElement.remove()"><i class="ph ph-trash"></i></button></td>
+                        </tr>
+                    `;
+                    toggleDocEditorType();
+                }
+                
+                document.getElementById('modal-issue-doc').classList.add('active');
+            }
+
+            function toggleDocEditorType() {
+                const type = document.getElementById('issue-doc-type').value;
+                if(type === 'marksheet') {
+                    document.getElementById('issue-doc-marksheet-wrapper').classList.remove('d-none');
+                    document.getElementById('issue-doc-url-wrapper').classList.add('d-none');
+                    document.getElementById('issue-doc-url').removeAttribute('required');
+                } else {
+                    document.getElementById('issue-doc-marksheet-wrapper').classList.add('d-none');
+                    document.getElementById('issue-doc-url-wrapper').classList.remove('d-none');
+                    document.getElementById('issue-doc-url').setAttribute('required', 'true');
+                }
+            }
+
+            function addMarksheetRow() {
+                const tbody = document.getElementById('marksheet-editor-tbody');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" class="mark-sub" placeholder="Subject" required></td>
+                    <td><input type="number" class="mark-obt" placeholder="0" required style="width: 80px;"></td>
+                    <td><input type="number" class="mark-tot" placeholder="100" required style="width: 80px;" value="100"></td>
+                    <td><input type="text" class="mark-rem" placeholder="e.g. Good"></td>
+                    <td><button type="button" class="btn btn-danger btn-sm" style="padding: 6px; height:auto;" onclick="this.parentElement.parentElement.remove()"><i class="ph ph-trash"></i></button></td>
+                `;
+                tbody.appendChild(row);
+            }
+
+            function saveIssuedDocument(e) {
+                e.preventDefault();
+                const studentId = document.getElementById('issue-doc-student-id').value;
+                const editId = document.getElementById('issue-doc-edit-id').value;
+                const title = document.getElementById('issue-doc-title').value.trim();
+                const type = document.getElementById('issue-doc-type').value;
+                
+                let studentObj = db.allStudents.find(s => s.regId === studentId);
+                if(!studentObj) { showToast("Student not found", "error"); return; }
+                if(!studentObj.issuedDocuments) studentObj.issuedDocuments = [];
+
+                let docPayload = {
+                    id: editId ? editId : ('DOC-' + Date.now()),
+                    date: new Date().toISOString().split('T')[0],
+                    title: title,
+                    type: type,
+                    issuedBy: currentUser.name + ` (${currentUser.role})`
+                };
+
+                if(type === 'marksheet') {
+                    const rows = document.querySelectorAll('#marksheet-editor-tbody tr');
+                    let marksData = [];
+                    rows.forEach(r => {
+                        const sub = r.querySelector('.mark-sub').value;
+                        const obt = parseFloat(r.querySelector('.mark-obt').value);
+                        const tot = parseFloat(r.querySelector('.mark-tot').value);
+                        const rem = r.querySelector('.mark-rem').value;
+                        if(sub) marksData.push({ subject: sub, obtained: obt, total: tot, remarks: rem });
+                    });
+                    if(marksData.length === 0) { showToast("Please add at least one subject", "warning"); return; }
+                    docPayload.content = marksData;
+                } else {
+                    docPayload.url = document.getElementById('issue-doc-url').value;
+                }
+
+                if (editId) {
+                    const idx = studentObj.issuedDocuments.findIndex(d => d.id === editId);
+                    if (idx > -1) studentObj.issuedDocuments[idx] = docPayload;
+                } else {
+                    studentObj.issuedDocuments.push(docPayload);
+                }
+
+                saveDB();
+                showToast(editId ? "Document updated successfully." : "Document officially issued to student.", "success");
+                closeModal('modal-issue-doc');
+                if(document.getElementById('modal-manage-docs').classList.contains('active')) {
+                    openManageDocsModal(studentId); // Refresh the manage docs list
+                }
+            }
+            
+            function openManageDocsModal(studentId) {
+                document.getElementById('manage-docs-student-id-label').innerText = studentId;
+                const tbody = document.getElementById('manage-docs-tbody');
+                tbody.innerHTML = '';
+                
+                let studentObj = db.allStudents.find(s => s.regId === studentId);
+                if(studentObj && studentObj.issuedDocuments && studentObj.issuedDocuments.length > 0) {
+                    studentObj.issuedDocuments.forEach(doc => {
+                        let editBtnHtml = doc.type === 'marksheet' 
+                            ? `<button class="btn btn-outline btn-sm" style="padding:4px 8px; margin-right:4px;" onclick="app.openIssueDocModal('${studentId}', '${doc.id}')"><i class="ph ph-pencil"></i> Edit</button>` 
+                            : '';
+                            
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${doc.date}</td>
+                                <td>${doc.title}</td>
+                                <td style="text-transform: capitalize;">${doc.type}</td>
+                                <td>
+                                    ${editBtnHtml}
+                                    <button class="btn btn-danger btn-sm" style="padding:4px 8px;" onclick="app.deleteDocument('${studentId}', '${doc.id}')"><i class="ph ph-trash"></i> Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No documents issued yet.</td></tr>`;
+                }
+                document.getElementById('modal-manage-docs').classList.add('active');
+            }
+            
+            function deleteDocument(studentId, docId) {
+                if(confirm("Are you sure you want to delete this document permanently?")) {
+                    let studentObj = db.allStudents.find(s => s.regId === studentId);
+                    if(studentObj) {
+                        studentObj.issuedDocuments = studentObj.issuedDocuments.filter(d => d.id !== docId);
+                        saveDB();
+                        showToast("Document deleted.", "success");
+                        openManageDocsModal(studentId); // Refresh list
+                    }
+                }
+            }
+
 
             function initChart(chartId, type, data, options) {
                 if (typeof Chart === 'undefined') return;
@@ -1650,15 +2270,18 @@
             }
 
             function renderSuperAdmin() {
+                // Real DB Analytics Mapping
                 document.getElementById('sa-total-users').innerText = db.users.length + db.allStudents.length; 
                 
-                const expectedFeeTotal = db.allStudents.length * 150; 
+                // Real Revenue Tracking (Expected mapping based on Enrolled count)
+                const expectedFeeTotal = db.allStudents.length * 150; // Expected Registration fees 
                 document.getElementById('sa-total-revenue').innerText = `$${expectedFeeTotal}`;
                 
                 if (typeof Chart !== 'undefined') {
                     Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
                     const gridColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
+                    // CHART 1: Real Application Statuses
                     let draft=0, sub=0, rev=0, paid=0, enr=0;
                     db.applications.forEach(a => {
                         if(a.status === 'draft') draft++;
@@ -1672,11 +2295,12 @@
                         labels: ['Draft', 'Submitted', 'In Review', 'Verify Pay', 'Enrolled'],
                         datasets: [{ 
                             label: 'Application Volumes', 
-                            data: [draft||1, sub||1, rev||1, paid||1, enr||1],
+                            data: [draft||1, sub||1, rev||1, paid||1, enr||1], // Default to 1 to show empty structure
                             backgroundColor: '#0071e3', borderRadius: 6 
                         }]
                     }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } } });
 
+                    // CHART 2: Real Grade Enrollments Distribution
                     let gradeCounts = {};
                     db.allStudents.forEach(s => {
                         let gr = s.grade || "Unassigned";
@@ -1694,6 +2318,7 @@
                         }]
                     }, { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor } } } });
 
+                    // CHART 3: Real User Roles
                     initChart('saDemographicsChart', 'doughnut', {
                         labels: ['Students', 'Teachers', 'Admin/HM', 'Support Staff'],
                         datasets: [{
@@ -1707,6 +2332,7 @@
                         }]
                     }, { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right' } } });
 
+                    // CHART 4: Real Feedback Types
                     let infra = 0, acad = 0, behav = 0, tech = 0;
                     db.studentReports.forEach(r => {
                         if(r.type === 'infra') infra++;
@@ -1738,7 +2364,7 @@
                             <td style="color:var(--warning);">${rep.status}</td>
                             <td>
                                 ${rep.status === 'Pending' ? 
-                                `<button class="btn btn-outline" style="padding:4px 8px; font-size:12px;" onclick="app.actionReport(${i})">Resolve</button>` : 
+                                `<button class="btn btn-outline btn-sm" style="padding:4px 8px; font-size:12px;" onclick="app.actionReport(${i})">Resolve</button>` : 
                                 `<span style="color: var(--success);"><i class="ph ph-check"></i> Resolved</span>`}
                             </td>
                         </tr>
@@ -1774,6 +2400,7 @@
                 container.innerHTML = '';
                 const date = new Date();
                 
+                // Keep the structural aesthetic but populate real dynamic current dates based on JS
                 const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
                 const startDayIndex = new Date(date.getFullYear(), date.getMonth(), 1).getDay(); 
                 
@@ -1814,15 +2441,31 @@
                 e.target.reset();
             }
 
-            // --- FIREBASE API (STORAGE & AUTH) REPLACEMENT ---
-            
+            // --- APPLICATION FORMS & TRACKING ---
+            function toggleApplicationFields() {
+                const type = document.getElementById('applicant-type').value;
+                if(type === 'student') {
+                    document.getElementById('form-student-fields').classList.remove('d-none');
+                    document.getElementById('form-teacher-fields').classList.add('d-none');
+                } else {
+                    document.getElementById('form-student-fields').classList.add('d-none');
+                    document.getElementById('form-teacher-fields').classList.remove('d-none');
+                }
+                renderApplicantDashboard(); 
+            }
+
             async function verifyPhoneFirebase(inputId, msgId, btnId) {
                 let phone = document.getElementById(inputId).value.trim();
                 if(phone.length < 10) { showToast("Enter a valid phone number first.", "error"); return; }
                 
+                // Format phone number to E.164 format
                 if (!phone.startsWith('+')) {
-                    if (phone.length === 10) phone = '+91' + phone;
-                    else { showToast("Please include the country code (e.g., +91...)", "warning"); return; }
+                    if (phone.length === 10) {
+                        phone = '+91' + phone;
+                    } else {
+                        showToast("Please include the country code (e.g., +91...)", "warning");
+                        return;
+                    }
                 }
 
                 const btn = document.getElementById(btnId);
@@ -1831,51 +2474,46 @@
                 btn.disabled = true;
 
                 try {
-                    // Try real Firebase API Call
+                    // Initialize RecaptchaVerifier on the verify button dynamically
                     if (!window.recaptchaVerifier) {
-                        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                        window.recaptchaVerifier = new RecaptchaVerifier(auth, btnId, {
                             'size': 'invisible',
-                            'callback': (response) => {}
+                            'callback': (response) => {
+                                // reCAPTCHA solved
+                            }
                         });
                     }
+                    const appVerifier = window.recaptchaVerifier;
 
-                    const confirmationResult = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+                    // 1. Request OTP via Firebase Phone Auth
+                    const confirmationResult = await signInWithPhoneNumber(auth, phone, appVerifier);
 
+                    // 2. Prompt user for the code
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                     
                     let otp = prompt(`An OTP was sent to ${phone} via Firebase. Enter the code below:`);
-                    if (!otp) return;
+                    if (!otp) return; // User cancelled
 
+                    // 3. Verify the OTP
                     btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Verifying...`;
                     btn.disabled = true;
 
                     await confirmationResult.confirm(otp);
-                    
+
+                    // 4. Success handling
                     document.getElementById('app-form-phone-verified').value = "true";
                     btn.style.display = "none";
                     document.getElementById(msgId).style.display = "block";
-                    showToast("Phone Verified Successfully via Firebase API!", "success");
+                    showToast("Phone Verified Successfully!", "success");
 
                 } catch (err) {
-                    // Graceful fallback for preview/canvas environments where domains (reCAPTCHA) might be blocked
-                    console.warn("Firebase phone auth encountered strict iframe limitations. Engaging simulated OTP fallback to unblock flow.", err);
-                    
+                    console.error("Firebase Phone verification error:", err);
+                    showToast(err.message || "Verification failed.", "error");
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                     
-                    let mockOtp = prompt(`[SIMULATED] An OTP was simulated for ${phone}. Enter '123456' to verify:`);
-                    if (!mockOtp) return;
-                    
-                    if (mockOtp === '123456') {
-                        document.getElementById('app-form-phone-verified').value = "true";
-                        btn.style.display = "none";
-                        document.getElementById(msgId).style.display = "block";
-                        showToast("Phone Verified (Simulated Check Passed)!", "success");
-                    } else {
-                        showToast("Verification failed. Incorrect OTP.", "error");
-                    }
-
+                    // Clear recaptcha so it can be re-initialized if needed
                     if(window.recaptchaVerifier) {
                         window.recaptchaVerifier.clear();
                         window.recaptchaVerifier = null;
@@ -1890,41 +2528,42 @@
                 const statusEl = inputElement.parentElement.querySelector('.status-msg');
                 const targetHidden = document.getElementById(targetHiddenId);
 
-                statusEl.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Uploading to Firebase Storage...`;
+                statusEl.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Uploading to secure server...`;
                 statusEl.style.color = 'var(--warning)';
 
                 try {
+                    const storage = getStorage(firebaseApp);
                     const fileExt = file.name.split('.').pop();
                     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-                    const filePath = `artifacts/${fbAppId}/public/documents/${fileName}`;
+                    const storageReference = storageRef(storage, `applications/${fileName}`);
 
-                    // Standard Firebase Storage Upload API
-                    const storageRef = ref(storage, filePath);
-                    await uploadBytes(storageRef, file);
-                    const publicUrl = await getDownloadURL(storageRef);
+                    // Upload to Firebase Storage
+                    const uploadTask = uploadBytesResumable(storageReference, file);
 
-                    targetHidden.value = publicUrl;
-                    statusEl.innerHTML = `<i class="ph ph-check-circle"></i> Uploaded: <a href="${publicUrl}" target="_blank" style="color:var(--primary);text-decoration:underline;">${file.name}</a>`;
-                    statusEl.style.color = 'var(--success)';
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            statusEl.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Uploading... ${Math.round(progress)}%`;
+                        }, 
+                        (error) => {
+                            console.error("Upload error:", error);
+                            statusEl.innerHTML = `<i class="ph ph-x-circle"></i> Upload Failed`;
+                            statusEl.style.color = 'var(--danger)';
+                            showToast("Failed to upload document.", "error");
+                        }, 
+                        async () => {
+                            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                            targetHidden.value = downloadURL;
+                            statusEl.innerHTML = `<i class="ph ph-check-circle"></i> Uploaded: <a href="${downloadURL}" target="_blank" style="color:var(--primary);text-decoration:underline;">${file.name}</a>`;
+                            statusEl.style.color = 'var(--success)';
+                        }
+                    );
                 } catch (err) {
-                    console.error("Upload error:", err);
+                    console.error("Upload initiation error:", err);
                     statusEl.innerHTML = `<i class="ph ph-x-circle"></i> Upload Failed`;
                     statusEl.style.color = 'var(--danger)';
-                    showToast("Failed to upload document to Firebase Storage.", "error");
+                    showToast("Failed to initiate upload.", "error");
                 }
-            }
-
-            // --- APPLICATION FORMS & TRACKING ---
-            function toggleApplicationFields() {
-                const type = document.getElementById('applicant-type').value;
-                if(type === 'student') {
-                    document.getElementById('form-student-fields').classList.remove('d-none');
-                    document.getElementById('form-teacher-fields').classList.add('d-none');
-                } else {
-                    document.getElementById('form-student-fields').classList.add('d-none');
-                    document.getElementById('form-teacher-fields').classList.remove('d-none');
-                }
-                renderApplicantDashboard(); 
             }
 
             function submitApplication(e) {
@@ -1950,6 +2589,7 @@
                     payload.dob = document.getElementById('stu-dob').value;
                     payload.targetGrade = document.getElementById('stu-grade').value;
                     payload.phone = document.getElementById('stu-gphone').value;
+                    payload.gender = document.getElementById('stu-gender').value;
                     
                     payload.details = {
                         firstName: first, middleName: middle, lastName: last,
@@ -1984,6 +2624,7 @@
                     payload.name = document.getElementById('tch-name').value;
                     payload.dob = document.getElementById('tch-dob').value;
                     payload.phone = document.getElementById('tch-phone').value;
+                    payload.gender = document.getElementById('tch-gender').value;
                     payload.targetGrade = "Staff Position";
 
                     payload.details = {
@@ -2088,10 +2729,10 @@
 
             function submitFeePayment(e) {
                 e.preventDefault();
-                const ref = document.getElementById('app-payment-ref').value.trim();
+                const phoneUsed = document.getElementById('app-payment-phone').value.trim();
                 const myApp = db.applications.find(a => a.applicantId === currentUser.id);
                 if(myApp) {
-                    myApp.paymentRef = ref;
+                    myApp.paymentPhone = phoneUsed;
                     myApp.status = 'paid_pending_approval';
                     saveDB();
                     showToast("Payment information sent for verification.", "success");
@@ -2136,7 +2777,7 @@
                             <td style="text-transform: capitalize;">${app.type}</td>
                             <td>${getStatusBadge(app.status)}</td>
                             <td>${app.submittedAt || 'N/A'}</td>
-                            <td><button class="btn btn-outline" style="padding: 4px 10px; font-size:12px;" onclick="app.viewAppDetail('${app.id}')">View Details</button></td>
+                            <td><button class="btn btn-outline btn-sm" onclick="app.viewAppDetail('${app.id}')">View Details</button></td>
                         </tr>
                     `;
                 });
@@ -2144,19 +2785,27 @@
 
             function formatLink(url) {
                 if (!url) return '<span style="color:var(--text-muted); font-size:13px;">Not Provided</span>';
-                return `<button type="button" class="btn btn-outline" style="padding: 4px 10px; font-size: 12px; margin-bottom: 4px;" onclick="app.openDocViewer('${url}')"><i class="ph ph-eye"></i> View Doc</button>`;
+                return `<button type="button" class="btn btn-outline btn-sm" style="margin-bottom: 4px;" onclick="app.openDocViewer('${url}', false)"><i class="ph ph-eye"></i> View Doc</button>`;
             }
 
-            function openDocViewer(url) {
+            function openDocViewer(content, isHtml = false) {
                 const container = document.getElementById('doc-viewer-container');
+                const actionArea = document.getElementById('doc-viewer-action-area');
                 const dlBtn = document.getElementById('doc-viewer-download-btn');
                 
-                dlBtn.href = url;
-                
-                if (url.match(/\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i)) {
-                    container.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius: 8px;">`;
+                if(isHtml) {
+                    container.innerHTML = content;
+                    actionArea.classList.add('d-none');
                 } else {
-                    container.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none; border-radius: 8px; background:white;"></iframe>`;
+                    dlBtn.href = content;
+                    actionArea.classList.remove('d-none');
+                    // Simple regex to check if it's an image
+                    if (content.match(/\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i)) {
+                        container.innerHTML = `<img src="${content}" style="max-width:100%; max-height:100%; object-fit:contain; border-radius: 8px;">`;
+                    } else {
+                        // Use iframe for PDF and other document types
+                        container.innerHTML = `<iframe src="${content}" style="width:100%; height:100%; border:none; border-radius: 8px; background:white;"></iframe>`;
+                    }
                 }
                 
                 document.getElementById('modal-doc-viewer').classList.add('active');
@@ -2164,7 +2813,7 @@
 
             function closeDocViewer() {
                 document.getElementById('modal-doc-viewer').classList.remove('active');
-                document.getElementById('doc-viewer-container').innerHTML = '';
+                document.getElementById('doc-viewer-container').innerHTML = ''; // Clear iframe to stop playback/loading
             }
 
             function viewAppDetail(appId) {
@@ -2179,6 +2828,7 @@
                             <h2 style="margin-bottom: 8px;">${appObj.name}</h2>
                             <div class="mb-4"><span class="status-badge" style="background: var(--primary); color: white;">${appObj.type.toUpperCase()} - ${appObj.targetGrade || 'Staff'}</span></div>
                             <p><strong>Primary Phone:</strong> ${appObj.phone} <span style="color:var(--success); font-size:12px;"><i class="ph-fill ph-check-circle"></i> Verified</span></p>
+                            <p><strong>Gender:</strong> ${appObj.gender || 'N/A'}</p>
                             <p><strong>DOB:</strong> ${appObj.dob}</p><hr style="border:0; border-top:1px solid var(--input-border); margin:16px 0;">`;
 
                 if(appObj.type === 'student') {
@@ -2246,7 +2896,7 @@
                     `;
                 } else if(appObj.status === 'paid_pending_approval' && activeReviewRole === 'admin') {
                     payBox.classList.remove('d-none');
-                    document.getElementById('rev-det-payment-ref').innerText = appObj.paymentRef;
+                    document.getElementById('rev-det-payment-phone').innerText = appObj.paymentPhone || appObj.paymentRef || 'Not Provided';
                     actionDiv.innerHTML = `
                         <button class="btn btn-success" onclick="app.processApp('approved')"><i class="ph ph-shield-check"></i> Payment Valid - Complete Enrollment</button>
                         <button class="btn btn-danger" onclick="app.processApp('payment_pending')"><i class="ph ph-x"></i> Invalid Payment - Request Again</button>
@@ -2280,9 +2930,11 @@
                         name: application.name,
                         grade: application.targetGrade || 'Staff',
                         status: 'Active',
-                        contact: application.phone
+                        contact: application.phone,
+                        issuedDocuments: []
                     });
 
+                    // Upgrade the user's role from 'applicant' to standard system roles
                     const userRecord = db.users.find(u => u.id === application.applicantId);
                     if(userRecord) {
                         userRecord.role = application.type === 'student' ? 'student' : 'teacher';
@@ -2304,12 +2956,101 @@
                 updateUIAfterDbSync();
             }
 
+            function renderMarksheetHTML(studentObj, docData) {
+                let rowsHtml = '';
+                let grandTotal = 0;
+                let obtainedTotal = 0;
+
+                docData.content.forEach(m => {
+                    grandTotal += m.total;
+                    obtainedTotal += m.obtained;
+                    rowsHtml += `
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${m.subject}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${m.total}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600;">${m.obtained}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${m.remarks || '-'}</td>
+                        </tr>
+                    `;
+                });
+
+                let percentage = grandTotal > 0 ? ((obtainedTotal / grandTotal) * 100).toFixed(2) : 0;
+
+                return `
+                    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #333;">
+                        <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0071e3; padding-bottom: 20px;">
+                            <h1 style="color: #0071e3; margin: 0 0 10px 0;">EduCore System</h1>
+                            <h2 style="margin: 0; color: #555;">Official Academic Transcript</h2>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                            <div>
+                                <p style="margin: 5px 0;"><strong>Student Name:</strong> ${studentObj.name}</p>
+                                <p style="margin: 5px 0;"><strong>Registration ID:</strong> ${studentObj.regId}</p>
+                                <p style="margin: 5px 0;"><strong>Grade/Class:</strong> ${studentObj.grade}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="margin: 5px 0;"><strong>Examination:</strong> ${docData.title}</p>
+                                <p style="margin: 5px 0;"><strong>Issue Date:</strong> ${docData.date}</p>
+                                <p style="margin: 5px 0;"><strong>Issued By:</strong> ${docData.issuedBy}</p>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                            <thead>
+                                <tr style="background-color: #0071e3; color: white;">
+                                    <th style="padding: 12px; text-align: left;">Subject</th>
+                                    <th style="padding: 12px; text-align: center;">Total Marks</th>
+                                    <th style="padding: 12px; text-align: center;">Marks Obtained</th>
+                                    <th style="padding: 12px; text-align: left;">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                    <td style="padding: 12px; text-align: right;">Grand Total:</td>
+                                    <td style="padding: 12px; text-align: center;">${grandTotal}</td>
+                                    <td style="padding: 12px; text-align: center; color: #0071e3;">${obtainedTotal}</td>
+                                    <td style="padding: 12px;">Overall: ${percentage}%</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+                            <div style="text-align: center; border-top: 1px solid #ccc; width: 200px; padding-top: 10px;">Class Teacher Signature</div>
+                            <div style="text-align: center; border-top: 1px solid #ccc; width: 200px; padding-top: 10px;">Headmaster Signature</div>
+                        </div>
+                    </div>
+                `;
+            }
+
             // --- TEACHER / STUDENT / PARENT / STAFF PORTALS ---
             function renderTeacherDashboard() {
+                const classLabel = currentUser.assignedClass || 'All Classes';
+                document.getElementById('teacher-assigned-class-label').innerText = classLabel;
+
                 const tbody = document.getElementById('teacher-student-table');
                 tbody.innerHTML = '';
-                db.allStudents.forEach(s => {
-                    tbody.innerHTML += `<tr><td>${s.regId}</td><td>${s.name}</td><td>${s.grade}</td><td style="color:var(--success); font-weight:bold;">${s.status}</td></tr>`;
+                
+                let studentsToShow = db.allStudents;
+                if(currentUser.assignedClass) {
+                    studentsToShow = db.allStudents.filter(s => s.grade === currentUser.assignedClass);
+                }
+
+                studentsToShow.forEach(s => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${s.regId}</td>
+                            <td>${s.name}</td>
+                            <td>${s.grade}</td>
+                            <td style="color:var(--success); font-weight:bold;">${s.status}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" style="padding:4px 8px; margin-right:4px;" onclick="app.openIssueDocModal('${s.regId}')"><i class="ph ph-file-plus"></i> Issue Doc</button>
+                                <button class="btn btn-outline btn-sm" style="padding:4px 8px;" onclick="app.openManageDocsModal('${s.regId}')"><i class="ph ph-folder"></i> Manage</button>
+                            </td>
+                        </tr>`;
                 });
             }
 
@@ -2320,6 +3061,33 @@
                 if (studentData) {
                     document.getElementById('student-profile-name').innerText = studentData.name;
                     document.getElementById('student-profile-grade').innerText = `ID: ${studentData.regId} | ${studentData.grade}`;
+
+                    const tbody = document.getElementById('student-docs-table');
+                    tbody.innerHTML = '';
+
+                    if(studentData.issuedDocuments && studentData.issuedDocuments.length > 0) {
+                        studentData.issuedDocuments.forEach(doc => {
+                            let actionHtml = '';
+                            if(doc.type === 'marksheet') {
+                                const rawHtml = renderMarksheetHTML(studentData, doc).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                                actionHtml = `<button class="btn btn-primary btn-sm" onclick="app.openDocViewer('${rawHtml}', true)"><i class="ph ph-eye"></i> View/Print</button>`;
+                            } else {
+                                actionHtml = `<button class="btn btn-outline btn-sm" onclick="app.openDocViewer('${doc.url}', false)"><i class="ph ph-download-simple"></i> Download</button>`;
+                            }
+
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${doc.date}</td>
+                                    <td style="font-weight: 600;">${doc.title}</td>
+                                    <td style="text-transform: capitalize;">${doc.type}</td>
+                                    <td>${doc.issuedBy}</td>
+                                    <td>${actionHtml}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No official documents issued yet.</td></tr>`;
+                    }
                 }
             }
 
@@ -2342,25 +3110,99 @@
 
             function renderParentDashboard() {
                 let studentData = db.allStudents.find(s => s.parentId === currentUser.id);
+                // Fallback for demo if no parent linked
                 if(!studentData && db.allStudents.length > 0) studentData = db.allStudents[0]; 
 
                 if (studentData) {
                     document.getElementById('parent-child-name').innerText = studentData.name;
                     document.getElementById('parent-child-id').innerText = studentData.regId;
+                    document.getElementById('parent-child-grade').innerText = studentData.grade;
+
+                    // Establish Contacts
+                    const hmUser = db.users.find(u => u.role === 'headmaster');
+                    if(hmUser) {
+                        const hmContact = hmUser.id.includes('@') ? `mailto:${hmUser.id}` : '#';
+                        document.getElementById('contact-hm-btn').href = hmContact;
+                    }
+
+                    const teacherUser = db.users.find(u => u.role === 'teacher' && u.assignedClass === studentData.grade);
+                    if(teacherUser) {
+                        document.getElementById('contact-teacher-name').innerText = teacherUser.name;
+                        const tContact = teacherUser.id.includes('@') ? `mailto:${teacherUser.id}` : '#';
+                        document.getElementById('contact-teacher-btn').href = tContact;
+                    } else {
+                        document.getElementById('contact-teacher-name').innerText = "Not Assigned";
+                        document.getElementById('contact-teacher-btn').style.display = "none";
+                    }
+
+                    // Render Academic Progress Stack
+                    const timelineContainer = document.getElementById('parent-academic-timeline');
+                    timelineContainer.innerHTML = '';
+                    
+                    if(studentData.issuedDocuments && studentData.issuedDocuments.length > 0) {
+                        // Filter just marksheets to show progress
+                        const marksheets = studentData.issuedDocuments.filter(d => d.type === 'marksheet');
+                        
+                        if(marksheets.length > 0) {
+                            marksheets.reverse().forEach(m => {
+                                let totalObtained = 0;
+                                let grandTotal = 0;
+                                m.content.forEach(sub => { totalObtained += sub.obtained; grandTotal += sub.total; });
+                                let pct = grandTotal > 0 ? ((totalObtained / grandTotal) * 100).toFixed(1) : 0;
+                                
+                                const rawHtml = renderMarksheetHTML(studentData, m).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+
+                                timelineContainer.innerHTML += `
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-content">
+                                            <div class="flex-between">
+                                                <h4 style="color: var(--primary); margin-bottom: 4px;">${m.title}</h4>
+                                                <div style="font-size: 12px; color: var(--text-muted);">${m.date}</div>
+                                            </div>
+                                            <div style="font-size: 20px; font-weight: 700; margin: 8px 0;">${pct}% <span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(${totalObtained} / ${grandTotal})</span></div>
+                                            <div class="flex-between" style="margin-top: 12px;">
+                                                <span style="font-size: 12px; color: var(--text-muted);">Issued by: ${m.issuedBy}</span>
+                                                <button class="btn btn-outline btn-sm" style="padding: 4px 10px;" onclick="app.openDocViewer('${rawHtml}', true)"><i class="ph ph-eye"></i> View Full Details</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        } else {
+                            timelineContainer.innerHTML = `<p style="color: var(--text-muted);">No academic records published yet.</p>`;
+                        }
+                    } else {
+                        timelineContainer.innerHTML = `<p style="color: var(--text-muted);">No records available yet.</p>`;
+                    }
+
                 } else {
                     document.getElementById('parent-child-name').innerText = "No Linked Student";
                     document.getElementById('parent-child-id').innerText = "N/A";
+                    document.getElementById('parent-child-grade').innerText = "N/A";
                 }
             }
 
             function renderStaffDashboard() {
-                const tbody = document.getElementById('staff-book-table-body');
-                tbody.innerHTML = '';
-                db.libraryLogs.forEach(log => {
-                    let color = log.status === 'missing' ? 'var(--danger)' : 'var(--primary)';
-                    if(log.status === 'returned') color = 'var(--success)';
-                    tbody.innerHTML += `<tr><td>${log.title}</td><td>${log.student || 'N/A'}</td><td style="color:${color}; font-weight:600; text-transform:capitalize;">${log.status}</td><td>${log.date}</td></tr>`;
-                });
+                const deptLabel = currentUser.department ? currentUser.department.replace('-staff', '') : 'General';
+                document.getElementById('staff-dept-label').innerText = deptLabel;
+
+                // Only show library panel if they are library staff (or general staff if undefined)
+                if(currentUser.department === 'library-staff' || !currentUser.department) {
+                    document.getElementById('staff-library-panel').classList.remove('d-none');
+                    document.getElementById('staff-library-logs-panel').classList.remove('d-none');
+                    
+                    const tbody = document.getElementById('staff-book-table-body');
+                    tbody.innerHTML = '';
+                    db.libraryLogs.forEach(log => {
+                        let color = log.status === 'missing' ? 'var(--danger)' : 'var(--primary)';
+                        if(log.status === 'returned') color = 'var(--success)';
+                        tbody.innerHTML += `<tr><td>${log.title}</td><td>${log.student || 'N/A'}</td><td style="color:${color}; font-weight:600; text-transform:capitalize;">${log.status}</td><td>${log.date}</td></tr>`;
+                    });
+                } else {
+                    document.getElementById('staff-library-panel').classList.add('d-none');
+                    document.getElementById('staff-library-logs-panel').classList.add('d-none');
+                }
             }
 
             function submitStaffLog(e) {
@@ -2403,7 +3245,10 @@
                 togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
                 toggleApplicationFields, verifyPhoneFirebase, uploadToLink, submitApplication, submitFeePayment,
                 exportDataToCSV, filterTable, actionReport, submitStudentReport, submitStaffLog, submitBookTrack,
-                addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery, openDocViewer, closeDocViewer
+                addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery, openDocViewer, closeDocViewer,
+                toggleAdminUserForm, handleAdminRoleChange, adminSaveUser, adminEditUser, adminDeleteUser,
+                openIssueDocModal, toggleDocEditorType, addMarksheetRow, saveIssuedDocument, deleteStudentData,
+                openManageDocsModal, deleteDocument
             };
         })();
     </script>
