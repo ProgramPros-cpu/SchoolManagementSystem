@@ -625,12 +625,14 @@
                         </div>
 
                         <h4 class="mb-4 mt-4" style="color: var(--primary);">4. Document Uploads</h4>
-                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Files are automatically converted to secure URLs. If cloud storage fails, local preview blobs will be generated.</p>
+                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Upload files directly OR paste an external secure link (e.g., Google Drive, Dropbox).</p>
                         <div class="form-grid">
                             <div class="input-group">
                                 <label>Last Exam / Year Marksheet (If available)</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-stu-mark')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-stu-mark')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-stu-mark">
                                 </div>
@@ -639,6 +641,8 @@
                                 <label>Student Passport Photo</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-stu-photo')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-stu-photo')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-stu-photo">
                                 </div>
@@ -647,6 +651,8 @@
                                 <label>Parent/Guardian Passport Photo</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-parent-photo')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-parent-photo')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-parent-photo">
                                 </div>
@@ -660,6 +666,8 @@
                                 </select>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-stu-dobproof')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-stu-dobproof')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-stu-dobproof">
                                 </div>
@@ -668,6 +676,8 @@
                                 <label>Parent/Guardian Signature Photo</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-parent-sig')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-parent-sig')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-parent-sig">
                                 </div>
@@ -676,6 +686,8 @@
                                 <label>Student Signature Photo</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept="image/*" onchange="app.uploadToLink(this, 'url-stu-sig')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-stu-sig')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-stu-sig">
                                 </div>
@@ -713,11 +725,14 @@
                         </div>
 
                         <h4 class="mb-4 mt-4" style="color: var(--primary);">2. Documents & Verification</h4>
+                        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Upload files directly OR paste an external secure link (e.g., Google Drive, Dropbox).</p>
                         <div class="form-grid">
                             <div class="input-group">
                                 <label>Curriculum Vitae (CV)</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.doc,.docx" onchange="app.uploadToLink(this, 'url-tch-cv')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-tch-cv')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-tch-cv">
                                 </div>
@@ -726,6 +741,8 @@
                                 <label>Proof of Identity (POI)</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-tch-poi')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-tch-poi')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-tch-poi">
                                 </div>
@@ -734,6 +751,8 @@
                                 <label>Proof of Address (POA)</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.jpg,.png" onchange="app.uploadToLink(this, 'url-tch-poa')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-tch-poa')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-tch-poa">
                                 </div>
@@ -742,6 +761,8 @@
                                 <label>Graduation or Above Certificates</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.jpg,.png" multiple onchange="app.uploadToLink(this, 'url-tch-certs')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-tch-certs')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-tch-certs">
                                 </div>
@@ -750,6 +771,8 @@
                                 <label>Other Govt. Issued Documents</label>
                                 <div class="file-upload-wrapper">
                                     <input type="file" accept=".pdf,.jpg,.png" multiple onchange="app.uploadToLink(this, 'url-tch-gov')">
+                                    <div style="text-align:center; margin: 8px 0; font-size:12px; color:var(--text-muted); font-weight:bold;">— OR —</div>
+                                    <input type="url" placeholder="Paste external link here..." style="padding: 8px 12px; font-size: 13px;" oninput="app.handlePastedLink(this, 'url-tch-gov')">
                                     <div class="status-msg mt-4" style="font-size: 13px;"></div>
                                     <input type="hidden" id="url-tch-gov">
                                 </div>
@@ -758,7 +781,10 @@
                     </div>
 
                     <input type="hidden" id="app-form-phone-verified" value="false">
-                    <button type="submit" class="btn btn-primary btn-block mt-4" id="btn-submit-app"><i class="ph ph-paper-plane-tilt"></i> Submit Application</button>
+                    <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline" style="flex: 1; min-width: 200px;" onclick="app.previewApplication()"><i class="ph ph-eye"></i> Preview & Print Form</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 2; min-width: 200px;" id="btn-submit-app"><i class="ph ph-paper-plane-tilt"></i> Submit Application</button>
+                    </div>
                 </form>
             </div>
 
@@ -2648,6 +2674,99 @@
                 renderApplicantDashboard(); 
             }
 
+            function previewApplication() {
+                const type = document.getElementById('applicant-type').value;
+                
+                let html = `
+                    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #333; line-height: 1.6;">
+                        <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0071e3; padding-bottom: 20px;">
+                            <h1 style="color: #0071e3; margin: 0 0 10px 0;">EduCore System</h1>
+                            <h2 style="margin: 0; color: #555;">Application Form Preview (Draft)</h2>
+                            <p style="color: var(--danger); font-weight: bold; margin-top: 10px;">* This is a preview. Application is not yet submitted.</p>
+                        </div>
+                `;
+
+                const thStyle = "padding: 10px; border: 1px solid #ddd; width: 35%; background: #f9f9f9; font-weight: 600;";
+                const tdStyle = "padding: 10px; border: 1px solid #ddd;";
+                const titleStyle = "background: #f0f0f0; padding: 10px; font-weight: bold; font-size: 16px; border: 1px solid #ddd;";
+
+                if (type === 'student') {
+                    const name = `${document.getElementById('stu-fname').value} ${document.getElementById('stu-mname').value} ${document.getElementById('stu-lname').value}`.trim() || '-';
+                    const dob = document.getElementById('stu-dob').value || '-';
+                    const gender = document.getElementById('stu-gender').value || '-';
+                    const grade = document.getElementById('stu-grade').value || '-';
+                    
+                    const address = `${document.getElementById('stu-house').value}, ${document.getElementById('stu-area').value}, ${document.getElementById('stu-city').value}, ${document.getElementById('stu-dist').value}, ${document.getElementById('stu-state').value}, ${document.getElementById('stu-country').value} - ${document.getElementById('stu-pin').value}`;
+                    
+                    const gName = document.getElementById('stu-gname').value || '-';
+                    const gRel = document.getElementById('stu-grel').value || '-';
+                    const gPhone = document.getElementById('stu-gphone').value || '-';
+                    const gEmail = document.getElementById('stu-gemail').value || '-';
+
+                    html += `
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr><td colspan="2" style="${titleStyle}">1. Student Details</td></tr>
+                            <tr><td style="${thStyle}">Full Name</td><td style="${tdStyle}">${name}</td></tr>
+                            <tr><td style="${thStyle}">Date of Birth</td><td style="${tdStyle}">${dob}</td></tr>
+                            <tr><td style="${thStyle}">Gender</td><td style="${tdStyle}">${gender}</td></tr>
+                            <tr><td style="${thStyle}">Applying for Grade</td><td style="${tdStyle}">${grade}</td></tr>
+                        </table>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr><td colspan="2" style="${titleStyle}">2. Address Details</td></tr>
+                            <tr><td style="${thStyle}">Complete Address</td><td style="${tdStyle}">${address.replace(/^[,\s]+|[,\s]+$/g, '').replace(/, ,/g, ',') || '-'}</td></tr>
+                        </table>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr><td colspan="2" style="${titleStyle}">3. Guardian Information</td></tr>
+                            <tr><td style="${thStyle}">Guardian Name</td><td style="${tdStyle}">${gName} (${gRel})</td></tr>
+                            <tr><td style="${thStyle}">Contact Phone</td><td style="${tdStyle}">${gPhone}</td></tr>
+                            <tr><td style="${thStyle}">Email Address</td><td style="${tdStyle}">${gEmail}</td></tr>
+                        </table>
+                    `;
+                } else {
+                    const name = document.getElementById('tch-name').value || '-';
+                    const dob = document.getElementById('tch-dob').value || '-';
+                    const gender = document.getElementById('tch-gender').value || '-';
+                    const phone = document.getElementById('tch-phone').value || '-';
+                    const email = document.getElementById('tch-email').value || '-';
+                    const gNames = document.getElementById('tch-gnames').value || '-';
+
+                    html += `
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr><td colspan="2" style="${titleStyle}">1. Teacher Personal Details</td></tr>
+                            <tr><td style="${thStyle}">Full Name</td><td style="${tdStyle}">${name}</td></tr>
+                            <tr><td style="${thStyle}">Date of Birth</td><td style="${tdStyle}">${dob}</td></tr>
+                            <tr><td style="${thStyle}">Gender</td><td style="${tdStyle}">${gender}</td></tr>
+                            <tr><td style="${thStyle}">Guardian/Spouse Name</td><td style="${tdStyle}">${gNames}</td></tr>
+                            <tr><td style="${thStyle}">Contact Phone</td><td style="${tdStyle}">${phone}</td></tr>
+                            <tr><td style="${thStyle}">Email Address</td><td style="${tdStyle}">${email}</td></tr>
+                        </table>
+                    `;
+                }
+
+                html += `
+                        <div style="margin-top: 40px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #ddd; padding-top: 16px;">
+                            Generated on: ${new Date().toLocaleString()}<br>
+                            Please verify all details. Close this viewer to go back and make edits, or hit submit if everything is correct.
+                        </div>
+                    </div>
+                `;
+
+                openDocViewer(html, true);
+            }
+
+            function handlePastedLink(inputElement, targetHiddenId) {
+                document.getElementById(targetHiddenId).value = inputElement.value;
+                const statusEl = inputElement.parentElement.querySelector('.status-msg');
+                if(inputElement.value.trim() !== '') {
+                    statusEl.innerHTML = `<i class="ph ph-link"></i> External Link Attached`;
+                    statusEl.style.color = 'var(--primary)';
+                } else {
+                    statusEl.innerHTML = ''; 
+                }
+            }
+
             async function verifyPhoneFirebase(inputId, msgId, btnId) {
                 let phone = document.getElementById(inputId).value.trim();
                 if(phone.length < 10) { showToast("Enter a valid phone number first.", "error"); return; }
@@ -3486,7 +3605,7 @@
             return {
                 handleAuth, logout, toggleTheme, openModal, closeModal, loginWithGoogle,
                 togglePortalSetting, renderAllStudents, viewAppDetail, processApp,
-                toggleApplicationFields, verifyPhoneFirebase, uploadToLink, submitApplication, submitFeePayment,
+                toggleApplicationFields, previewApplication, verifyPhoneFirebase, uploadToLink, handlePastedLink, submitApplication, submitFeePayment,
                 exportDataToCSV, filterTable, actionReport, submitStudentReport, submitStaffLog, submitBookTrack,
                 addCalendarEvent, showToast, toggleJarvis, submitJarvisQuery, openDocViewer, closeDocViewer,
                 toggleAdminUserForm, handleAdminRoleChange, adminSaveUser, adminEditUser, adminDeleteUser,
